@@ -1,0 +1,6 @@
+{
+  "admin.binding-selector": {
+    "component": "BindingSelector",
+    "path": "/admin/app/binding-selector"
+  }
+}
