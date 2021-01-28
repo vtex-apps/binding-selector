@@ -1,9 +1,9 @@
-import type { FC } from "react";
-import React from "react";
-import { FormattedMessage } from "react-intl";
-import { Layout, PageBlock, PageHeader } from "vtex.styleguide";
+import type { FC } from 'react'
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import { Layout, PageBlock, PageHeader } from 'vtex.styleguide'
 
-import "./styles.global.css";
+import './styles.global.css'
 
 const BindingSelector: FC = () => {
   return (
@@ -14,7 +14,7 @@ const BindingSelector: FC = () => {
     >
       <PageBlock variation="full" />
     </Layout>
-  );
-};
+  )
+}
 
-export default BindingSelector;
+export default BindingSelector
