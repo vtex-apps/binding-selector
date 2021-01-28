@@ -2,6 +2,8 @@ import type { FC } from 'react'
 import React, { useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 
+import BindingSelectorList from './components/BindingSelectorList'
+
 const fakeBindingsLabel: {
   [Identifier: string]: { [Identifier: string]: string }
 } = {
@@ -27,8 +29,6 @@ const CSS_HANDLES = [
   'relativeContainer',
   'button',
   'buttonTextClasses',
-  'list',
-  'listElement',
 ] as const
 
 const BindingSelectorBlock: FC = () => {
@@ -38,6 +38,11 @@ const BindingSelectorBlock: FC = () => {
 
   const handleClick = () => {
     setOpen(!open)
+  }
+
+  const handleSelection = (selectedBinding: string): void => {
+    setCurrentBiding(selectedBinding)
+    setOpen(false)
   }
 
   return (
@@ -56,33 +61,12 @@ const BindingSelectorBlock: FC = () => {
             {fakeBindingsLabel[currentBinding][currentBinding]}
           </span>
         </button>
-        <ul
-          hidden={!open}
-          className={`${handles.list} absolute z-5 list top-1 ph0 mh0 mt5 bg-base`}
-        >
-          {Object.keys(fakeBindingsLabel[currentBinding])
-            .filter((binding) => {
-              return binding !== currentBinding
-            })
-            .map((binding) => (
-              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-              <li
-                key={binding}
-                className={`${handles.listElement} t-action--small pointer f5 pa3 hover-bg-muted-5 tc`}
-                onClick={() => {
-                  setCurrentBiding(binding)
-                  setOpen(false)
-                }}
-                onKeyDown={() => {
-                  setCurrentBiding(binding)
-                  setOpen(false)
-                }}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                <span>{fakeBindingsLabel[currentBinding][binding]}</span>
-              </li>
-            ))}
-        </ul>
+        <BindingSelectorList
+          open={open}
+          currentBinding={currentBinding}
+          fakeBindingsLabel={fakeBindingsLabel}
+          onSelectBinding={handleSelection}
+        />
       </div>
     </div>
   )
