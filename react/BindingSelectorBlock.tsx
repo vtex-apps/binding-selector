@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import React, { useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
+import { useRuntime } from 'vtex.render-runtime'
 
 import BindingSelectorList from './components/BindingSelectorList'
 
@@ -35,6 +36,10 @@ const BindingSelectorBlock: FC = () => {
   const [currentBinding, setCurrentBiding] = useState<string>('pt-BR')
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
+  const { binding: runtimeBinding } = useRuntime()
+
+  // eslint-disable-next-line no-console
+  console.log({ runtimeBinding })
 
   const handleClick = () => {
     setOpen(!open)
