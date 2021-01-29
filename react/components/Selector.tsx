@@ -1,6 +1,5 @@
 import React, { useState, FC } from 'react'
 import { useQuery, compose } from 'react-apollo'
-import type { InjectedIntl } from 'react-intl'
 import { FormattedMessage, injectIntl, InjectedIntl } from 'react-intl'
 import { Toggle, Button } from 'vtex.styleguide'
 
