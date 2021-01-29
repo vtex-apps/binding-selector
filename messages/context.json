@@ -1,4 +1,12 @@
 {
   "admin-binding-selector.navigation.label": "Binding Selector",
-  "admin-binding-selector": "Binding Selector"
+  "admin-binding-selector": "Binding Selector",
+  "admin-description": "The sales policies will be updated when your customers change their store bindings.",
+  "admin-label": "Update Sales Channel",
+  "admin-store": "Store",
+  "admin-locale": "Locale",
+  "admin-action": "Customise store names",
+  "admin-modal": "Customise the store names in this binding’s language.",
+  "admin-cancel": "Cancel",
+  "admin-save": "Save"
 }

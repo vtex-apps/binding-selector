@@ -14,7 +14,20 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-intl": "^2.7.2",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.126.10/public/@types/vtex.render-runtime",
+    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.135.0/public/@types/vtex.styleguide",
+    "vtex.tenant-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.1/public/@types/vtex.tenant-graphql"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@apollo/client": "^3.3.7",
+    "apollo-client": "^2.4.7",
+    "axios": "^0.21.0",
+    "graphql": "^14.0.2",
+    "react": "^16.6.3",
+    "react-apollo": "^2.3.1",
+    "react-dom": "^16.0.0",
+    "react-markdown": "^4.0.4",
+    "react-router-dom": "5.2.0"
+  }
 }
