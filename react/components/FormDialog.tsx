@@ -1,48 +1,47 @@
-import React, { useState, SyntheticEvent, FC } from "react";
-import { FormattedMessage, injectIntl } from "react-intl";
-import { Modal, Input, Button } from "vtex.styleguide";
-import { compose } from "react-apollo";
+import React, { useState, FC, SyntheticEvent } from 'react'
+import { FormattedMessage, injectIntl } from 'react-intl'
+import { Modal, Input, Button } from 'vtex.styleguide'
+import { compose } from 'react-apollo'
 
 interface Bindings {
-  id: string;
-  canonicalBaseAddress: string;
-  defaultLocale: string;
+  id: string
+  canonicalBaseAddress: string
+  defaultLocale: string
 }
 
 interface FormDialogProps {
-  open: boolean;
-  handleToggle: () => void;
-  bindings: Bindings[];
-  chosenBinding: Bindings;
+  open: boolean
+  handleToggle: () => void
+  bindings: Bindings[]
+  chosenBinding: Bindings
 }
 
 interface DataLocaleTypes {
-  [key: string]: string;
+  [key: string]: string
 }
 
 interface TranslatedLocales {
-  [key: string]: string;
+  [key: string]: string
 }
 
 interface Payload {
-  chosenId: string;
-  translatedLocales: TranslatedLocales;
+  chosenId: string
+  translatedLocales: TranslatedLocales
 }
 
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
-  const { open, handleToggle, bindings, chosenBinding } = props;
-  const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({});
+  const { open, handleToggle, bindings, chosenBinding } = props
+  const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
 
   const handleChange = (event: SyntheticEvent) => {
-    const { name, value } = event.target as HTMLButtonElement;
+    const { name, value } = event.target as HTMLButtonElement
 
-    setDataLocales({ ...dataLocales, [name]: value });
-  };
-
+    setDataLocales({ ...dataLocales, [name]: value })
+  }
 
   const showFields = () => {
-    return bindings?.map((binding: Bindings) => {
-      if (binding.canonicalBaseAddress.split("/")[1] !== "admin") {
+    const fields = bindings?.map((binding: Bindings) => {
+      if (binding.canonicalBaseAddress.split('/')[1] !== 'admin') {
         return (
           <div className="flex items-center justify-center w-100">
             <div className="pa4 w-40">
@@ -53,23 +52,25 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             <div className="pa4 w-50">
               <Input
                 name={binding.id}
-                onChange={(e: any) => handleChange(e)}
+                onChange={(e: SyntheticEvent) => handleChange(e)}
                 value={dataLocales[binding.defaultLocale]}
               />
             </div>
           </div>
-        );
+        )
       }
-    });
-  };
+    })
+
+    return fields
+  }
 
   const onSubmit = () => {
-    const payload = {} as Payload;
+    const payload = {} as Payload
 
-    payload.chosenId = chosenBinding.id;
-    payload.translatedLocales = dataLocales;
-    console.log(payload);
-  };
+    payload.chosenId = chosenBinding.id
+    payload.translatedLocales = dataLocales
+    console.log(payload)
+  }
 
   return (
     <Modal isOpen={open} onClose={handleToggle}>
@@ -92,7 +93,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default compose(injectIntl)(FormDialog);
+export default compose(injectIntl)(FormDialog)
