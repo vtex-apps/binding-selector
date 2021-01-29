@@ -40,10 +40,16 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   }
 
   const showFields = () => {
-    const fields = bindings?.map((binding: Bindings) => {
-      if (binding.canonicalBaseAddress.split('/')[1] !== 'admin') {
+    const fields = bindings
+      ?.filter((binding: Bindings) => {
+        return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
+      })
+      .map((binding: Bindings) => {
         return (
-          <div className="flex items-center justify-center w-100">
+          <div
+            key={binding.id}
+            className="flex items-center justify-center w-100"
+          >
             <div className="pa4 w-40">
               <label>
                 {binding.canonicalBaseAddress} ({binding.defaultLocale})
@@ -58,8 +64,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             </div>
           </div>
         )
-      }
-    })
+      })
 
     return fields
   }

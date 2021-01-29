@@ -1,6 +1,8 @@
-import React, { useState, FC } from 'react'
+import type { FC } from 'react'
+import React, { useState } from 'react'
 import { useQuery, compose } from 'react-apollo'
-import { FormattedMessage, injectIntl, InjectedIntl } from 'react-intl'
+import type { InjectedIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
 import { Toggle, Button } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
@@ -28,38 +30,38 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
   const handleToggle = () => setModalOpen(!modalOpen)
 
   const showBindings = () => {
-    const infoSections = bindingData?.tenantInfo.bindings.map(
-      (info: BindingsInfo, i: number) => {
-        if (info.canonicalBaseAddress.split('/')[1] !== 'admin') {
-          return (
-            <section className="flex items-center justify-between">
-              <div>
-                <p>
-                  {intl.formatMessage({ id: 'admin-store' })} {i}
-                  {': '}
-                  {info.canonicalBaseAddress}
-                </p>
-                <p>
-                  {intl.formatMessage({ id: 'admin-locale' })}
-                  {': '}
-                  {info.defaultLocale}
-                </p>
-              </div>
-              <div>
-                <Button
-                  onClick={() => {
-                    setModalOpen(!modalOpen)
-                    setChosenBinding(info)
-                  }}
-                >
-                  <FormattedMessage id="admin-action" />
-                </Button>
-              </div>
-            </section>
-          )
-        }
-      }
-    )
+    const infoSections = bindingData?.tenantInfo.bindings
+      .filter((info: BindingsInfo) => {
+        return info.canonicalBaseAddress.split('/')[1] !== 'admin'
+      })
+      .map((info: BindingsInfo, i: number) => {
+        return (
+          <section key={info.id} className="flex items-center justify-between">
+            <div>
+              <p>
+                {intl.formatMessage({ id: 'admin-store' })} {i}
+                {': '}
+                {info.canonicalBaseAddress}
+              </p>
+              <p>
+                {intl.formatMessage({ id: 'admin-locale' })}
+                {': '}
+                {info.defaultLocale}
+              </p>
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setModalOpen(!modalOpen)
+                  setChosenBinding(info)
+                }}
+              >
+                <FormattedMessage id="admin-action" />
+              </Button>
+            </div>
+          </section>
+        )
+      })
 
     return infoSections
   }
@@ -78,7 +80,7 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
       <Toggle
         checked={isActive}
         label={intl.formatMessage({ id: 'admin-label' })}
-        onClick={handleChange}
+        onChange={handleChange}
       />
       <div className="pt6">{isActive && showBindings()}</div>
     </div>
