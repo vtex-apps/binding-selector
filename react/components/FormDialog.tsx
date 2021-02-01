@@ -1,4 +1,5 @@
-import React, { useState, FC, SyntheticEvent } from 'react'
+import type { FC, SyntheticEvent } from 'react'
+import React, { useState } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
 import { compose } from 'react-apollo'
@@ -29,6 +30,34 @@ interface Payload {
   translatedLocales: TranslatedLocales
 }
 
+interface FieldInputProps {
+  binding: Bindings
+  dataLocales: DataLocaleTypes
+  handleChange: (e: SyntheticEvent) => void
+  key: number
+}
+
+const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
+  const { binding, dataLocales, handleChange, key } = props
+
+  return (
+    <div key={key} className="flex items-center justify-center w-100">
+      <div className="pa4 w-40">
+        <label>
+          {binding.canonicalBaseAddress} ({binding.defaultLocale})
+        </label>
+      </div>
+      <div className="pa4 w-50">
+        <Input
+          name={binding.id}
+          onChange={(e: SyntheticEvent) => handleChange(e)}
+          value={dataLocales[binding.defaultLocale]}
+        />
+      </div>
+    </div>
+  )
+}
+
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleToggle, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
@@ -44,25 +73,14 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
       ?.filter((binding: Bindings) => {
         return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
       })
-      .map((binding: Bindings) => {
+      .map((binding: Bindings, i: number) => {
         return (
-          <div
-            key={binding.id}
-            className="flex items-center justify-center w-100"
-          >
-            <div className="pa4 w-40">
-              <label>
-                {binding.canonicalBaseAddress} ({binding.defaultLocale})
-              </label>
-            </div>
-            <div className="pa4 w-50">
-              <Input
-                name={binding.id}
-                onChange={(e: SyntheticEvent) => handleChange(e)}
-                value={dataLocales[binding.defaultLocale]}
-              />
-            </div>
-          </div>
+          <FieldInput
+            binding={binding}
+            dataLocales={dataLocales}
+            handleChange={handleChange}
+            key={i}
+          />
         )
       })
 

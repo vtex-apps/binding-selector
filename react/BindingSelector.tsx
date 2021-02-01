@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { FormattedMessage } from "react-intl";
-import { Layout, PageBlock, PageHeader } from "vtex.styleguide";
+import React, { FC } from 'react'
+import { FormattedMessage } from 'react-intl'
+import { Layout, PageBlock, PageHeader } from 'vtex.styleguide'
 
-import Selector from "./components/Selector";
+import Selector from './components/Selector'
 
 const BindingSelector: FC = () => {
   return (
@@ -15,7 +15,7 @@ const BindingSelector: FC = () => {
         <Selector />
       </PageBlock>
     </Layout>
-  );
-};
+  )
+}
 
-export default BindingSelector;
+export default BindingSelector

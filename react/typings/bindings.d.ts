@@ -1,10 +1,10 @@
 interface Binding {
-  id: string;
-  defaultLocale: string;
+  id: string
+  defaultLocale: string
 }
 
 interface BindingsData {
   tenantInfo: {
-    bindings: Binding[];
-  };
+    bindings: Binding[]
+  }
 }

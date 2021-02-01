@@ -18,6 +18,48 @@ interface BindingsInfo {
   defaultLocale: string
 }
 
+interface BindingList {
+  info: BindingsInfo
+  i: number
+  setModalOpen: (modalOpen: boolean) => void
+  modalOpen: boolean
+  setChosenBinding: (info: BindingsInfo) => void,
+  key: number
+}
+
+const BindingList: FC<BindingList> = (props: BindingList) => {
+  const { info, i, setModalOpen, modalOpen, setChosenBinding, key } = props
+
+  return (
+    <section key={key} className="flex items-center justify-between">
+      <div>
+        <p>
+          <FormattedMessage
+            id="admin-store"
+            values={{ index: i + 1, address: info.canonicalBaseAddress }}
+          />
+        </p>
+        <p>
+          <FormattedMessage
+            id="admin-locale"
+            values={{ locale: info.defaultLocale }}
+          />
+        </p>
+      </div>
+      <div>
+        <Button
+          onClick={() => {
+            setModalOpen(!modalOpen)
+            setChosenBinding(info)
+          }}
+        >
+          <FormattedMessage id="admin-action" />
+        </Button>
+      </div>
+    </section>
+  )
+}
+
 const Selector: FC<SelectorProps> = (props: SelectorProps) => {
   const { intl } = props
   const [isActive, setIsActive] = useState<boolean>(false)
@@ -36,30 +78,14 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
       })
       .map((info: BindingsInfo, i: number) => {
         return (
-          <section key={info.id} className="flex items-center justify-between">
-            <div>
-              <p>
-                {intl.formatMessage({ id: 'admin-store' })} {i}
-                {': '}
-                {info.canonicalBaseAddress}
-              </p>
-              <p>
-                {intl.formatMessage({ id: 'admin-locale' })}
-                {': '}
-                {info.defaultLocale}
-              </p>
-            </div>
-            <div>
-              <Button
-                onClick={() => {
-                  setModalOpen(!modalOpen)
-                  setChosenBinding(info)
-                }}
-              >
-                <FormattedMessage id="admin-action" />
-              </Button>
-            </div>
-          </section>
+          <BindingList
+            key={i}
+            info={info}
+            i={i}
+            setModalOpen={setModalOpen}
+            modalOpen={modalOpen}
+            setChosenBinding={setChosenBinding}
+          />
         )
       })
 
@@ -82,7 +108,7 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
         label={intl.formatMessage({ id: 'admin-label' })}
         onChange={handleChange}
       />
-      <div className="pt6">{isActive && showBindings()}</div>
+      <div className="pt6">{showBindings()}</div>
     </div>
   )
 }
