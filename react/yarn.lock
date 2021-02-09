@@ -349,9 +349,9 @@ typescript@3.9.7:
   version "9.135.1"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.135.1/public/@types/vtex.styleguide#ed8d203eff74ed072b6e2f6ddb66d0c92b797ade"
 
-"vtex.tenant-graphql@https://fila--vtexspain.myvtex.com/_v/private/typings/linked/v1/vtex.tenant-graphql@0.1.2-beta.0+build1612800467/public/@types/vtex.tenant-graphql":
-  version "0.1.2-beta.0"
-  resolved "https://fila--vtexspain.myvtex.com/_v/private/typings/linked/v1/vtex.tenant-graphql@0.1.2-beta.0+build1612800467/public/@types/vtex.tenant-graphql#ddb2cfc484481bb6feb42a532d9b2d6798baff67"
+"vtex.tenant-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql":
+  version "0.1.2"
+  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql#74673fe86baefe74f21a6d2615993ea0ccb5e79e"
 
 zen-observable-ts@^0.8.18:
   version "0.8.18"

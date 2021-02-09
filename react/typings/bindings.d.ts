@@ -13,3 +13,9 @@ interface TenantInfoResponse {
     bindings: Binding[]
   }
 }
+
+interface FilteredBinding {
+  id: string
+  label: string
+  salesChannel: string
+}

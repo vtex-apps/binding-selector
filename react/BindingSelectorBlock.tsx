@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import type { FC } from 'react'
-import React, { useState } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useQuery } from 'react-apollo'
@@ -7,26 +7,7 @@ import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
-
-const fakeBindingsLabel: {
-  [Identifier: string]: { [Identifier: string]: string }
-} = {
-  'pt-BR': {
-    'pt-BR': 'Brasil',
-    'it-IT': 'Itália',
-    'en-US': 'EUA',
-  },
-  'it-IT': {
-    'pt-BR': 'Brasile',
-    'it-IT': 'Italia',
-    'en-US': 'USA',
-  },
-  'en-US': {
-    'pt-BR': 'Brazil',
-    'it-IT': 'Italy',
-    'en-US': 'US',
-  },
-}
+import { filterBindings } from './utils'
 
 const CSS_HANDLES = [
   'container',
@@ -36,13 +17,17 @@ const CSS_HANDLES = [
 ] as const
 
 const BindingSelectorBlock: FC = () => {
-  const [currentBinding, setCurrentBiding] = useState<string>('pt-BR')
+  const [currentBinding, setCurrentBiding] = useState<FilteredBinding>(
+    {} as FilteredBinding
+  )
+
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
+  const [bindingInfo, setBindingInfo] = useState<FilteredBinding[]>([])
   const { binding: runtimeBinding } = useRuntime()
   const {
     error: tenantError,
-    data,
+    data: tenantData,
     loading: loadingTenantInfo,
   } = useQuery<TenantInfoResponse>(getSalesChannel, {
     ssr: false,
@@ -56,22 +41,35 @@ const BindingSelectorBlock: FC = () => {
 
   // eslint-disable-next-line no-console
   console.log({ orderForm })
-  // eslint-disable-next-line no-console
-  console.log(data)
 
-  // eslint-disable-next-line no-console
-  console.log({ runtimeBinding })
+  useEffect(() => {
+    if (tenantData) {
+      const filteredBindings = filterBindings(tenantData.tenantInfo)
+
+      setBindingInfo(filteredBindings)
+    }
+  }, [tenantData])
+
+  useEffect(() => {
+    if (runtimeBinding?.id) {
+      const findBinding = bindingInfo.find(({ id }) => id === runtimeBinding.id)
+
+      if (findBinding) {
+        setCurrentBiding(findBinding)
+      }
+    }
+  }, [bindingInfo, runtimeBinding])
 
   const handleClick = () => {
     setOpen(!open)
   }
 
-  const handleSelection = (selectedBinding: string): void => {
+  const handleSelection = (selectedBinding: FilteredBinding): void => {
     setCurrentBiding(selectedBinding)
     setOpen(false)
   }
 
-  const isLoading = loadingTenantInfo || loadingOrderForm
+  const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
   const hasError = !!orderFormError || !!tenantError
 
   if (hasError) {
@@ -96,13 +94,13 @@ const BindingSelectorBlock: FC = () => {
               className={`${handles.button} link pa3 bg-transparent bn flex items-center pointer c-on-base`}
             >
               <span className={`${handles.buttonTextClasses}`}>
-                {fakeBindingsLabel[currentBinding][currentBinding]}
+                {currentBinding.label}
               </span>
             </button>
             <BindingSelectorList
               open={open}
               currentBinding={currentBinding}
-              fakeBindingsLabel={fakeBindingsLabel}
+              bindingInfo={bindingInfo}
               onSelectBinding={handleSelection}
             />
           </>
