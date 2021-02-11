@@ -1,3 +1,7 @@
+import { updateSalesChannel } from './orderForm'
+
 export const resolvers = {
-  Mutation: {},
+  Mutation: {
+    updateSalesChannel,
+  },
 }
