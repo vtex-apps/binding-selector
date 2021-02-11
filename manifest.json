@@ -21,17 +21,5 @@
     "docs": "0.x",
     "store": "0.x"
   },
-  "policies": [
-    {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "api.vtex.com",
-        "path": "/api/*"
-      }
-    },
-    {
-      "name": "ADMIN_DS"
-    }
-  ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
