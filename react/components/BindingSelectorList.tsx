@@ -20,7 +20,6 @@ const BindingSelectorList: FC<Props> = ({
   onSelectBinding,
 }) => {
   const handles = useCssHandles(CSS_HANDLES)
-  // const { data: hrefData } = useQuery(alternateHrefQuery)
 
   return (
     <ul
