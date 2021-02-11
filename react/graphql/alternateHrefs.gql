@@ -1,0 +1,8 @@
+query alternateHrefs($id: String!, $type: String!) {
+  internal @context(provider: "vtex.rewriter") {
+    routes(locator: { id: $id, type: $type }) {
+      binding
+      route
+    }
+  }
+}

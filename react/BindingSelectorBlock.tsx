@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react'
-import React, { useState } from 'react'
+// import { withApollo, compose, graphql } from 'react-apollo'
+import React, { useState, useEffect } from 'react'
+import { useLazyQuery } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
-import { useRuntime } from 'vtex.render-runtime'
+import { useRuntime, canUseDOM } from 'vtex.render-runtime'
 
 import BindingSelectorList from './components/BindingSelectorList'
+import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 
 const fakeBindingsLabel: {
   [Identifier: string]: { [Identifier: string]: string }
@@ -36,16 +40,33 @@ const BindingSelectorBlock: FC = () => {
   const [currentBinding, setCurrentBiding] = useState<string>('pt-BR')
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
-  const { binding: runtimeBinding } = useRuntime()
+  // @ts-expect-error routes not typed in useRuntime
+  const { route: { pageContext: { id, type }} } = useRuntime()
+
+  const queryVariables = {
+    id,
+    type,
+  }
 
   // eslint-disable-next-line no-console
-  console.log({ runtimeBinding })
+  const [getAlternateHrefs, { loading, data }] = useLazyQuery(
+    alternateHrefsQuery,
+    {
+      variables: queryVariables,
+    }
+  )
+
+  useEffect(() => {
+    console.log('dataHrefs', data?.internal?.routes)
+  }, [data])
 
   const handleClick = () => {
     setOpen(!open)
   }
 
   const handleSelection = (selectedBinding: string): void => {
+    console.log(selectedBinding)
+    getAlternateHrefs()
     setCurrentBiding(selectedBinding)
     setOpen(false)
   }
@@ -76,5 +97,9 @@ const BindingSelectorBlock: FC = () => {
     </div>
   )
 }
+
+//const withAlternateHrefs = graphql(alternateHrefsQuery, {
+//  name: 'alternateHrefs',
+//})
 
 export default BindingSelectorBlock
