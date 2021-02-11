@@ -57,6 +57,7 @@ const BindingSelectorBlock: FC = () => {
   )
 
   useEffect(() => {
+    // This will not yet work for home page. Will retrieve the base url from tenant.
     console.log('dataHrefs', data?.internal?.routes)
   }, [data])
 
