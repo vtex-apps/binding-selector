@@ -4,6 +4,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useQuery } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
+import { OrderItemsProvider, useOrderItems } from 'vtex.order-items/OrderItems'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
@@ -33,10 +34,13 @@ const BindingSelectorBlock: FC = () => {
     ssr: false,
   })
 
+  const { addItem } = useOrderItems()
+
   const {
     error: orderFormError,
     loading: loadingOrderForm,
     orderForm,
+    setOrderForm,
   } = useOrderForm()
 
   // eslint-disable-next-line no-console
@@ -66,6 +70,48 @@ const BindingSelectorBlock: FC = () => {
 
   const handleSelection = (selectedBinding: FilteredBinding): void => {
     setCurrentBiding(selectedBinding)
+    fetch(
+      // `/api/checkout/pub/orderForm/${orderForm.id}`,
+      `/api/checkout/pub/orderForm/${orderForm.id}/attachments/clientPreferencesData?sc=${selectedBinding.salesChannel}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          locale: selectedBinding.label,
+          optinNewsLetter:
+            orderForm.clientPreferencesData.optInNewsletter ?? false,
+        }),
+      }
+    )
+      .then((r) => r.json())
+      .then((orderResponse) => {
+        setOrderForm({
+          clientPreferencesData: {
+            locale: selectedBinding.label,
+            optinNewsLetter:
+              orderForm.clientPreferencesData.optInNewsletter ?? false,
+          },
+        })
+        // eslint-disable-next-line no-console
+        console.log({ orderResponse })
+
+        // const { storePreferencesData } = orderResponse
+        // const updateStorePreference = {
+        //   ...storePreferencesData,
+        //   ...{ currencyCode: selectedBinding.defaultCurrency },
+        // }
+        addItem(orderResponse.items, null, selectedBinding.salesChannel)
+        window.location.search = '?__bindingAddress=b2c.powerplanet.com/pt'
+        // navigate({  to: '/?__bindingAddress=b2c.powerplanet.com/pt' })
+        // return fetch(
+        //   `/api/checkout/pub/orderForm/${orderForm.id}/attachments/storePreferencesData`,
+        //   {
+        //     method: 'POST',
+        //     body: JSON.stringify(updateStorePreference),
+        //   }
+        // )
+      })
+    // eslint-disable-next-line no-console
+    console.log('id', orderForm, 'sales', selectedBinding.salesChannel)
     setOpen(false)
   }
 
@@ -113,7 +159,9 @@ const BindingSelectorBlock: FC = () => {
 const BindingSelectorBlockWrapper = () => {
   return (
     <OrderFormProvider>
-      <BindingSelectorBlock />
+      <OrderItemsProvider>
+        <BindingSelectorBlock />
+      </OrderItemsProvider>
     </OrderFormProvider>
   )
 }
