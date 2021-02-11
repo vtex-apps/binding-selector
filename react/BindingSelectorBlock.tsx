@@ -65,7 +65,6 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const handleSelection = (selectedBinding: string): void => {
-    console.log(selectedBinding)
     getAlternateHrefs()
     setCurrentBiding(selectedBinding)
     setOpen(false)
