@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
-import { useRuntime, canUseDOM } from 'vtex.render-runtime'
+import { useRuntime } from 'vtex.render-runtime'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
