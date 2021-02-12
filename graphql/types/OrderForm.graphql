@@ -12,10 +12,10 @@ type PartialOrderForm {
 
 type ClientPreferencesData {
   locale: String
-  optInNewsletter: Boolean
+  optinNewsletter: Boolean
 }
 
 input ClientPreferencesDataInput {
-  optInNewsletter: Boolean
+  optinNewsletter: Boolean
   locale: String
 }

@@ -17,7 +17,8 @@ export const updateSalesChannel = async (
   const updatedClientPreferencesData = {
     ...clientPreferencesData,
     locale,
-    optInNewsletter: clientPreferencesData?.optInNewsletter ?? false,
+    // @ts-expect-error There is a misspelling in the type definition
+    optinNewsLetter: clientPreferencesData?.optinNewsLetter ?? false,
   }
 
   if (!orderForm.items.length) {
