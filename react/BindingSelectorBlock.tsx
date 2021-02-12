@@ -72,18 +72,23 @@ const BindingSelectorBlock: FC = () => {
   ): Promise<void> => {
     setCurrentBiding(selectedBinding)
     setOpen(false)
-    await updateSalesChannel({
-      variables: {
-        orderFormId: orderForm.id,
-        salesChannel: selectedBinding.salesChannel,
-        locale: selectedBinding.label,
-      },
-    })
-    // only works for Power Planet homepage. Need to be update when we get the right binding url and hreflang
-    window.location.search = `?__bindingAddress=b2c.powerplanet.com/${selectedBinding.label.slice(
-      0,
-      2
-    )}`
+    try {
+      await updateSalesChannel({
+        variables: {
+          orderFormId: orderForm.id,
+          salesChannel: selectedBinding.salesChannel,
+          locale: selectedBinding.label,
+        },
+      })
+      // only works for Power Planet homepage. Need to be update when we get the right binding url and hreflang
+      window.location.search = `?__bindingAddress=b2c.powerplanet.com/${selectedBinding.label.slice(
+        0,
+        2
+      )}`
+    } catch (e) {
+      // How to handle when there is an error updating sales channel?
+      console.error(e)
+    }
   }
 
   const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
