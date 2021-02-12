@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react'
-// import { withApollo, compose, graphql } from 'react-apollo'
 import React, { useState, useEffect } from 'react'
-import { useLazyQuery } from 'react-apollo'
+import { withApollo, compose, graphql } from 'react-apollo'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 
@@ -36,7 +36,12 @@ const CSS_HANDLES = [
   'buttonTextClasses',
 ] as const
 
-const BindingSelectorBlock: FC = () => {
+interface Hrefs {
+  binding: string
+  url: string
+}
+
+const BindingSelectorBlock: FC = (props: any) => {
   const [currentBinding, setCurrentBiding] = useState<string>('pt-BR')
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
@@ -48,25 +53,26 @@ const BindingSelectorBlock: FC = () => {
     type,
   }
 
-  // eslint-disable-next-line no-console
-  const [getAlternateHrefs, { loading, data }] = useLazyQuery(
-    alternateHrefsQuery,
-    {
-      variables: queryVariables,
-    }
-  )
-
-  useEffect(() => {
-    // This will not yet work for home page. Will retrieve the base url from tenant.
-    console.log('dataHrefs', data?.internal?.routes)
-  }, [data])
-
   const handleClick = () => {
     setOpen(!open)
   }
 
-  const handleSelection = (selectedBinding: string): void => {
-    getAlternateHrefs()
+  const getAltHrefs = async (): Promise<any> => {
+    try {
+      const result = await props.client.query({
+        query: alternateHrefsQuery,
+        variables: queryVariables,
+      })
+
+      return result
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleSelection = async (selectedBinding: string): Promise<any> => {
+    const data = await getAltHrefs()
+    console.log('dataHref', data?.internal?.routes)
     setCurrentBiding(selectedBinding)
     setOpen(false)
   }
@@ -98,8 +104,8 @@ const BindingSelectorBlock: FC = () => {
   )
 }
 
-//const withAlternateHrefs = graphql(alternateHrefsQuery, {
-//  name: 'alternateHrefs',
-//})
+const withAlternateHrefs = graphql(alternateHrefsQuery, {
+  name: 'alternateHrefs',
+})
 
-export default BindingSelectorBlock
+export default compose(withApollo, withAlternateHrefs)(BindingSelectorBlock)
