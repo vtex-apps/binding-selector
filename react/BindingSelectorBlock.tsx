@@ -71,6 +71,7 @@ const BindingSelectorBlock: FC = () => {
     selectedBinding: FilteredBinding
   ): Promise<void> => {
     setCurrentBiding(selectedBinding)
+    setOpen(false)
     await updateSalesChannel({
       variables: {
         orderFormId: orderForm.id,
@@ -78,8 +79,11 @@ const BindingSelectorBlock: FC = () => {
         locale: selectedBinding.label,
       },
     })
-    setOpen(false)
-    window.location.search = '?__bindingAddress=b2c.powerplanet.com/pt'
+    // only works for Power Planet homepage. Need to be update when we get the right binding url and hreflang
+    window.location.search = `?__bindingAddress=b2c.powerplanet.com/${selectedBinding.label.slice(
+      0,
+      2
+    )}`
   }
 
   const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
