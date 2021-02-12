@@ -1,9 +1,11 @@
 import type { FC } from 'react'
 import React, { useState } from 'react'
-import { useQuery, compose } from 'react-apollo'
+import { useQuery, compose, useMutation } from 'react-apollo'
 import type { InjectedIntl } from 'react-intl'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import { Toggle, Button } from 'vtex.styleguide'
+import { Toggle, Button, Input } from 'vtex.styleguide'
+import saveTokenGQL from '../graphql/saveToken.gql'
+import tokenGQL from '../graphql/token.gql'
 
 import FormDialog from './FormDialog'
 import accountLocalesQuery from '../graphql/accountLocales.gql'
@@ -23,7 +25,7 @@ interface BindingList {
   i: number
   setModalOpen: (modalOpen: boolean) => void
   modalOpen: boolean
-  setChosenBinding: (info: BindingsInfo) => void,
+  setChosenBinding: (info: BindingsInfo) => void
   key: number
 }
 
@@ -92,6 +94,10 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
     return infoSections
   }
 
+  const [token, setToken] = useState('')
+  useQuery(tokenGQL, { onCompleted: ({ token }) => setToken(token) })
+  const [saveToken] = useMutation(saveTokenGQL)
+  console.log('token', token)
   return (
     <div>
       <FormDialog
@@ -103,6 +109,18 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
       <p className="pb4">
         <FormattedMessage id="admin-description" />
       </p>
+      <Input
+        placeholder="API Token"
+        value={token}
+        onChange={(e: any) => setToken(e.target.value)}
+      />
+      <Button
+        onClick={() => {
+          saveToken({ variables: { token } })
+        }}
+      >
+        Salvar
+      </Button>
       <Toggle
         checked={isActive}
         label={intl.formatMessage({ id: 'admin-label' })}

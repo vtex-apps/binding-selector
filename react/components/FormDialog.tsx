@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
 import { compose } from 'react-apollo'
+import { useQuery } from 'react-apollo'
+
+import tokenGQL from '../graphql/token.gql'
 
 interface Bindings {
   id: string
@@ -39,7 +42,7 @@ interface FieldInputProps {
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
-
+  const { data: retrievedToken } = useQuery(tokenGQL)
   return (
     <div key={key} className="flex items-center justify-center w-100">
       <div className="pa4 w-40">
@@ -48,6 +51,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
         </label>
       </div>
       <div className="pa4 w-50">
+      <p>Current token: {retrievedToken?.token}</p>
         <Input
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
