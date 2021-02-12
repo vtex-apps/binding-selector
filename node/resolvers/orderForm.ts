@@ -1,22 +1,32 @@
 import type { OrderForm as CheckoutOrderForm } from 'vtex.checkout-graphql'
 
-export const updateSalesChannel = (
+export const updateSalesChannel = async (
   _: unknown,
   args: {
     orderFormId: string
     salesChannel: string
-    clientPreferencesData: CheckoutOrderForm['clientPreferencesData']
+    locale: string
   },
   ctx: Context
 ): Promise<CheckoutOrderForm> => {
   const { clients } = ctx
-  const { orderFormId, salesChannel, clientPreferencesData } = args
-
+  const { orderFormId, salesChannel, locale } = args
   const { checkout } = clients
+  const orderForm = await checkout.getOrderForm(orderFormId)
+  const { clientPreferencesData } = orderForm
+  const updatedClientPreferencesData = {
+    ...clientPreferencesData,
+    locale,
+    optInNewsletter: clientPreferencesData?.optInNewsletter ?? false,
+  }
 
-  return checkout.updateSalesChannel(
-    orderFormId,
-    salesChannel,
-    clientPreferencesData
-  )
+  if (!orderForm.items.length) {
+    return checkout.updateSalesChannel(
+      orderFormId,
+      salesChannel,
+      updatedClientPreferencesData
+    )
+  }
+
+  return checkout.addItems(orderFormId, orderForm.items, salesChannel)
 }

@@ -17,6 +17,12 @@ export class Checkout extends JanusClient {
     })
   }
 
+  public getOrderForm = (orderFormId: string) => {
+    return this.get<CheckoutOrderForm>(this.routes.getOrderForm(orderFormId), {
+      metric: 'checkout-orderForm',
+    })
+  }
+
   public updateSalesChannel = (
     orderFormId: string,
     salesChannel: string,
@@ -34,6 +40,27 @@ export class Checkout extends JanusClient {
         metric: 'checkout-updateSalesChannel',
       }
     )
+  }
+
+  public addItems = (
+    orderFormId: string,
+    items: CheckoutOrderForm['items'],
+    salesChannel: string
+  ) =>
+    this.post<CheckoutOrderForm, { orderItems: CheckoutOrderForm['items'] }>(
+      this.routes.addItems(orderFormId, salesChannel),
+      {
+        orderItems: items,
+      },
+      { metric: 'checkout-AddItem' }
+    )
+
+  protected get = <T>(url: string, config: RequestConfig = {}) => {
+    try {
+      return this.http.get<T>(url, config)
+    } catch (e) {
+      return (statusToError(e) as unknown) as CheckoutOrderForm
+    }
   }
 
   protected post = async <T, D>(
@@ -55,6 +82,9 @@ export class Checkout extends JanusClient {
     const base = '/api/checkout/pub'
 
     return {
+      addItems: (orderFormId: string, salesChannel: string) =>
+        `${base}/orderForm/${orderFormId}/items?sc=${salesChannel}`,
+      getOrderForm: (orderFormId: string) => `${base}/orderForm/${orderFormId}`,
       updateSalesChannel: (orderFormId: string, salesChannel: string) =>
         `${base}/orderForm/${orderFormId}/attachments/clientPreferencesData?sc=${salesChannel}`,
     }

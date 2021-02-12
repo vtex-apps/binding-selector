@@ -2,7 +2,7 @@ type Mutation {
   updateSalesChannel(
     orderFormId: ID
     salesChannel: String
-    clientPreferencesData: ClientPreferencesDataInput
+    locale: String
   ): PartialOrderForm
 }
 

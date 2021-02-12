@@ -1,5 +1,5 @@
 type PartialOrderForm {
-  id: ID!
+  orderFormId: ID!
   salesChannel: String!
   items: [Item!]!
   canEditData: Boolean!
