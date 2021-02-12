@@ -21,13 +21,17 @@ export const updateSalesChannel = async (
     optinNewsLetter: clientPreferencesData?.optinNewsLetter ?? false,
   }
 
+  const updatedOrderFormPromise = checkout.updateSalesChannel(
+    orderFormId,
+    salesChannel,
+    updatedClientPreferencesData
+  )
+
   if (!orderForm.items.length) {
-    return checkout.updateSalesChannel(
-      orderFormId,
-      salesChannel,
-      updatedClientPreferencesData
-    )
+    return updatedOrderFormPromise
   }
+
+  await updatedOrderFormPromise
 
   return checkout.addItems(orderFormId, orderForm.items, salesChannel)
 }
