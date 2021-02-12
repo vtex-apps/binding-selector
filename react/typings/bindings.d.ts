@@ -19,3 +19,9 @@ interface FilteredBinding {
   label: string
   salesChannel: string
 }
+
+interface UpdateSalesChannelVariables {
+  salesChannel: string
+  locale: string
+  orderFormId: string
+}

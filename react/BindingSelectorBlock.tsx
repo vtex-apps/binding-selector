@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import type { FC } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
-import { useQuery } from 'react-apollo'
+import { useQuery, useMutation } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
-import { OrderItemsProvider, useOrderItems } from 'vtex.order-items/OrderItems'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
+import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import { filterBindings } from './utils'
 
 const CSS_HANDLES = [
@@ -34,17 +34,16 @@ const BindingSelectorBlock: FC = () => {
     ssr: false,
   })
 
-  const { addItem } = useOrderItems()
+  const [updateSalesChannel] = useMutation<
+    { updateSalesChannel: { orderFormId: string } },
+    UpdateSalesChannelVariables
+  >(updateSalesChannelMutation)
 
   const {
     error: orderFormError,
     loading: loadingOrderForm,
     orderForm,
-    setOrderForm,
   } = useOrderForm()
-
-  // eslint-disable-next-line no-console
-  console.log({ orderForm })
 
   useEffect(() => {
     if (tenantData) {
@@ -68,51 +67,19 @@ const BindingSelectorBlock: FC = () => {
     setOpen(!open)
   }
 
-  const handleSelection = (selectedBinding: FilteredBinding): void => {
+  const handleSelection = async (
+    selectedBinding: FilteredBinding
+  ): Promise<void> => {
     setCurrentBiding(selectedBinding)
-    fetch(
-      // `/api/checkout/pub/orderForm/${orderForm.id}`,
-      `/api/checkout/pub/orderForm/${orderForm.id}/attachments/clientPreferencesData?sc=${selectedBinding.salesChannel}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          locale: selectedBinding.label,
-          optinNewsLetter:
-            orderForm.clientPreferencesData.optInNewsletter ?? false,
-        }),
-      }
-    )
-      .then((r) => r.json())
-      .then((orderResponse) => {
-        setOrderForm({
-          clientPreferencesData: {
-            locale: selectedBinding.label,
-            optinNewsLetter:
-              orderForm.clientPreferencesData.optInNewsletter ?? false,
-          },
-        })
-        // eslint-disable-next-line no-console
-        console.log({ orderResponse })
-
-        // const { storePreferencesData } = orderResponse
-        // const updateStorePreference = {
-        //   ...storePreferencesData,
-        //   ...{ currencyCode: selectedBinding.defaultCurrency },
-        // }
-        addItem(orderResponse.items, null, selectedBinding.salesChannel)
-        window.location.search = '?__bindingAddress=b2c.powerplanet.com/pt'
-        // navigate({  to: '/?__bindingAddress=b2c.powerplanet.com/pt' })
-        // return fetch(
-        //   `/api/checkout/pub/orderForm/${orderForm.id}/attachments/storePreferencesData`,
-        //   {
-        //     method: 'POST',
-        //     body: JSON.stringify(updateStorePreference),
-        //   }
-        // )
-      })
-    // eslint-disable-next-line no-console
-    console.log('id', orderForm, 'sales', selectedBinding.salesChannel)
+    await updateSalesChannel({
+      variables: {
+        orderFormId: orderForm.id,
+        salesChannel: selectedBinding.salesChannel,
+        locale: selectedBinding.label,
+      },
+    })
     setOpen(false)
+    window.location.search = '?__bindingAddress=b2c.powerplanet.com/pt'
   }
 
   const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
@@ -159,9 +126,7 @@ const BindingSelectorBlock: FC = () => {
 const BindingSelectorBlockWrapper = () => {
   return (
     <OrderFormProvider>
-      <OrderItemsProvider>
-        <BindingSelectorBlock />
-      </OrderItemsProvider>
+      <BindingSelectorBlock />
     </OrderFormProvider>
   )
 }
