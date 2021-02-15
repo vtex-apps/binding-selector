@@ -75,7 +75,7 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     if (runtimeBinding?.id) {
-      const findBinding = bindingInfo.find(({ bindingId }) => bindingId === runtimeBinding.id)
+      const findBinding = bindingInfo.find(({ id }) => id === runtimeBinding.id)
 
       if (findBinding) {
         setCurrentBiding(findBinding)
