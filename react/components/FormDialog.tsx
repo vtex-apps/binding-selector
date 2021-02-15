@@ -27,9 +27,16 @@ interface TranslatedLocales {
   [key: string]: InfoObject
 }
 
+interface InfoArray {
+  id: string
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
+}
+
 interface Payload {
   chosenId: string
-  translatedLocales: DataLocaleTypes
+  translatedLocales: InfoArray[]
 }
 
 interface InfoObject {
@@ -127,7 +134,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
       })
     }
     console.log('arr', array)
-    payload.translatedLocales = dataLocales
+    payload.translatedLocales = array
     console.log('payload', payload)
   }
 
