@@ -11,6 +11,7 @@ export const filterBindings = ({
         id: binding.id,
         label: binding.defaultLocale,
         salesChannel: salesChannelInfo.salesChannel,
+        canonicalBaseAddress: binding.canonicalBaseAddress,
       }
 
       bindingsById.push(bindingInfo)

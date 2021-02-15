@@ -30,6 +30,7 @@ const BindingSelectorBlock: FC = () => {
     route: {
       pageContext: { id, type },
     },
+    binding: runtimeBinding,
   } = useRuntime()
 
   const queryVariables = {
@@ -37,13 +38,14 @@ const BindingSelectorBlock: FC = () => {
     type,
   }
 
-  // eslint-disable-next-line no-console
-  const [getAlternateHrefs, { data }] = useLazyQuery(alternateHrefsQuery, {
+  const [
+    getAlternateHrefs,
+    { data: hrefAltData, loading: loadingHref },
+  ] = useLazyQuery(alternateHrefsQuery, {
     variables: queryVariables,
   })
 
   const [bindingInfo, setBindingInfo] = useState<FilteredBinding[]>([])
-  const { binding: runtimeBinding } = useRuntime()
   const {
     error: tenantError,
     data: tenantData,
@@ -84,10 +86,31 @@ const BindingSelectorBlock: FC = () => {
   }, [bindingInfo, runtimeBinding])
 
   useEffect(() => {
-    // This will not yet work for home page. Will retrieve the base url from tenant.
-    // eslint-disable-next-line no-console
-    console.log('dataHrefs', data?.internal?.routes)
-  }, [data])
+    const { canonicalBaseAddress } = currentBinding
+    const queryString = `?__bindingAddress=${canonicalBaseAddress}`
+    const { hostname, protocol } = window.location
+    let path = ''
+
+    const isMyVtex = hostname.indexOf('myvtex') !== -1
+
+    // eslint-disable-next-line vtex/prefer-early-return
+    if (hrefAltData) {
+      const { routes } = hrefAltData.internal
+      const hasRoutes = !!routes.length
+
+      if (hasRoutes) {
+        const { route } = routes.find(
+          ({ binding }: { binding: string }) => binding === currentBinding.id
+        )
+
+        path = route
+      }
+
+      window.location.href = `${protocol}//${
+        isMyVtex ? hostname : canonicalBaseAddress
+      }${path}/${isMyVtex ? queryString : ''}`
+    }
+  }, [hrefAltData, currentBinding])
 
   const handleClick = () => {
     setOpen(!open)
@@ -96,7 +119,6 @@ const BindingSelectorBlock: FC = () => {
   const handleSelection = async (
     selectedBinding: FilteredBinding
   ): Promise<void> => {
-    getAlternateHrefs()
     setCurrentBiding(selectedBinding)
     setOpen(false)
     try {
@@ -107,18 +129,17 @@ const BindingSelectorBlock: FC = () => {
           locale: selectedBinding.label,
         },
       })
-      // only works for Power Planet homepage. Need to be update when we get the right binding url and hreflang
-      window.location.search = `?__bindingAddress=b2c.powerplanet.com/${selectedBinding.label.slice(
-        0,
-        2
-      )}`
     } catch (e) {
       // How to handle when there is an error updating sales channel?
       console.error(e)
     }
+
+    getAlternateHrefs()
   }
 
-  const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
+  const isLoading =
+    loadingTenantInfo || loadingOrderForm || !currentBinding.id || loadingHref
+
   const hasError = !!orderFormError || !!tenantError
 
   if (hasError) {

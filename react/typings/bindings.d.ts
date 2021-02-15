@@ -6,6 +6,7 @@ interface Binding {
       salesChannel: string
     }
   }
+  canonicalBaseAddress: string
 }
 
 interface TenantInfoResponse {
@@ -18,6 +19,7 @@ interface FilteredBinding {
   id: string
   label: string
   salesChannel: string
+  canonicalBaseAddress: string
 }
 
 interface UpdateSalesChannelVariables {
