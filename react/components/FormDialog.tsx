@@ -23,10 +23,6 @@ interface DataLocaleTypes {
   [key: string]: string
 }
 
-interface TranslatedLocales {
-  [key: string]: InfoObject
-}
-
 interface InfoArray {
   id: string
   label: string
@@ -118,23 +114,23 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     const payload = {} as Payload
 
     payload.chosenId = chosenBinding.id
-    console.log('data', dataLocales)
-    const array = []
+    const translatedInfoArray = [] as InfoArray[]
+
     for (const [key, value] of Object.entries(dataLocales)) {
       const defaultLoc = bindings.filter((item) => item.id === key)[0]
-      .defaultLocale
+        .defaultLocale
 
-    const canonicalBase = bindings.filter((item) => item.id === key)[0]
-      .canonicalBaseAddress
-      array.push({
+      const canonicalBase = bindings.filter((item) => item.id === key)[0]
+        .canonicalBaseAddress
+
+      translatedInfoArray.push({
         label: value,
         id: key,
         defaultLocale: defaultLoc,
         canonicalBaseAddress: canonicalBase,
       })
     }
-    console.log('arr', array)
-    payload.translatedLocales = array
+    payload.translatedLocales = translatedInfoArray
     console.log('payload', payload)
   }
 
