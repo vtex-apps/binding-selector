@@ -11,7 +11,6 @@
     "@vtex/tsconfig": "^0.5.6",
     "axios": "^0.21.1",
     "typescript": "3.9.7",
-    "vtex.binding-selector": "https://updatesc--powerplanet.myvtex.com/_v/private/typings/linked/v1/vtex.binding-selector@0.0.1+build1613056975/public/@types/vtex.binding-selector",
     "vtex.checkout-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.checkout-graphql@0.56.1/public/@types/vtex.checkout-graphql",
     "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.4/public/@types/vtex.css-handles",
     "vtex.order-items": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.order-items@0.11.0/public/@types/vtex.order-items",

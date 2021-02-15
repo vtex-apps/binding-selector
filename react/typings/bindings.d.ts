@@ -25,3 +25,8 @@ interface UpdateSalesChannelVariables {
   locale: string
   orderFormId: string
 }
+
+interface AlternateHrefsVariables {
+  id: string
+  type: string
+}

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
 import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
-import { useQuery, useMutation } from 'react-apollo'
+import { useQuery, useMutation, useLazyQuery } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
+import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { filterBindings } from './utils'
 
 const CSS_HANDLES = [
@@ -24,6 +25,23 @@ const BindingSelectorBlock: FC = () => {
 
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
+  const {
+    // @ts-expect-error routes not typed in useRuntime
+    route: {
+      pageContext: { id, type },
+    },
+  } = useRuntime()
+
+  const queryVariables = {
+    id,
+    type,
+  }
+
+  // eslint-disable-next-line no-console
+  const [getAlternateHrefs, { data }] = useLazyQuery(alternateHrefsQuery, {
+    variables: queryVariables,
+  })
+
   const [bindingInfo, setBindingInfo] = useState<FilteredBinding[]>([])
   const { binding: runtimeBinding } = useRuntime()
   const {
@@ -55,13 +73,21 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     if (runtimeBinding?.id) {
-      const findBinding = bindingInfo.find(({ id }) => id === runtimeBinding.id)
+      const findBinding = bindingInfo.find(
+        ({ id: bindingId }) => bindingId === runtimeBinding.id
+      )
 
       if (findBinding) {
         setCurrentBiding(findBinding)
       }
     }
   }, [bindingInfo, runtimeBinding])
+
+  useEffect(() => {
+    // This will not yet work for home page. Will retrieve the base url from tenant.
+    // eslint-disable-next-line no-console
+    console.log('dataHrefs', data?.internal?.routes)
+  }, [data])
 
   const handleClick = () => {
     setOpen(!open)
@@ -70,6 +96,7 @@ const BindingSelectorBlock: FC = () => {
   const handleSelection = async (
     selectedBinding: FilteredBinding
   ): Promise<void> => {
+    getAlternateHrefs()
     setCurrentBiding(selectedBinding)
     setOpen(false)
     try {
