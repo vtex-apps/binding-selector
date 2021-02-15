@@ -4,11 +4,9 @@ import { useCssHandles } from 'vtex.css-handles'
 
 interface Props {
   open: boolean
-  currentBinding: string
-  fakeBindingsLabel: {
-    [Identifier: string]: { [Identifier: string]: string }
-  }
-  onSelectBinding: (selectedBinding: string) => void
+  currentBinding: FilteredBinding
+  bindingInfo: FilteredBinding[]
+  onSelectBinding: (selectedBinding: FilteredBinding) => void
 }
 
 const CSS_HANDLES = ['list', 'listElement'] as const
@@ -16,7 +14,7 @@ const CSS_HANDLES = ['list', 'listElement'] as const
 const BindingSelectorList: FC<Props> = ({
   open,
   currentBinding,
-  fakeBindingsLabel,
+  bindingInfo,
   onSelectBinding,
 }) => {
   const handles = useCssHandles(CSS_HANDLES)
@@ -26,14 +24,14 @@ const BindingSelectorList: FC<Props> = ({
       hidden={!open}
       className={`${handles.list} absolute z-5 list top-1 ph0 mh0 mt5 bg-base`}
     >
-      {Object.keys(fakeBindingsLabel[currentBinding])
+      {bindingInfo
         .filter((binding) => {
-          return binding !== currentBinding
+          return binding.id !== currentBinding.id
         })
         .map((binding) => (
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
           <li
-            key={binding}
+            key={binding.id}
             className={`${handles.listElement} t-action--small pointer f5 pa3 hover-bg-muted-5 tc`}
             onClick={() => {
               onSelectBinding(binding)
@@ -43,7 +41,7 @@ const BindingSelectorList: FC<Props> = ({
             }}
             onMouseDown={(e) => e.preventDefault()}
           >
-            <span>{fakeBindingsLabel[currentBinding][binding]}</span>
+            <span>{binding.label}</span>
           </li>
         ))}
     </ul>

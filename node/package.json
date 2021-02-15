@@ -1,30 +1,25 @@
 {
   "name": "vtex.binding-selector",
   "version": "0.0.1",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vtex-test-tools test"
   },
   "devDependencies": {
-    "@types/node": "^11.12.1",
-    "@types/react": "^16.8.10",
-    "@types/react-intl": "^2.3.17",
-    "apollo-client": "^2.4.7",
-    "graphql": "^14.0.2",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-intl": "^2.7.2",
+    "@vtex/test-tools": "vtex/test-tools",
+    "@vtex/tsconfig": "^0.5.6",
+    "axios": "^0.21.1",
     "typescript": "3.9.7",
+    "vtex.binding-selector": "https://updatesc--powerplanet.myvtex.com/_v/private/typings/linked/v1/vtex.binding-selector@0.0.1+build1613056975/public/@types/vtex.binding-selector",
     "vtex.checkout-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.checkout-graphql@0.56.1/public/@types/vtex.checkout-graphql",
     "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.4/public/@types/vtex.css-handles",
     "vtex.order-items": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.order-items@0.11.0/public/@types/vtex.order-items",
     "vtex.order-manager": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.order-manager@0.9.0/public/@types/vtex.order-manager",
-    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.126.11/public/@types/vtex.render-runtime",
     "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.135.1/public/@types/vtex.styleguide",
     "vtex.tenant-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql"
   },
   "dependencies": {
-    "@vtex/css-handles": "^1.1.3",
-    "react-apollo": "^3.1.5"
+    "@vtex/api": "6.39.1"
   }
 }
