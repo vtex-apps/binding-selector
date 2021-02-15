@@ -28,7 +28,11 @@ const BindingSelectorBlock: FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
   // @ts-expect-error routes not typed in useRuntime
-  const { route: { pageContext: { id, type }} } = useRuntime()
+  const {
+    route: {
+      pageContext: { id, type },
+    },
+  } = useRuntime()
 
   const queryVariables = {
     id,
@@ -71,7 +75,7 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     if (runtimeBinding?.id) {
-      const findBinding = bindingInfo.find(({ id }) => id === runtimeBinding.id)
+      const findBinding = bindingInfo.find(({ bindingId }) => bindingId === runtimeBinding.id)
 
       if (findBinding) {
         setCurrentBiding(findBinding)
