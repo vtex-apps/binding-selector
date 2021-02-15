@@ -2,8 +2,7 @@ import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { compose } from 'react-apollo'
-import { useQuery } from 'react-apollo'
+import { compose, useQuery } from 'react-apollo'
 
 import tokenGQL from '../graphql/token.gql'
 
@@ -25,12 +24,18 @@ interface DataLocaleTypes {
 }
 
 interface TranslatedLocales {
-  [key: string]: string
+  [key: string]: InfoObject
 }
 
 interface Payload {
   chosenId: string
-  translatedLocales: TranslatedLocales
+  translatedLocales: DataLocaleTypes
+}
+
+interface InfoObject {
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
 }
 
 interface FieldInputProps {
@@ -43,6 +48,7 @@ interface FieldInputProps {
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
   const { data: retrievedToken } = useQuery(tokenGQL)
+
   return (
     <div key={key} className="flex items-center justify-center w-100">
       <div className="pa4 w-40">
@@ -51,7 +57,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
         </label>
       </div>
       <div className="pa4 w-50">
-      <p>Current token: {retrievedToken?.token}</p>
+        <p>Current token: {retrievedToken?.token}</p>
         <Input
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
@@ -68,7 +74,17 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
+    const infoObject = {} as InfoObject
 
+    const defaultLoc = bindings.filter((item) => item.id === name)[0]
+      .defaultLocale
+
+    const canonicalBase = bindings.filter((item) => item.id === name)[0]
+      .canonicalBaseAddress
+
+    // infoObject.label = value
+    // infoObject.defaultLocale = defaultLoc
+    // infoObject.canonicalBaseAddress = canonicalBase
     setDataLocales({ ...dataLocales, [name]: value })
   }
 
@@ -95,8 +111,24 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     const payload = {} as Payload
 
     payload.chosenId = chosenBinding.id
+    console.log('data', dataLocales)
+    const array = []
+    for (const [key, value] of Object.entries(dataLocales)) {
+      const defaultLoc = bindings.filter((item) => item.id === key)[0]
+      .defaultLocale
+
+    const canonicalBase = bindings.filter((item) => item.id === key)[0]
+      .canonicalBaseAddress
+      array.push({
+        label: value,
+        id: key,
+        defaultLocale: defaultLoc,
+        canonicalBaseAddress: canonicalBase,
+      })
+    }
+    console.log('arr', array)
     payload.translatedLocales = dataLocales
-    console.log(payload)
+    console.log('payload', payload)
   }
 
   return (
