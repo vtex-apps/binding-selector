@@ -77,17 +77,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
-    const infoObject = {} as InfoObject
 
-    const defaultLoc = bindings.filter((item) => item.id === name)[0]
-      .defaultLocale
-
-    const canonicalBase = bindings.filter((item) => item.id === name)[0]
-      .canonicalBaseAddress
-
-    // infoObject.label = value
-    // infoObject.defaultLocale = defaultLoc
-    // infoObject.canonicalBaseAddress = canonicalBase
     setDataLocales({ ...dataLocales, [name]: value })
   }
 
