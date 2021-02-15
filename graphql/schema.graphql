@@ -1,7 +1,15 @@
+input TranslatedInfoArray {
+  id: String,
+  label: String
+  defaultLocale: String
+  canonicalBaseAddress: String
+}
+
 type Query {
     token: String
   }
-  
-  type Mutation {
-    saveToken(token: String): String
-  }
+
+type Mutation {
+  saveToken(token: String): String
+  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): String
+}

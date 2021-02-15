@@ -120,6 +120,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         canonicalBaseAddress: canonicalBase,
       })
     }
+
     payload.translatedLocales = translatedInfoArray
     console.log('payload', payload)
   }
