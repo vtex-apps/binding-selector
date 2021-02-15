@@ -1,0 +1,21 @@
+type PartialOrderForm {
+  orderFormId: ID!
+  salesChannel: String!
+  items: [Item!]!
+  canEditData: Boolean!
+  loggedIn: Boolean!
+  userProfileId: String
+  value: Float!
+  clientPreferencesData: ClientPreferencesData
+  allowManualPrice: Boolean
+}
+
+type ClientPreferencesData {
+  locale: String
+  optinNewsletter: Boolean
+}
+
+input ClientPreferencesDataInput {
+  optinNewsletter: Boolean
+  locale: String
+}
