@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { FC } from 'react'
-// import { withApollo, compose, graphql } from 'react-apollo'
 import React, { useState, useEffect } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
-import { useRuntime, canUseDOM } from 'vtex.render-runtime'
+import { useRuntime } from 'vtex.render-runtime'
 import { useQuery, useMutation, useLazyQuery } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
 
@@ -27,8 +25,8 @@ const BindingSelectorBlock: FC = () => {
 
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
-  // @ts-expect-error routes not typed in useRuntime
   const {
+    // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
     },
@@ -75,7 +73,9 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     if (runtimeBinding?.id) {
-      const findBinding = bindingInfo.find(({ id }) => id === runtimeBinding.id)
+      const findBinding = bindingInfo.find(
+        ({ id: bindingId }) => bindingId === runtimeBinding.id
+      )
 
       if (findBinding) {
         setCurrentBiding(findBinding)
@@ -85,6 +85,7 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     // This will not yet work for home page. Will retrieve the base url from tenant.
+    // eslint-disable-next-line no-console
     console.log('dataHrefs', data?.internal?.routes)
   }, [data])
 
