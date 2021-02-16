@@ -94,7 +94,7 @@ const BindingSelectorBlock: FC = () => {
     if (hrefAltData) {
       const { routes = [] } = hrefAltData.internal
 
-      path = getMatchRoute({ routes, currentBidingId: currentBinding.id })
+      path = getMatchRoute({ routes, currentBindingId: currentBinding.id })
 
       window.location.href = createRedirectUrl({
         canonicalBaseAddress,

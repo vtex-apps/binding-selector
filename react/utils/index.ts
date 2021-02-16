@@ -42,18 +42,18 @@ export const createRedirectUrl = ({
   }`
 }
 
-interface MathRoute {
-  currentBidingId: string
+interface MatchRoute {
+  currentBindingId: string
   routes: [RoutesByBinding] | []
 }
 
 export const getMatchRoute = ({
-  currentBidingId,
+  currentBindingId,
   routes,
-}: MathRoute): string => {
+}: MatchRoute): string => {
   const { route } =
     routes.find(
-      ({ binding }: { binding: string }) => binding === currentBidingId
+      ({ binding }: { binding: string }) => binding === currentBindingId
     ) ?? {}
 
   return route ?? ''
