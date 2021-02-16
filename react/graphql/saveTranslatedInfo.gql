@@ -1,0 +1,3 @@
+mutation saveTranslatedInfo($chosenId: String, $translatedLocales: [TranslatedInfoArray]) {
+  saveTranslatedInfo(chosenId: $chosenId, translatedLocales: $translatedLocales)
+}

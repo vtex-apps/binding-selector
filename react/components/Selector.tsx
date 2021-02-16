@@ -109,18 +109,6 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
       <p className="pb4">
         <FormattedMessage id="admin-description" />
       </p>
-      <Input
-        placeholder="API Token"
-        value={token}
-        onChange={(e: any) => setToken(e.target.value)}
-      />
-      <Button
-        onClick={() => {
-          saveToken({ variables: { token } })
-        }}
-      >
-        Salvar
-      </Button>
       <Toggle
         checked={isActive}
         label={intl.formatMessage({ id: 'admin-label' })}

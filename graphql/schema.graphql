@@ -5,8 +5,16 @@ input TranslatedInfoArray {
   canonicalBaseAddress: String
 }
 
+type TranslatedInfoOutput {
+  id: String,
+  label: String
+  defaultLocale: String
+  canonicalBaseAddress: String
+}
+
 type Query {
     token: String
+    translatedInfo: [TranslatedInfoOutput]
   }
 
 type Mutation {

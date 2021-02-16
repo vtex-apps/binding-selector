@@ -1,0 +1,8 @@
+query translatedInfo {
+  dataToSave {
+      id
+      label
+      defaultLocale
+      canonicalBaseAddress
+  }
+}

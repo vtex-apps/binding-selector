@@ -2,9 +2,11 @@ import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { compose, useQuery } from 'react-apollo'
+import { compose, useQuery, useMutation } from 'react-apollo'
 
 import tokenGQL from '../graphql/token.gql'
+import translatedInfo from '../graphql/translatedInfo.gql'
+import saveTranslatedInfoGQL from '../graphql/saveTranslatedInfo.gql'
 
 interface Bindings {
   id: string
@@ -51,7 +53,8 @@ interface FieldInputProps {
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
   const { data: retrievedToken } = useQuery(tokenGQL)
-
+  const { data: dataInfo } = useQuery(translatedInfo)
+  console.log(dataInfo)
   return (
     <div key={key} className="flex items-center justify-center w-100">
       <div className="pa4 w-40">
@@ -60,7 +63,6 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
         </label>
       </div>
       <div className="pa4 w-50">
-        <p>Current token: {retrievedToken?.token}</p>
         <Input
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
@@ -74,6 +76,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleToggle, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
+  const [saveTranslatedInfo] = useMutation(saveTranslatedInfoGQL)
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -122,6 +125,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     payload.translatedLocales = translatedInfoArray
+
+    saveTranslatedInfo({ variables: payload })
     console.log('payload', payload)
   }
 
