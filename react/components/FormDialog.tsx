@@ -2,9 +2,7 @@ import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { compose, useQuery } from 'react-apollo'
-
-import tokenGQL from '../graphql/token.gql'
+import { compose } from 'react-apollo'
 
 interface Bindings {
   id: string
@@ -35,12 +33,6 @@ interface Payload {
   translatedLocales: InfoArray[]
 }
 
-interface InfoObject {
-  label: string
-  defaultLocale: string
-  canonicalBaseAddress: string
-}
-
 interface FieldInputProps {
   binding: Bindings
   dataLocales: DataLocaleTypes
@@ -50,7 +42,6 @@ interface FieldInputProps {
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
-  const { data: retrievedToken } = useQuery(tokenGQL)
 
   return (
     <div key={key} className="flex items-center justify-center w-100">
@@ -60,7 +51,6 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
         </label>
       </div>
       <div className="pa4 w-50">
-        <p>Current token: {retrievedToken?.token}</p>
         <Input
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
