@@ -1,6 +1,7 @@
 interface Binding {
   id: string
   defaultLocale: string
+  canonicalBaseAddress: string
   extraContext: {
     portal?: {
       salesChannel: string

@@ -3,6 +3,8 @@ import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Layout, PageBlock, PageHeader } from 'vtex.styleguide'
 
+import Selector from './components/Selector'
+
 import './styles.global.css'
 
 const BindingSelector: FC = () => {
@@ -12,7 +14,9 @@ const BindingSelector: FC = () => {
         <PageHeader title={<FormattedMessage id="admin-binding-selector" />} />
       }
     >
-      <PageBlock variation="full" />
+      <PageBlock variation="full">
+        <Selector />
+      </PageBlock>
     </Layout>
   )
 }
