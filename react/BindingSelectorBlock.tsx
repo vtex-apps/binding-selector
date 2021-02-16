@@ -9,7 +9,7 @@ import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
-import { filterBindings } from './utils'
+import { createRedirectUrl, filterBindings, getMatchRoute } from './utils'
 
 const CSS_HANDLES = [
   'container',
@@ -41,7 +41,7 @@ const BindingSelectorBlock: FC = () => {
   const [
     getAlternateHrefs,
     { data: hrefAltData, loading: loadingHref },
-  ] = useLazyQuery(alternateHrefsQuery, {
+  ] = useLazyQuery<QueryInternal>(alternateHrefsQuery, {
     variables: queryVariables,
   })
 
@@ -87,28 +87,21 @@ const BindingSelectorBlock: FC = () => {
 
   useEffect(() => {
     const { canonicalBaseAddress } = currentBinding
-    const queryString = `?__bindingAddress=${canonicalBaseAddress}`
     const { hostname, protocol } = window.location
     let path = ''
 
-    const isMyVtex = hostname.indexOf('myvtex') !== -1
-
     // eslint-disable-next-line vtex/prefer-early-return
     if (hrefAltData) {
-      const { routes } = hrefAltData.internal
-      const hasRoutes = !!routes.length
+      const { routes = [] } = hrefAltData.internal
 
-      if (hasRoutes) {
-        const { route } = routes.find(
-          ({ binding }: { binding: string }) => binding === currentBinding.id
-        )
+      path = getMatchRoute({ routes, currentBidingId: currentBinding.id })
 
-        path = route
-      }
-
-      window.location.href = `${protocol}//${
-        isMyVtex ? hostname : canonicalBaseAddress
-      }${path}/${isMyVtex ? queryString : ''}`
+      window.location.href = createRedirectUrl({
+        canonicalBaseAddress,
+        hostname,
+        protocol,
+        path,
+      })
     }
   }, [hrefAltData, currentBinding])
 
