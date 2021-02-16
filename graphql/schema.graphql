@@ -1,0 +1,11 @@
+type Mutation {
+  updateSalesChannel(
+    orderFormId: ID
+    salesChannel: String
+    locale: String
+  ): PartialOrderForm
+}
+
+type Query {
+  doNotCall: String
+}
