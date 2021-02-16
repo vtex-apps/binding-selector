@@ -1,20 +1,13 @@
 import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { compose } from 'react-apollo'
-
-interface Bindings {
-  id: string
-  canonicalBaseAddress: string
-  defaultLocale: string
-}
 
 interface FormDialogProps {
   open: boolean
   handleToggle: () => void
-  bindings: Bindings[]
-  chosenBinding: Bindings
+  bindings: Binding[]
+  chosenBinding: Binding
 }
 
 interface DataLocaleTypes {
@@ -34,7 +27,7 @@ interface Payload {
 }
 
 interface FieldInputProps {
-  binding: Bindings
+  binding: Binding
   dataLocales: DataLocaleTypes
   handleChange: (e: SyntheticEvent) => void
   key: number
@@ -73,10 +66,10 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const showFields = () => {
     const fields = bindings
-      ?.filter((binding: Bindings) => {
+      ?.filter((binding: Binding) => {
         return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
       })
-      .map((binding: Bindings, i: number) => {
+      .map((binding: Binding, i: number) => {
         return (
           <FieldInput
             binding={binding}
@@ -138,4 +131,4 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   )
 }
 
-export default compose(injectIntl)(FormDialog)
+export default FormDialog

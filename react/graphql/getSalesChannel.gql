@@ -4,6 +4,7 @@ query getSalesChannel {
       id
       defaultLocale
       extraContext
+      canonicalBaseAddress
     }
   }
 }

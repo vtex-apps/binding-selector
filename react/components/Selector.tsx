@@ -6,24 +6,18 @@ import { FormattedMessage, injectIntl } from 'react-intl'
 import { Toggle, Button } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
-import accountLocalesQuery from '../graphql/accountLocales.gql'
+import getSalesChannel from '../graphql/getSalesChannel.gql'
 
 interface SelectorProps {
   intl: InjectedIntl
 }
 
-interface BindingsInfo {
-  id: string
-  canonicalBaseAddress: string
-  defaultLocale: string
-}
-
 interface BindingList {
-  info: BindingsInfo
+  info: Binding
   i: number
   setModalOpen: (modalOpen: boolean) => void
   modalOpen: boolean
-  setChosenBinding: (info: BindingsInfo) => void
+  setChosenBinding: (info: Binding) => void
   key: number
 }
 
@@ -64,8 +58,10 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
   const { intl } = props
   const [isActive, setIsActive] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [chosenBinding, setChosenBinding] = useState({})
-  const { data: bindingData } = useQuery(accountLocalesQuery)
+  const [chosenBinding, setChosenBinding] = useState<Binding>(Object)
+  const { data: bindingData } = useQuery<TenantInfoResponse>(getSalesChannel, {
+    ssr: false,
+  })
 
   const handleChange = () => setIsActive(!isActive)
 
@@ -73,10 +69,10 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
 
   const showBindings = () => {
     const infoSections = bindingData?.tenantInfo.bindings
-      .filter((info: BindingsInfo) => {
+      .filter((info: Binding) => {
         return info.canonicalBaseAddress.split('/')[1] !== 'admin'
       })
-      .map((info: BindingsInfo, i: number) => {
+      .map((info: Binding, i: number) => {
         return (
           <BindingList
             key={i}
@@ -98,7 +94,7 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
         open={modalOpen}
         handleToggle={handleToggle}
         chosenBinding={chosenBinding}
-        bindings={bindingData?.tenantInfo.bindings}
+        bindings={bindingData?.tenantInfo.bindings ?? []}
       />
       <p className="pb4">
         <FormattedMessage id="admin-description" />
