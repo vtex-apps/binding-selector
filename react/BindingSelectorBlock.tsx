@@ -10,6 +10,7 @@ import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { createRedirectUrl, filterBindings, getMatchRoute } from './utils'
+import Spinner from './components/Spinner'
 
 const CSS_HANDLES = [
   'container',
@@ -40,7 +41,7 @@ const BindingSelectorBlock: FC = () => {
 
   const [
     getAlternateHrefs,
-    { data: hrefAltData, loading: loadingHref },
+    { data: hrefAltData },
   ] = useLazyQuery<QueryInternal>(alternateHrefsQuery, {
     variables: queryVariables,
   })
@@ -64,6 +65,8 @@ const BindingSelectorBlock: FC = () => {
     loading: loadingOrderForm,
     orderForm,
   } = useOrderForm()
+
+  const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
   useEffect(() => {
     if (tenantData) {
@@ -112,6 +115,7 @@ const BindingSelectorBlock: FC = () => {
   const handleSelection = async (
     selectedBinding: FilteredBinding
   ): Promise<void> => {
+    setLoadingRedirect(true)
     setCurrentBiding(selectedBinding)
     setOpen(false)
     try {
@@ -131,7 +135,10 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const isLoading =
-    loadingTenantInfo || loadingOrderForm || !currentBinding.id || loadingHref
+    loadingTenantInfo ||
+    loadingOrderForm ||
+    !currentBinding.id ||
+    loadingRedirect
 
   const hasError = !!orderFormError || !!tenantError
 
@@ -149,7 +156,9 @@ const BindingSelectorBlock: FC = () => {
       <div
         className={`${handles.relativeContainer} relative flex justify-center`}
       >
-        {isLoading ? null : (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <>
             <button
               type="button"
