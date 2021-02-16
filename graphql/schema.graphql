@@ -1,7 +1,0 @@
-type Query {
-    token: String
-  }
-  
-  type Mutation {
-    saveToken(token: String): String
-  }

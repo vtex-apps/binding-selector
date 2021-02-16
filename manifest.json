@@ -20,17 +20,5 @@
     "node": "6.x",
     "graphql": "1.x"
   },
-  "policies": [
-    {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "portal.vtexcommercestable.com.br",
-        "path": "*"
-      }
-    },
-    {
-      "name": "vbase-read-write"
-    }
-  ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
