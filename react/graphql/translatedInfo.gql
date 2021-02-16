@@ -1,8 +1,11 @@
 query translatedInfo {
-  dataToSave {
-      id
-      label
-      defaultLocale
-      canonicalBaseAddress
+  translatedInfo {
+      chosenId 
+      translatedLocales {
+        id
+        label
+        defaultLocale
+        canonicalBaseAddress
+      }
   }
 }

@@ -1,5 +1,9 @@
-export default function token(_: any, __: any, ctx: Context) {
+export default function translatedInfo(_: any, __: any, ctx: Context) {
     return ctx.clients.vbase
       .getJSON('account.binding', 'configs')
-      .then((data: any) => data.dataToSave)
+      .then((data: any) => {
+        console.log('data', data.dataToSave)
+        return data.dataToSave
+      })
+      .catch(err => console.log(err))
   }

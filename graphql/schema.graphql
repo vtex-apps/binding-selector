@@ -5,11 +5,16 @@ input TranslatedInfoArray {
   canonicalBaseAddress: String
 }
 
-type TranslatedInfoOutput {
+type BindingsTranslation {
   id: String,
   label: String
   defaultLocale: String
   canonicalBaseAddress: String
+}
+
+type TranslatedInfoOutput {
+  chosenId: String
+  translatedLocales: [BindingsTranslation]
 }
 
 type Query {
