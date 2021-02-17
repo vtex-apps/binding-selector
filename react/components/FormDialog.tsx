@@ -6,6 +6,13 @@ import { useMutation } from 'react-apollo'
 
 import saveTranslatedInfoGQL from '../graphql/saveTranslatedInfo.gql'
 
+interface InfoArray {
+  id: string
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
+}
+
 interface FormDialogProps {
   open: boolean
   handleToggle: () => void
@@ -15,18 +22,6 @@ interface FormDialogProps {
 
 interface DataLocaleTypes {
   [key: string]: string
-}
-
-interface InfoArray {
-  id: string
-  label: string
-  defaultLocale: string
-  canonicalBaseAddress: string
-}
-
-interface Payload {
-  bindingId: string
-  translatedLocales: InfoArray[]
 }
 
 interface FieldInputProps {
@@ -60,7 +55,20 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleToggle, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
-  const [saveTranslatedInfo] = useMutation(saveTranslatedInfoGQL)
+  const [saveTranslatedInfo] = useMutation<
+    {
+      saveTranslatedInfo: {
+        bindingId: string
+        translatedLocales: {
+          id: string
+          defaultLocale: string
+          canonicalBaseAddress: string
+          label: string
+        }
+      }
+    },
+    BindingsSaved
+  >(saveTranslatedInfoGQL)
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -88,7 +96,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   }
 
   const onSubmit = () => {
-    const payload = {} as Payload
+    const payload = {} as BindingsSaved
 
     payload.bindingId = chosenBinding.id
     const translatedInfoArray = [] as InfoArray[]

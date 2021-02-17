@@ -7,13 +7,19 @@ interface Binding {
       salesChannel: string
     }
   }
-  canonicalBaseAddress: string
 }
 
 interface TenantInfoResponse {
   tenantInfo: {
     bindings: Binding[]
   }
+}
+
+interface InfoBinding {
+  id: string
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
 }
 
 interface FilteredBinding {
@@ -25,7 +31,7 @@ interface FilteredBinding {
 
 interface BindingsSaved {
   bindingId: string
-  translatedLocales: FilteredBinding[]
+  translatedLocales: InfoBinding[]
 }
 
 interface UpdateSalesChannelVariables {

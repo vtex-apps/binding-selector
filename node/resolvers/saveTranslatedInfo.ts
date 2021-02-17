@@ -1,19 +1,3 @@
-interface TranslatedInfo {
-  id: string
-  label: string
-  canonicalBaseAddress: string
-  defaultLocale: string
-}
-
-interface TranslatedBinding {
-  bindingId: string
-  translatedLocales: [TranslatedInfo]
-}
-
-interface GetResponse {
-  newDataToSave: [TranslatedBinding]
-}
-
 export const saveTranslatedInfo = async (
   _: unknown,
   args: {
@@ -26,7 +10,7 @@ export const saveTranslatedInfo = async (
   const { bindingId, translatedLocales } = args
   const { vbase } = clients
 
-  let newDataToSave: TranslatedBinding[]
+  let dataSave: TranslatedBinding[]
 
   const newData = {
     bindingId,
@@ -39,31 +23,31 @@ export const saveTranslatedInfo = async (
       'configs'
     )
 
-    if (savedTranslations.newDataToSave?.length) {
-      const filteredFromChosenId = savedTranslations.newDataToSave.filter(
+    if (savedTranslations?.dataSave?.length) {
+      const filteredFromChosenId = savedTranslations.dataSave.filter(
         (item: { bindingId: string }) => item.bindingId !== bindingId
       )
 
       filteredFromChosenId.push(newData)
-      newDataToSave = filteredFromChosenId
+      dataSave = filteredFromChosenId
     } else {
-      newDataToSave = []
-      newDataToSave.push(newData)
+      dataSave = []
+      dataSave.push(newData)
     }
 
     await vbase.saveJSON('account.binding', 'configs', {
-      newDataToSave,
+      dataSave,
     })
 
-    return newDataToSave
+    return dataSave
   } catch {
-    newDataToSave = []
-    newDataToSave.push(newData)
+    dataSave = []
+    dataSave.push(newData)
 
     await vbase.saveJSON('account.binding', 'configs', {
-      newDataToSave,
+      dataSave,
     })
 
-    return newDataToSave
+    return dataSave
   }
 }

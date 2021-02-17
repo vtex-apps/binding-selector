@@ -1,25 +1,5 @@
-input TranslatedInfoArray {
-  id: String,
-  label: String
-  defaultLocale: String
-  canonicalBaseAddress: String
-}
-
-type BindingsTranslation {
-  id: String,
-  label: String
-  defaultLocale: String
-  canonicalBaseAddress: String
-}
-
-type TranslatedInfoOutput {
-  bindingId: String
-  translatedLocales: [BindingsTranslation]
-}
-
 type Query {
     translatedInfo: [TranslatedInfoOutput]
-    doNotCall: String
   }
 
 type Mutation {
