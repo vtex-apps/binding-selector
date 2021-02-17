@@ -26,7 +26,7 @@ const BindingList: FC<BindingList> = (props: BindingList) => {
 
   return (
     <section key={key} className="flex items-center justify-between">
-      <div>
+      <div className="flex-grow-1" style={{ flexBasis: '33%' }}>
         <p>
           <FormattedMessage
             id="admin-store"
@@ -39,6 +39,9 @@ const BindingList: FC<BindingList> = (props: BindingList) => {
             values={{ locale: info.defaultLocale }}
           />
         </p>
+      </div>
+      <div className="flex-grow-1 flex justify-left">
+        <Toggle checked={false} label="Hide it" onChange={() => {}} />
       </div>
       <div>
         <Button
