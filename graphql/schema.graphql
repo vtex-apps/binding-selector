@@ -18,7 +18,7 @@ type TranslatedInfoOutput {
 }
 
 type Query {
-    translatedInfo: String
+    translatedInfo: [TranslatedInfoOutput]
     doNotCall: String
   }
 
@@ -28,5 +28,5 @@ type Mutation {
     salesChannel: String
     locale: String
   ): PartialOrderForm
-  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): String
+  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
 }

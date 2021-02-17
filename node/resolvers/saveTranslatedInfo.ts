@@ -1,68 +1,57 @@
-interface TranslatedInfoArray {
+interface TranslatedInfo {
   id: string
   label: string
   canonicalBaseAddress: string
   defaultLocale: string
 }
 
-interface ResultResponse {
+interface TranslatedBinding {
   chosenId: string
-  resolverResponse: [TranslatedInfoArray]
+  translatedLocales: [TranslatedInfo]
 }
 
-export default function saveTranslatedInfo(
-  _: any,
-  {
-    chosenId,
-    translatedLocales,
-  }: {
+interface GetResponse {
+  newDataToSave: [TranslatedBinding]
+}
+
+export const saveTranslatedInfo = async (
+  _: unknown,
+  args: {
     chosenId: string
-    translatedLocales: any[]
+    translatedLocales: [TranslatedInfo]
   },
   ctx: Context
-) {
-  return ctx.clients.vbase
-    .getJSON('account.binding', 'configs')
-    .then((data: any) => {
-      const newData = {
-        chosenId,
-        translatedLocales,
-      }
-      console.log('here 1')
-      let dataToSave: ResultResponse[]
-      // let resolverResponse
+) => {
+  const { clients } = ctx
+  const { chosenId, translatedLocales } = args
+  const { vbase } = clients
+  const savedTranslations: GetResponse = await vbase.getJSON(
+    'account.binding',
+    'configs'
+  )
 
-      if (data.dataToSave.length) {
-        console.log('here')
-        const filteredFromChosenId = data.dataToSave.filter(
-          (item: { chosenId: string }) => item.chosenId !== chosenId
-        )
+  let newDataToSave: TranslatedBinding[]
 
-        filteredFromChosenId.push(newData)
-        dataToSave = filteredFromChosenId
+  const newData = {
+    chosenId,
+    translatedLocales,
+  }
 
-      } else {
-        console.log('hero')
-        const bindingsInfo = [] as ResultResponse[]
+  if (savedTranslations.newDataToSave.length) {
+    const filteredFromChosenId = savedTranslations.newDataToSave.filter(
+      (item: { chosenId: string }) => item.chosenId !== chosenId
+    )
 
-        data.dataToSave.push(newData)
-        dataToSave = bindingsInfo
-      }
+    filteredFromChosenId.push(newData)
+    newDataToSave = filteredFromChosenId
+  } else {
+    savedTranslations.newDataToSave.push(newData)
+    newDataToSave = savedTranslations.newDataToSave
+  }
 
-      ctx.clients.vbase
-        .saveJSON('account.binding', 'configs', { dataToSave })
-        .then(() => {
-          // resolverResponse = data
-          return 'string'
-          // return resolverResponse
-        })
-        .catch((err: any) => {
-          return err
-        })
+  await vbase.saveJSON('account.binding', 'configs', {
+    newDataToSave,
+  })
 
-      return 'success'
-    })
-    .catch((err: any) => {
-      return err
-    })
+  return newDataToSave
 }

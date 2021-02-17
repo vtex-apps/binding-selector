@@ -2,16 +2,9 @@ import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { useQuery, useMutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 
-import translatedInfo from '../graphql/translatedInfo.gql'
 import saveTranslatedInfoGQL from '../graphql/saveTranslatedInfo.gql'
-
-interface Bindings {
-  id: string
-  canonicalBaseAddress: string
-  defaultLocale: string
-}
 
 interface FormDialogProps {
   open: boolean
@@ -46,8 +39,6 @@ interface FieldInputProps {
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
 
-  // const { data: dataInfo } = useQuery(translatedInfo)
-  // console.log('dataInfo', dataInfo)
   return (
     <div key={key} className="flex items-center justify-center w-100">
       <div className="pa4 w-40">
@@ -120,7 +111,6 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     payload.translatedLocales = translatedInfoArray
 
     saveTranslatedInfo({ variables: payload })
-    console.log('payload', payload)
   }
 
   return (

@@ -7,6 +7,7 @@ import { Toggle, Button } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
 import getSalesChannel from '../graphql/getSalesChannel.gql'
+import translatedInfo from '../graphql/translatedInfo.gql'
 
 interface SelectorProps {
   intl: InjectedIntl
@@ -60,6 +61,10 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [chosenBinding, setChosenBinding] = useState<Binding>(Object)
   const { data: bindingData } = useQuery<TenantInfoResponse>(getSalesChannel, {
+    ssr: false,
+  })
+
+  const { data: translatedData } = useQuery(translatedInfo, {
     ssr: false,
   })
 

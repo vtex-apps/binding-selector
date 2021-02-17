@@ -1,3 +1,11 @@
 mutation saveTranslatedInfo($chosenId: String, $translatedLocales: [TranslatedInfoArray]) {
-  saveTranslatedInfo(chosenId: $chosenId, translatedLocales: $translatedLocales)
+  saveTranslatedInfo(chosenId: $chosenId, translatedLocales: $translatedLocales) {
+      chosenId
+      translatedLocales {
+        id
+        label
+        defaultLocale
+        canonicalBaseAddress
+      }
+  }
 }

@@ -1,5 +1,5 @@
-import translatedInfo from './translatedInfo'
-import saveTranslatedInfo from './saveTranslatedInfo'
+import { translatedInfo } from './translatedInfo'
+import { saveTranslatedInfo } from './saveTranslatedInfo'
 import { updateSalesChannel } from './orderForm'
 
 export const mutations = {
