@@ -46,8 +46,8 @@ interface FieldInputProps {
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
 
-  const { data: dataInfo } = useQuery(translatedInfo)
-  console.log('dataInfo', dataInfo)
+  // const { data: dataInfo } = useQuery(translatedInfo)
+  // console.log('dataInfo', dataInfo)
   return (
     <div key={key} className="flex items-center justify-center w-100">
       <div className="pa4 w-40">
