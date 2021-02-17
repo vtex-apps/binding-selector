@@ -5,6 +5,11 @@ interface TranslatedInfoArray {
   defaultLocale: string
 }
 
+interface ResultResponse {
+  chosenId: string
+  resolverResponse: [TranslatedInfoArray]
+}
+
 export default function saveTranslatedInfo(
   _: any,
   {
@@ -20,15 +25,13 @@ export default function saveTranslatedInfo(
   return ctx.clients.vbase
     .getJSON('account.binding', 'configs')
     .then((data: any) => {
-      console.log('data', data)
-
       const newData = {
         chosenId,
         translatedLocales,
       }
 
-      let dataToSave
-
+      let dataToSave : ResultResponse[]
+      let resolverResponse
       if (data.dataToSave.length) {
         const filteredFromChosenId = data.dataToSave.filter(
           (item: { chosenId: string }) => item.chosenId !== chosenId
@@ -37,7 +40,7 @@ export default function saveTranslatedInfo(
         filteredFromChosenId.push(newData)
         dataToSave = filteredFromChosenId
       } else {
-        const bindingsInfo = [] as TranslatedInfoArray[]
+        const bindingsInfo = [] as ResultResponse[]
 
         data.dataToSave.push(newData)
         dataToSave = bindingsInfo
@@ -46,19 +49,21 @@ export default function saveTranslatedInfo(
       ctx.clients.vbase
         .saveJSON('account.binding', 'configs', { dataToSave })
         .then((_: any) => {
-          console.log('success', _)
-
-          return 'success'
+          resolverResponse = dataToSave
         })
         .catch((err: any) => {
-          console.log(err)
-
-          return 'fail'
+          resolverResponse = {
+            errorMessage: 'Error in saving data',
+            error: err
+          }
         })
+        return resolverResponse
     })
     .catch((err: any) => {
-      console.log('fail', err)
-
-      return 'fail'
+      const resolverResponse = {
+        errorMessage: 'Error in saving data',
+        error: err
+      }
+      return resolverResponse
     })
 }

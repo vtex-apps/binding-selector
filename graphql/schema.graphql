@@ -23,6 +23,6 @@ type Query {
   }
 
 type Mutation {
-  saveToken(token: String): String
-  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): String
+  saveToken(token: String): [TranslatedInfoOutput]
+  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
 }
