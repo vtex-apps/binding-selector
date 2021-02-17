@@ -23,6 +23,11 @@ interface FilteredBinding {
   canonicalBaseAddress: string
 }
 
+interface BindingsSaved {
+  bindingId: string
+  translatedLocales: FilteredBinding[]
+}
+
 interface UpdateSalesChannelVariables {
   salesChannel: string
   locale: string

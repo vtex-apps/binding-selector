@@ -64,7 +64,7 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
     ssr: false,
   })
 
-  const { data: translatedData } = useQuery(translatedInfo, {
+  const { data: translatedData } = useQuery<BindingsSaved>(translatedInfo, {
     ssr: false,
   })
 
