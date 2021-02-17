@@ -1,9 +1,0 @@
-{
-    "chosenId": "string",
-    "translatedLocales": {
-      "binding1": {
-          "label": "string",
-          "defaultLocale": "string"
-      }
-    }
-  }

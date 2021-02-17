@@ -1,28 +1,20 @@
-# [ WORK IN PROGRESS ] Admin Example
+# Selector Binding
 
-An example admin app that adds a menu button to the admin sidebar.
+_TODO_
 
-# PREVIEW NOTICE :construction:
+## Configuration
 
-We're working on the **admin builder**, which will allow you to define two files: `admin/routes.json` file with everything you need to create an admin interface (routes paths and components), and `admin/navigation.json` which alows your admin app to insert itself in the sidebar navigation. This is a temporary example!
+_TODO_
 
-### How to develop admins
+## Customization
 
-1. Admins always declare routes in `/admin/app/<route>`
+In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
 
-2. Declare the `admin` builder in your manifest
-
-3. When installed, the user navigates to `/admin/<route>`, but your app runs in an iframe that points to `/admin/app/<route>`.
-
-4. You can develop directly in the `/admin/app` route for convenience, but don't forget to test it inside the iframe. :)
-
-
-### Quickstart
-
-1. Clone this repo
-
-2. `yarn --cwd react/` for code completion
-
-3. `vtex link`
-
-4. Navigate to `workspace--account.myvtex.com/admin/app/example`
+| CSS Handles |
+| --------------------- |
+| `container` |
+| `relativeContainer` |
+| `button` |
+| `buttonTextClasses` |
+| `list` |
+| `listElement` |

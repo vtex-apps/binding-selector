@@ -1,3 +1,9 @@
 import { IOClients } from '@vtex/api'
 
-export class Clients extends IOClients {}
+import { Checkout } from './checkout'
+
+export class Clients extends IOClients {
+  public get checkout() {
+    return this.getOrSet('checkout', Checkout)
+  }
+}

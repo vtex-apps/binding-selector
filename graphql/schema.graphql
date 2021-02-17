@@ -18,11 +18,15 @@ type TranslatedInfoOutput {
 }
 
 type Query {
-    token: String
     translatedInfo: [TranslatedInfoOutput]
+    doNotCall: String
   }
 
 type Mutation {
-  saveToken(token: String): [TranslatedInfoOutput]
+  updateSalesChannel(
+    orderFormId: ID
+    salesChannel: String
+    locale: String
+  ): PartialOrderForm
   saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
 }

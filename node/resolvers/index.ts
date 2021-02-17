@@ -1,14 +1,12 @@
-import token from './token'
-import saveToken from './saveToken'
 import translatedInfo from './translatedInfo'
 import saveTranslatedInfo from './saveTranslatedInfo'
+import { updateSalesChannel } from './orderForm'
 
 export const mutations = {
-  saveToken,
+  updateSalesChannel,
   saveTranslatedInfo,
 }
 
 export const queries = {
-  token,
   translatedInfo,
 }
