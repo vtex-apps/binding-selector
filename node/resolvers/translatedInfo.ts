@@ -6,7 +6,7 @@ interface TranslatedInfo {
 }
 
 interface TranslatedBinding {
-  chosenId: string
+  bindingId: string
   translatedLocales: [TranslatedInfo]
 }
 

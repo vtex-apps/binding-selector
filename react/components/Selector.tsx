@@ -68,6 +68,7 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
     ssr: false,
   })
 
+  console.log('translatedData', translatedData)
   const handleChange = () => setIsActive(!isActive)
 
   const handleToggle = () => setModalOpen(!modalOpen)

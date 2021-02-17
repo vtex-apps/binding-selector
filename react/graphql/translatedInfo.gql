@@ -1,6 +1,6 @@
 query translatedInfo {
   translatedInfo {
-      chosenId 
+      bindingId 
       translatedLocales {
         id
         label

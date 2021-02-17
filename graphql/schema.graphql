@@ -13,7 +13,7 @@ type BindingsTranslation {
 }
 
 type TranslatedInfoOutput {
-  chosenId: String
+  bindingId: String
   translatedLocales: [BindingsTranslation]
 }
 
@@ -28,5 +28,5 @@ type Mutation {
     salesChannel: String
     locale: String
   ): PartialOrderForm
-  saveTranslatedInfo(chosenId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
+  saveTranslatedInfo(bindingId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
 }

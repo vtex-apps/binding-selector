@@ -25,7 +25,7 @@ interface InfoArray {
 }
 
 interface Payload {
-  chosenId: string
+  bindingId: string
   translatedLocales: InfoArray[]
 }
 
@@ -90,7 +90,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const onSubmit = () => {
     const payload = {} as Payload
 
-    payload.chosenId = chosenBinding.id
+    payload.bindingId = chosenBinding.id
     const translatedInfoArray = [] as InfoArray[]
 
     for (const [key, value] of Object.entries(dataLocales)) {

@@ -1,6 +1,6 @@
-mutation saveTranslatedInfo($chosenId: String, $translatedLocales: [TranslatedInfoArray]) {
-  saveTranslatedInfo(chosenId: $chosenId, translatedLocales: $translatedLocales) {
-      chosenId
+mutation saveTranslatedInfo($bindingId: String, $translatedLocales: [TranslatedInfoArray]) {
+  saveTranslatedInfo(bindingId: $bindingId, translatedLocales: $translatedLocales) {
+      bindingId
       translatedLocales {
         id
         label

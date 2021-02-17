@@ -6,7 +6,7 @@ interface TranslatedInfo {
 }
 
 interface TranslatedBinding {
-  chosenId: string
+  bindingId: string
   translatedLocales: [TranslatedInfo]
 }
 
@@ -17,13 +17,13 @@ interface GetResponse {
 export const saveTranslatedInfo = async (
   _: unknown,
   args: {
-    chosenId: string
+    bindingId: string
     translatedLocales: [TranslatedInfo]
   },
   ctx: Context
 ) => {
   const { clients } = ctx
-  const { chosenId, translatedLocales } = args
+  const { bindingId, translatedLocales } = args
   const { vbase } = clients
   const savedTranslations: GetResponse = await vbase.getJSON(
     'account.binding',
@@ -33,13 +33,13 @@ export const saveTranslatedInfo = async (
   let newDataToSave: TranslatedBinding[]
 
   const newData = {
-    chosenId,
+    bindingId,
     translatedLocales,
   }
 
   if (savedTranslations.newDataToSave.length) {
     const filteredFromChosenId = savedTranslations.newDataToSave.filter(
-      (item: { chosenId: string }) => item.chosenId !== chosenId
+      (item: { bindingId: string }) => item.bindingId !== bindingId
     )
 
     filteredFromChosenId.push(newData)
