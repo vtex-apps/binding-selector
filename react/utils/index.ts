@@ -11,6 +11,7 @@ export const filterBindings = ({
         id: binding.id,
         label: binding.defaultLocale,
         salesChannel: salesChannelInfo.salesChannel,
+        canonicalBaseAddress: binding.canonicalBaseAddress,
       }
 
       bindingsById.push(bindingInfo)
@@ -18,4 +19,42 @@ export const filterBindings = ({
   }
 
   return bindingsById
+}
+
+interface RedirectUrlArgs {
+  canonicalBaseAddress: string
+  hostname: Window['location']['hostname']
+  protocol: Window['location']['protocol']
+  path: string
+}
+
+export const createRedirectUrl = ({
+  canonicalBaseAddress,
+  hostname,
+  protocol,
+  path,
+}: RedirectUrlArgs): string => {
+  const queryString = `?__bindingAddress=${canonicalBaseAddress}`
+  const isMyVtex = hostname.indexOf('myvtex') !== -1
+
+  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}/${
+    isMyVtex ? queryString : ''
+  }`
+}
+
+interface MatchRoute {
+  currentBindingId: string
+  routes: [RoutesByBinding] | []
+}
+
+export const getMatchRoute = ({
+  currentBindingId,
+  routes,
+}: MatchRoute): string => {
+  const { route } =
+    routes.find(
+      ({ binding }: { binding: string }) => binding === currentBindingId
+    ) ?? {}
+
+  return route ?? ''
 }
