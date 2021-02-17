@@ -9,7 +9,8 @@ import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
-import { filterBindings } from './utils'
+import { createRedirectUrl, filterBindings, getMatchRoute } from './utils'
+import Spinner from './components/Spinner'
 
 const CSS_HANDLES = [
   'container',
@@ -30,6 +31,7 @@ const BindingSelectorBlock: FC = () => {
     route: {
       pageContext: { id, type },
     },
+    binding: runtimeBinding,
   } = useRuntime()
 
   const queryVariables = {
@@ -37,13 +39,14 @@ const BindingSelectorBlock: FC = () => {
     type,
   }
 
-  // eslint-disable-next-line no-console
-  const [getAlternateHrefs, { data }] = useLazyQuery(alternateHrefsQuery, {
+  const [
+    getAlternateHrefs,
+    { data: hrefAltData },
+  ] = useLazyQuery<QueryInternal>(alternateHrefsQuery, {
     variables: queryVariables,
   })
 
   const [bindingInfo, setBindingInfo] = useState<FilteredBinding[]>([])
-  const { binding: runtimeBinding } = useRuntime()
   const {
     error: tenantError,
     data: tenantData,
@@ -62,6 +65,8 @@ const BindingSelectorBlock: FC = () => {
     loading: loadingOrderForm,
     orderForm,
   } = useOrderForm()
+
+  const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
   useEffect(() => {
     if (tenantData) {
@@ -84,10 +89,24 @@ const BindingSelectorBlock: FC = () => {
   }, [bindingInfo, runtimeBinding])
 
   useEffect(() => {
-    // This will not yet work for home page. Will retrieve the base url from tenant.
-    // eslint-disable-next-line no-console
-    console.log('dataHrefs', data?.internal?.routes)
-  }, [data])
+    const { canonicalBaseAddress } = currentBinding
+    const { hostname, protocol } = window.location
+    let path = ''
+
+    // eslint-disable-next-line vtex/prefer-early-return
+    if (hrefAltData) {
+      const { routes = [] } = hrefAltData.internal
+
+      path = getMatchRoute({ routes, currentBindingId: currentBinding.id })
+
+      window.location.href = createRedirectUrl({
+        canonicalBaseAddress,
+        hostname,
+        protocol,
+        path,
+      })
+    }
+  }, [hrefAltData, currentBinding])
 
   const handleClick = () => {
     setOpen(!open)
@@ -96,7 +115,7 @@ const BindingSelectorBlock: FC = () => {
   const handleSelection = async (
     selectedBinding: FilteredBinding
   ): Promise<void> => {
-    getAlternateHrefs()
+    setLoadingRedirect(true)
     setCurrentBiding(selectedBinding)
     setOpen(false)
     try {
@@ -107,18 +126,20 @@ const BindingSelectorBlock: FC = () => {
           locale: selectedBinding.label,
         },
       })
-      // only works for Power Planet homepage. Need to be update when we get the right binding url and hreflang
-      window.location.search = `?__bindingAddress=b2c.powerplanet.com/${selectedBinding.label.slice(
-        0,
-        2
-      )}`
     } catch (e) {
       // How to handle when there is an error updating sales channel?
       console.error(e)
     }
+
+    getAlternateHrefs()
   }
 
-  const isLoading = loadingTenantInfo || loadingOrderForm || !currentBinding.id
+  const isLoading =
+    loadingTenantInfo ||
+    loadingOrderForm ||
+    !currentBinding.id ||
+    loadingRedirect
+
   const hasError = !!orderFormError || !!tenantError
 
   if (hasError) {
@@ -135,7 +156,9 @@ const BindingSelectorBlock: FC = () => {
       <div
         className={`${handles.relativeContainer} relative flex justify-center`}
       >
-        {isLoading ? null : (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <>
             <button
               type="button"
