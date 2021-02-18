@@ -71,7 +71,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   // eslint-disable-next-line no-console
   console.log('translatedData', translatedData)
-
+console.log('showb', showBindings)
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
 
