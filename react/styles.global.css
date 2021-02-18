@@ -6,3 +6,7 @@ body,
 .render-provider {
   height: 100%;
 }
+
+.flex-basis-33 {
+  flex-basis: 33%;
+}
