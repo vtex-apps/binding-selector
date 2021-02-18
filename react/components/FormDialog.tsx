@@ -5,7 +5,7 @@ import { Modal, Input, Button } from 'vtex.styleguide'
 
 interface FormDialogProps {
   open: boolean
-  handleToggle: () => void
+  handleOnClose: () => void
   bindings: Binding[]
   chosenBinding: Binding
 }
@@ -55,7 +55,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 }
 
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
-  const { open, handleToggle, bindings, chosenBinding } = props
+  const { open, handleOnClose, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
 
   const handleChange = (event: SyntheticEvent) => {
@@ -103,12 +103,14 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         canonicalBaseAddress: canonicalBase,
       })
     }
+
     payload.translatedLocales = translatedInfoArray
+    // eslint-disable-next-line no-console
     console.log('payload', payload)
   }
 
   return (
-    <Modal isOpen={open} onClose={handleToggle}>
+    <Modal isOpen={open} onClose={handleOnClose}>
       <div className="pt6 tc">
         <FormattedMessage id="admin-modal" />
       </div>

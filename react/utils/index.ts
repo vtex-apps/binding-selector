@@ -19,3 +19,9 @@ export const filterBindings = ({
 
   return bindingsById
 }
+
+export const removeBindingAdmin = (bindings: Binding[] = []): Binding[] => {
+  return bindings.filter(
+    (binding) => binding.canonicalBaseAddress.split('/')[1] !== 'admin'
+  )
+}
