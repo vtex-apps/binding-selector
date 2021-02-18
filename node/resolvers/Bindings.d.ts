@@ -7,9 +7,10 @@ interface TranslatedInfo {
 
 interface TranslatedBinding {
   bindingId: string
+  show: boolean
   translatedLocales: [TranslatedInfo]
 }
 
 interface GetResponse {
-  dataSave: [TranslatedBinding]
+  data: [TranslatedBinding]
 }

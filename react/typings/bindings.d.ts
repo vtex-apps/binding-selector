@@ -15,6 +15,10 @@ interface TenantInfoResponse {
   }
 }
 
+interface BindingInfoResponse {
+  data: BindingsSaved[]
+}
+
 interface InfoBinding {
   id: string
   label: string
@@ -31,6 +35,7 @@ interface FilteredBinding {
 
 interface BindingsSaved {
   bindingId: string
+  show: boolean
   translatedLocales: InfoBinding[]
 }
 

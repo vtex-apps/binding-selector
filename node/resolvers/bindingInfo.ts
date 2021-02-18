@@ -1,4 +1,4 @@
-export const translatedInfo = async (_: unknown, __: unknown, ctx: Context) => {
+export const bindingInfo = async (_: unknown, __: unknown, ctx: Context) => {
   const { clients } = ctx
   const { vbase } = clients
   const savedTranslations: GetResponse = await vbase.getJSON(
@@ -6,5 +6,5 @@ export const translatedInfo = async (_: unknown, __: unknown, ctx: Context) => {
     'configs'
   )
 
-  return savedTranslations.dataSave
+  return savedTranslations.data
 }

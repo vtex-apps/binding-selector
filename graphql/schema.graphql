@@ -1,6 +1,6 @@
 type Query {
-    translatedInfo: [TranslatedInfoOutput]
-  }
+  bindingInfo: [TranslatedInfoOutput]
+}
 
 type Mutation {
   updateSalesChannel(
@@ -8,5 +8,5 @@ type Mutation {
     salesChannel: String
     locale: String
   ): PartialOrderForm
-  saveTranslatedInfo(bindingId: String, translatedLocales: [TranslatedInfoArray]): [TranslatedInfoOutput]
+  saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
 }

@@ -1,12 +1,25 @@
 input TranslatedInfoArray {
-  id: String,
+  id: String
+  label: String
+  defaultLocale: String
+  canonicalBaseAddress: String
+}
+
+input BindingsInput {
+  bindingId: String
+  show: Boolean
+  translatedLocales: [BindingsTranslationInput]
+}
+
+input BindingsTranslationInput {
+  id: String
   label: String
   defaultLocale: String
   canonicalBaseAddress: String
 }
 
 type BindingsTranslation {
-  id: String,
+  id: String
   label: String
   defaultLocale: String
   canonicalBaseAddress: String
@@ -14,5 +27,6 @@ type BindingsTranslation {
 
 type TranslatedInfoOutput {
   bindingId: String
+  show: Boolean
   translatedLocales: [BindingsTranslation]
 }

@@ -1,0 +1,12 @@
+query bindingInfo {
+  bindingInfo {
+    bindingId
+    show
+    translatedLocales {
+      id
+      label
+      defaultLocale
+      canonicalBaseAddress
+    }
+  }
+}

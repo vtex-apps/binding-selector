@@ -1,12 +1,12 @@
-import { translatedInfo } from './translatedInfo'
-import { saveTranslatedInfo } from './saveTranslatedInfo'
+import { bindingInfo } from './bindingInfo'
+import { saveBindingInfo } from './saveBindingInfo'
 import { updateSalesChannel } from './orderForm'
 
 export const mutations = {
   updateSalesChannel,
-  saveTranslatedInfo,
+  saveBindingInfo,
 }
 
 export const queries = {
-  translatedInfo,
+  bindingInfo,
 }

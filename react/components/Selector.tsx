@@ -7,7 +7,6 @@ import { Toggle, Button } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
 import getSalesChannel from '../graphql/getSalesChannel.gql'
-import translatedInfo from '../graphql/translatedInfo.gql'
 
 interface SelectorProps {
   intl: InjectedIntl
@@ -64,12 +63,6 @@ const Selector: FC<SelectorProps> = (props: SelectorProps) => {
     ssr: false,
   })
 
-  const { data: translatedData } = useQuery<BindingsSaved>(translatedInfo, {
-    ssr: false,
-  })
-
-  // eslint-disable-next-line no-console
-  console.log('translatedData', translatedData)
   const handleChange = () => setIsActive(!isActive)
 
   const handleToggle = () => setModalOpen(!modalOpen)

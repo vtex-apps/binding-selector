@@ -2,9 +2,10 @@ import type { FC, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
-import { useMutation } from 'react-apollo'
+import { useMutation, useQuery } from 'react-apollo'
 
-import saveTranslatedInfoGQL from '../graphql/saveTranslatedInfo.gql'
+import saveBindingInfo from '../graphql/saveBindingInfo.gql'
+import bindingInfo from '../graphql/bindingInfo.gql'
 
 interface InfoArray {
   id: string
@@ -31,6 +32,10 @@ interface FieldInputProps {
   key: number
 }
 
+interface DataMutation {
+  data: BindingsSaved[]
+}
+
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key } = props
 
@@ -55,7 +60,13 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleToggle, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
-  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveTranslatedInfoGQL)
+  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
+
+  // eslint-disable-next-line no-console
+  console.log('translatedData', translatedData)
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -84,6 +95,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const onSubmit = () => {
     const payload = {} as BindingsSaved
+    const dataContainer = {} as DataMutation
 
     payload.bindingId = chosenBinding.id
     const translatedInfoArray = [] as InfoArray[]
@@ -104,8 +116,24 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     payload.translatedLocales = translatedInfoArray
+    payload.show = false
 
-    saveTranslatedInfo({ variables: payload })
+    if (translatedData?.bindingInfo?.length) {
+      const filteredFromChosenId = translatedData.bindingInfo.filter(
+        (item: { bindingId: string }) => item.bindingId !== chosenBinding.id
+      )
+
+      filteredFromChosenId.push(payload)
+
+      dataContainer.data = filteredFromChosenId
+    } else {
+      const newArray = [] as BindingsSaved[]
+
+      newArray.push(payload)
+      dataContainer.data = newArray
+    }
+
+    saveTranslatedInfo({ variables: dataContainer })
   }
 
   return (
