@@ -24,7 +24,7 @@ const BindingList: FC<BindingListProps> = ({
     <div className="pt6">
       {bindings.map((binding, i) => (
         <section key={binding.id} className="flex items-center justify-between">
-          <div className="flex-grow-1" style={{ flexBasis: '33%' }}>
+          <div className="flex-grow-1 flex-basis-33">
             <p>
               <FormattedMessage
                 id="admin-store"
