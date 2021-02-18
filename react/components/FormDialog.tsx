@@ -55,20 +55,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleToggle, bindings, chosenBinding } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
-  const [saveTranslatedInfo] = useMutation<
-    {
-      saveTranslatedInfo: {
-        bindingId: string
-        translatedLocales: {
-          id: string
-          defaultLocale: string
-          canonicalBaseAddress: string
-          label: string
-        }
-      }
-    },
-    BindingsSaved
-  >(saveTranslatedInfoGQL)
+  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveTranslatedInfoGQL)
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
