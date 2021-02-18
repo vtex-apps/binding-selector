@@ -1,4 +1,4 @@
-import type { FC, SyntheticEvent } from 'react'
+import type { FC, FormEvent, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
@@ -16,9 +16,10 @@ interface InfoArray {
 
 interface FormDialogProps {
   open: boolean
-  handleToggle: () => void
+  handleOnClose: () => void
   bindings: Binding[]
   chosenBinding: Binding
+  showBindings: { [key: string]: boolean }
 }
 
 interface DataLocaleTypes {
@@ -30,6 +31,7 @@ interface FieldInputProps {
   dataLocales: DataLocaleTypes
   handleChange: (e: SyntheticEvent) => void
   key: number
+  showBindings: { [key: string]: boolean }
 }
 
 interface DataMutation {
@@ -37,7 +39,7 @@ interface DataMutation {
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
-  const { binding, dataLocales, handleChange, key } = props
+  const { binding, dataLocales, handleChange, key, showBindings } = props
 
   return (
     <div key={key} className="flex items-center justify-center w-100">
@@ -48,6 +50,8 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
       </div>
       <div className="pa4 w-50">
         <Input
+          disabled={!showBindings[binding.id]}
+          required={showBindings[binding.id]}
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
           value={dataLocales[binding.defaultLocale]}
@@ -58,7 +62,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
 }
 
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
-  const { open, handleToggle, bindings, chosenBinding } = props
+  const { open, handleOnClose, bindings, chosenBinding, showBindings } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
   const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
@@ -86,6 +90,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             dataLocales={dataLocales}
             handleChange={handleChange}
             key={i}
+            showBindings={showBindings}
           />
         )
       })
@@ -93,7 +98,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     return fields
   }
 
-  const onSubmit = () => {
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault()
     const payload = {} as BindingsSaved
     const dataContainer = {} as DataMutation
 
@@ -101,11 +107,13 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     const translatedInfoArray = [] as InfoArray[]
 
     for (const [key, value] of Object.entries(dataLocales)) {
-      const defaultLoc = bindings.filter((item) => item.id === key)[0]
-        .defaultLocale
+      const defaultLoc = bindings.filter(
+        (item: { id: string }) => item.id === key
+      )[0].defaultLocale
 
-      const canonicalBase = bindings.filter((item) => item.id === key)[0]
-        .canonicalBaseAddress
+      const canonicalBase = bindings.filter(
+        (item: { id: string }) => item.id === key
+      )[0].canonicalBaseAddress
 
       translatedInfoArray.push({
         label: value,
@@ -134,28 +142,32 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     saveTranslatedInfo({ variables: dataContainer })
+    // eslint-disable-next-line no-console
+    console.log('payload', payload)
   }
 
   return (
-    <Modal isOpen={open} onClose={handleToggle}>
-      <div className="pt6 tc">
-        <FormattedMessage id="admin-modal" />
-      </div>
-      <div className="pt6 flex w-100 flex-column justify-center items-center">
-        {showFields()}
-        <div className="flex pt6">
-          <div className="pr4">
-            <Button variation="tertiary">
-              <FormattedMessage id="admin-cancel" />
-            </Button>
-          </div>
-          <div>
-            <Button onClick={onSubmit}>
-              <FormattedMessage id="admin-save" />
-            </Button>
+    <Modal isOpen={open} onClose={handleOnClose}>
+      <form onSubmit={onSubmit}>
+        <div className="pt6 tc">
+          <FormattedMessage id="admin-modal" />
+        </div>
+        <div className="pt6 flex w-100 flex-column justify-center items-center">
+          {showFields()}
+          <div className="flex pt6">
+            <div className="pr4">
+              <Button variation="tertiary">
+                <FormattedMessage id="admin-cancel" />
+              </Button>
+            </div>
+            <div>
+              <Button type="submit">
+                <FormattedMessage id="admin-save" />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </Modal>
   )
 }

@@ -21,6 +21,12 @@ export const filterBindings = ({
   return bindingsById
 }
 
+export const removeBindingAdmin = (bindings: Binding[] = []): Binding[] => {
+  return bindings.filter(
+    (binding) => binding.canonicalBaseAddress.split('/')[1] !== 'admin'
+  )
+}
+
 interface RedirectUrlArgs {
   canonicalBaseAddress: string
   hostname: Window['location']['hostname']
@@ -37,7 +43,7 @@ export const createRedirectUrl = ({
   const queryString = `?__bindingAddress=${canonicalBaseAddress}`
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
-  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}/${
+  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}${
     isMyVtex ? queryString : ''
   }`
 }

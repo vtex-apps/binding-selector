@@ -16,7 +16,7 @@ interface TenantInfoResponse {
 }
 
 interface BindingInfoResponse {
-  data: BindingsSaved[]
+  bindingInfo: BindingsSaved[]
 }
 
 interface InfoBinding {
