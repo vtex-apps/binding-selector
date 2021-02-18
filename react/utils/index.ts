@@ -37,7 +37,7 @@ export const createRedirectUrl = ({
   const queryString = `?__bindingAddress=${canonicalBaseAddress}`
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
-  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}/${
+  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}${
     isMyVtex ? queryString : ''
   }`
 }
