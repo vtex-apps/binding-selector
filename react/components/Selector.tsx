@@ -43,6 +43,7 @@ const Selector: FC = () => {
         handleOnClose={handleOnClose}
         chosenBinding={chosenBinding}
         bindings={filteredBindings ?? []}
+        showBindings={showBindings}
       />
       <p className="pb4">
         <FormattedMessage id="admin-description" />
