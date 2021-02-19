@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
@@ -26,20 +26,23 @@ const Selector: FC = () => {
     ssr: false,
   })
 
-  const setInitialShowValues = () => {
-    const dataHolder = {} as ShowBindings
+  const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
-    translatedData?.bindingInfo.forEach((binding) => {
-      dataHolder[binding.bindingId] = binding.show
-    })
+  useEffect(() => {
+    const setInitialShowValues = () => {
+      const dataHolder = {} as ShowBindings
 
-    return dataHolder
-  }
+      translatedData?.bindingInfo.forEach((binding) => {
+        dataHolder[binding.bindingId] = binding.show
+      })
 
-  const initialShowValues = setInitialShowValues()
-  const [showBindings, setShowBindings] = useState<ShowBindings>(
-    initialShowValues
-  )
+      return dataHolder
+    }
+
+    const initialShowValues = setInitialShowValues()
+
+    setShowBindings(initialShowValues)
+  }, [translatedData?.bindingInfo])
 
   const handleUpdateSalesChannel = () =>
     setUpdateSalesChannel(!updateSalesChannel)
