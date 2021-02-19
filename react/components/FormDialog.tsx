@@ -1,5 +1,5 @@
 import type { FC, FormEvent, SyntheticEvent } from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
 import { useMutation, useQuery } from 'react-apollo'
@@ -69,6 +69,12 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     ssr: false,
   })
 
+  const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
+
+  useEffect(() => {
+    setFetchedData(translatedData?.bindingInfo ?? [])
+  }, [translatedData?.bindingInfo])
+
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
 
@@ -123,8 +129,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     payload.translatedLocales = translatedInfoArray
     payload.show = !!showBindings[chosenBinding.id]
 
-    if (translatedData?.bindingInfo?.length) {
-      const filteredFromChosenId = translatedData.bindingInfo.filter(
+    if (fetchedData.length) {
+      const filteredFromChosenId = fetchedData.filter(
         (item: { bindingId: string }) => item.bindingId !== chosenBinding.id
       )
 
@@ -139,6 +145,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     saveTranslatedInfo({ variables: dataContainer })
+    setFetchedData(dataContainer.data)
+    handleOnClose()
   }
 
   return (
