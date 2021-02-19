@@ -69,9 +69,6 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     ssr: false,
   })
 
-  // eslint-disable-next-line no-console
-  console.log('translatedData', translatedData)
-console.log('showb', showBindings)
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
 
@@ -124,7 +121,7 @@ console.log('showb', showBindings)
     }
 
     payload.translatedLocales = translatedInfoArray
-    payload.show = false
+    payload.show = !!showBindings[chosenBinding.id]
 
     if (translatedData?.bindingInfo?.length) {
       const filteredFromChosenId = translatedData.bindingInfo.filter(
@@ -142,8 +139,6 @@ console.log('showb', showBindings)
     }
 
     saveTranslatedInfo({ variables: dataContainer })
-    // eslint-disable-next-line no-console
-    console.log('payload', payload)
   }
 
   return (

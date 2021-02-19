@@ -8,6 +8,7 @@ import FormDialog from './FormDialog'
 import getSalesChannel from '../graphql/getSalesChannel.gql'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
+import bindingInfo from '../graphql/bindingInfo.gql'
 
 interface ShowBindings {
   [key: string]: boolean
@@ -21,7 +22,24 @@ const Selector: FC = () => {
     ssr: false,
   })
 
-  const [showBindings, setShowBindings] = useState<ShowBindings>({})
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
+
+  const setInitialShowValues = () => {
+    const dataHolder = {} as ShowBindings
+
+    translatedData?.bindingInfo.forEach((binding) => {
+      dataHolder[binding.bindingId] = binding.show
+    })
+
+    return dataHolder
+  }
+
+  const initialShowValues = setInitialShowValues()
+  const [showBindings, setShowBindings] = useState<ShowBindings>(
+    initialShowValues
+  )
 
   const handleUpdateSalesChannel = () =>
     setUpdateSalesChannel(!updateSalesChannel)
