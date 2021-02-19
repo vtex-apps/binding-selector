@@ -7,13 +7,6 @@ import { useMutation, useQuery } from 'react-apollo'
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
 import bindingInfo from '../graphql/bindingInfo.gql'
 
-interface InfoArray {
-  id: string
-  label: string
-  defaultLocale: string
-  canonicalBaseAddress: string
-}
-
 interface FormDialogProps {
   open: boolean
   handleOnClose: () => void
@@ -61,7 +54,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   )
 }
 
-const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
+const FormDialog: FC<FormDialogProps> = (props) => {
   const { open, handleOnClose, bindings, chosenBinding, showBindings } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
@@ -107,22 +100,25 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     const dataContainer = {} as DataMutation
 
     payload.bindingId = chosenBinding.id
-    const translatedInfoArray = [] as InfoArray[]
+    const translatedInfoArray = [] as AdjustedBinding[]
 
     for (const [key, value] of Object.entries(dataLocales)) {
-      const defaultLoc = bindings.filter(
-        (item: { id: string }) => item.id === key
-      )[0].defaultLocale
-
-      const canonicalBase = bindings.filter(
-        (item: { id: string }) => item.id === key
-      )[0].canonicalBaseAddress
+      const [
+        {
+          defaultLocale,
+          canonicalBaseAddress,
+          extraContext: {
+            portal: { salesChannel },
+          },
+        },
+      ] = bindings.filter(({ id }) => id === key)
 
       translatedInfoArray.push({
         label: value,
         id: key,
-        defaultLocale: defaultLoc,
-        canonicalBaseAddress: canonicalBase,
+        defaultLocale,
+        canonicalBaseAddress,
+        salesChannel,
       })
     }
 
