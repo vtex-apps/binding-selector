@@ -1,11 +1,12 @@
+type Query {
+  bindingInfo: [TranslatedInfoOutput]
+}
+
 type Mutation {
   updateSalesChannel(
     orderFormId: ID
     salesChannel: String
     locale: String
   ): PartialOrderForm
-}
-
-type Query {
-  doNotCall: String
+  saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
 }

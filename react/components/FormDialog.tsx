@@ -2,6 +2,17 @@ import type { FC, FormEvent, SyntheticEvent } from 'react'
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
+import { useMutation, useQuery } from 'react-apollo'
+
+import saveBindingInfo from '../graphql/saveBindingInfo.gql'
+import bindingInfo from '../graphql/bindingInfo.gql'
+
+interface InfoArray {
+  id: string
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
+}
 
 interface FormDialogProps {
   open: boolean
@@ -15,18 +26,6 @@ interface DataLocaleTypes {
   [key: string]: string
 }
 
-interface InfoArray {
-  id: string
-  label: string
-  defaultLocale: string
-  canonicalBaseAddress: string
-}
-
-interface Payload {
-  chosenId: string
-  translatedLocales: InfoArray[]
-}
-
 interface FieldInputProps {
   binding: Binding
   dataLocales: DataLocaleTypes
@@ -35,7 +34,11 @@ interface FieldInputProps {
   showBindings: { [key: string]: boolean }
 }
 
-const FieldInput: FC<FieldInputProps> = (props) => {
+interface DataMutation {
+  data: BindingsSaved[]
+}
+
+const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
   const { binding, dataLocales, handleChange, key, showBindings } = props
 
   return (
@@ -58,9 +61,13 @@ const FieldInput: FC<FieldInputProps> = (props) => {
   )
 }
 
-const FormDialog: FC<FormDialogProps> = (props) => {
+const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleOnClose, bindings, chosenBinding, showBindings } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
+  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -90,17 +97,20 @@ const FormDialog: FC<FormDialogProps> = (props) => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const payload = {} as Payload
+    const payload = {} as BindingsSaved
+    const dataContainer = {} as DataMutation
 
-    payload.chosenId = chosenBinding.id
+    payload.bindingId = chosenBinding.id
     const translatedInfoArray = [] as InfoArray[]
 
     for (const [key, value] of Object.entries(dataLocales)) {
-      const defaultLoc = bindings.filter((item) => item.id === key)[0]
-        .defaultLocale
+      const defaultLoc = bindings.filter(
+        (item: { id: string }) => item.id === key
+      )[0].defaultLocale
 
-      const canonicalBase = bindings.filter((item) => item.id === key)[0]
-        .canonicalBaseAddress
+      const canonicalBase = bindings.filter(
+        (item: { id: string }) => item.id === key
+      )[0].canonicalBaseAddress
 
       translatedInfoArray.push({
         label: value,
@@ -111,8 +121,24 @@ const FormDialog: FC<FormDialogProps> = (props) => {
     }
 
     payload.translatedLocales = translatedInfoArray
-    // eslint-disable-next-line no-console
-    console.log('payload', payload)
+    payload.show = !!showBindings[chosenBinding.id]
+
+    if (translatedData?.bindingInfo?.length) {
+      const filteredFromChosenId = translatedData.bindingInfo.filter(
+        (item: { bindingId: string }) => item.bindingId !== chosenBinding.id
+      )
+
+      filteredFromChosenId.push(payload)
+
+      dataContainer.data = filteredFromChosenId
+    } else {
+      const newArray = [] as BindingsSaved[]
+
+      newArray.push(payload)
+      dataContainer.data = newArray
+    }
+
+    saveTranslatedInfo({ variables: dataContainer })
   }
 
   return (

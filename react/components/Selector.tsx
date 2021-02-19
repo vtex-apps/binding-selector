@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
@@ -8,6 +8,7 @@ import FormDialog from './FormDialog'
 import getSalesChannel from '../graphql/getSalesChannel.gql'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
+import bindingInfo from '../graphql/bindingInfo.gql'
 
 interface ShowBindings {
   [key: string]: boolean
@@ -21,7 +22,27 @@ const Selector: FC = () => {
     ssr: false,
   })
 
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
+
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
+
+  useEffect(() => {
+    const setInitialShowValues = () => {
+      const dataHolder = {} as ShowBindings
+
+      translatedData?.bindingInfo.forEach((binding) => {
+        dataHolder[binding.bindingId] = binding.show
+      })
+
+      return dataHolder
+    }
+
+    const initialShowValues = setInitialShowValues()
+
+    setShowBindings(initialShowValues)
+  }, [translatedData?.bindingInfo])
 
   const handleUpdateSalesChannel = () =>
     setUpdateSalesChannel(!updateSalesChannel)

@@ -7,7 +7,6 @@ interface Binding {
       salesChannel: string
     }
   }
-  canonicalBaseAddress: string
 }
 
 interface TenantInfoResponse {
@@ -16,11 +15,28 @@ interface TenantInfoResponse {
   }
 }
 
+interface BindingInfoResponse {
+  bindingInfo: BindingsSaved[]
+}
+
+interface InfoBinding {
+  id: string
+  label: string
+  defaultLocale: string
+  canonicalBaseAddress: string
+}
+
 interface FilteredBinding {
   id: string
   label: string
   salesChannel: string
   canonicalBaseAddress: string
+}
+
+interface BindingsSaved {
+  bindingId: string
+  show: boolean
+  translatedLocales: InfoBinding[]
 }
 
 interface UpdateSalesChannelVariables {
