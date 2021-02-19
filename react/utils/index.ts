@@ -1,20 +1,15 @@
 export const filterBindings = ({
-  bindings = [],
-}: TenantInfoResponse['tenantInfo']): FilteredBinding[] => {
+  bindingInfo = [],
+}: BindingInfoResponse): BindingsByBindingId[] => {
   const bindingsById = []
 
-  for (const binding of bindings) {
-    const salesChannelInfo = binding.extraContext.portal
-
-    if (salesChannelInfo) {
-      const bindingInfo = {
-        id: binding.id,
-        label: binding.defaultLocale,
-        salesChannel: salesChannelInfo.salesChannel,
-        canonicalBaseAddress: binding.canonicalBaseAddress,
+  for (const binding of bindingInfo) {
+    if (binding.show) {
+      const bindingIdAndLabels = {
+        [binding.bindingId]: binding.translatedLocales,
       }
 
-      bindingsById.push(bindingInfo)
+      bindingsById.push(bindingIdAndLabels)
     }
   }
 

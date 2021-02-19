@@ -22,7 +22,7 @@ const CSS_HANDLES = [
 const BindingSelectorBlock: FC = () => {
   const {
     data: { currentBinding, bindingList, bindingsError, loadingBindings },
-    actions: { setCurrentBinding },
+    actions: { setCurrentBindingInfo },
   } = useBinding()
 
   const [open, setOpen] = useState<boolean>(false)
@@ -91,14 +91,14 @@ const BindingSelectorBlock: FC = () => {
     selectedBinding: AdjustedBinding
   ): Promise<void> => {
     setLoadingRedirect(true)
-    setCurrentBinding(selectedBinding)
+    setCurrentBindingInfo(selectedBinding.id)
     setOpen(false)
     try {
       await updateSalesChannel({
         variables: {
           orderFormId: orderForm.id,
           salesChannel: selectedBinding.salesChannel,
-          locale: selectedBinding.label,
+          locale: selectedBinding.defaultLocale,
         },
       })
     } catch (e) {

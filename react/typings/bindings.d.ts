@@ -43,3 +43,7 @@ interface AlternateHrefsVariables {
   id: string
   type: string
 }
+
+interface BindingsByBindingId {
+  [bindingId: string]: AdjustedBinding[]
+}

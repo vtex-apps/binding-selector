@@ -1,55 +1,57 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { useQuery } from 'react-apollo'
 
-import getSalesChannel from '../graphql/getSalesChannel.gql'
+import getBindingInfo from '../graphql/bindingInfo.gql'
 import { filterBindings } from '../utils'
 
 export const useBinding = () => {
-  const [bindingList, setBindingList] = useState<FilteredBinding[]>([])
+  const [bindingList, setBindingList] = useState<AdjustedBinding[]>([])
 
-  const [currentBinding, setCurrentBinding] = useState<FilteredBinding>(
-    {} as FilteredBinding
+  const [currentBinding, setCurrentBinding] = useState<AdjustedBinding>(
+    {} as AdjustedBinding
   )
 
   const {
-    error: tenantError,
-    data: tenantData,
-    loading: loadingTenantInfo,
-  } = useQuery<TenantInfoResponse>(getSalesChannel, {
-    ssr: false,
-  })
+    data: bindingData,
+    loading: loadingBindings,
+    error: bindingsError,
+  } = useQuery<BindingInfoResponse>(getBindingInfo)
 
   const { binding: runtimeBinding } = useRuntime()
 
-  /**
-   * This effect run when we have info about all bindings.
-   */
-  useEffect(() => {
-    if (tenantData) {
-      const filteredBindings = filterBindings(tenantData.tenantInfo)
+  const setCurrentBindingInfo = useCallback(
+    (selectedBindingId: string): void => {
+      // eslint-disable-next-line vtex/prefer-early-return
+      if (bindingData) {
+        const filteredBindings = filterBindings(bindingData)
+        const bindindFound = filteredBindings.find(
+          (binding) => Object.keys(binding)[0] === selectedBindingId
+        )
 
-      setBindingList(filteredBindings)
-    }
-  }, [tenantData])
+        if (bindindFound) {
+          setBindingList(bindindFound[selectedBindingId])
+          const findCurrentBinding = bindindFound[selectedBindingId].find(
+            ({ id }) => id === selectedBindingId
+          )
+
+          if (findCurrentBinding) {
+            setCurrentBinding(findCurrentBinding)
+          }
+        }
+      }
+    },
+    [bindingData]
+  )
 
   /**
    * This effects uses sets the current binding user is on
    */
   useEffect(() => {
-    if (runtimeBinding?.id) {
-      const bindindFound = bindingList.find(
-        ({ id: bindingId }) => bindingId === runtimeBinding.id
-      )
-
-      if (bindindFound) {
-        setCurrentBinding(bindindFound)
-      }
+    if (bindingData && runtimeBinding?.id) {
+      setCurrentBindingInfo(runtimeBinding.id)
     }
-  }, [bindingList, runtimeBinding])
-
-  const bindingsError = tenantError
-  const loadingBindings = loadingTenantInfo
+  }, [bindingData, runtimeBinding, setCurrentBindingInfo])
 
   return {
     data: {
@@ -59,7 +61,7 @@ export const useBinding = () => {
       loadingBindings,
     },
     actions: {
-      setCurrentBinding,
+      setCurrentBindingInfo,
     },
   }
 }
