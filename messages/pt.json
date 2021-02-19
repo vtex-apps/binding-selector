@@ -10,6 +10,7 @@
   "admin-modal": "Customise the store names in this binding’s language.",
   "admin-cancel": "Cancel",
   "admin-save": "Save",
+  "admin-edit": "Edit",
   "admin-hide-binding": "Ocultar",
   "admin-show-binding": "Show"
 }

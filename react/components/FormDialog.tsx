@@ -1,5 +1,5 @@
 import type { FC, FormEvent, SyntheticEvent } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Input, Button } from 'vtex.styleguide'
 import { useMutation, useQuery } from 'react-apollo'
@@ -32,6 +32,8 @@ interface FieldInputProps {
   handleChange: (e: SyntheticEvent) => void
   key: number
   showBindings: { [key: string]: boolean }
+  showEditValue: InfoBinding[]
+  showEdit: boolean
 }
 
 interface DataMutation {
@@ -39,7 +41,25 @@ interface DataMutation {
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
-  const { binding, dataLocales, handleChange, key, showBindings } = props
+  const {
+    binding,
+    dataLocales,
+    handleChange,
+    key,
+    showBindings,
+    showEditValue,
+    showEdit,
+  } = props
+
+  const labelText = showEditValue?.filter((bind) => bind.id === binding.id)[0]
+
+  const LabelTextField = () => {
+    if (labelText?.label) {
+      return <p>{labelText?.label}</p>
+    }
+
+    return <Input disabled />
+  }
 
   return (
     <div key={key} className="flex items-center justify-center w-100">
@@ -49,13 +69,17 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
         </label>
       </div>
       <div className="pa4 w-50">
-        <Input
-          disabled={!showBindings[binding.id]}
-          required={showBindings[binding.id]}
-          name={binding.id}
-          onChange={(e: SyntheticEvent) => handleChange(e)}
-          value={dataLocales[binding.defaultLocale]}
-        />
+        {showEdit ? (
+          LabelTextField()
+        ) : (
+          <Input
+            disabled={!showBindings[binding.id]}
+            required={showBindings[binding.id]}
+            name={binding.id}
+            onChange={(e: SyntheticEvent) => handleChange(e)}
+            value={dataLocales[binding.defaultLocale]}
+          />
+        )}
       </div>
     </div>
   )
@@ -65,15 +89,41 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const { open, handleOnClose, bindings, chosenBinding, showBindings } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
-    ssr: false,
-  })
+
+  const { data: translatedData, refetch } = useQuery<BindingInfoResponse>(
+    bindingInfo,
+    {
+      ssr: false,
+    }
+  )
 
   const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
 
+  const [showEdit, setShowEdit] = useState<boolean>(false)
+  const [translatedLocales, setTranslatedLocales] = useState<InfoBinding[]>([])
+
+  const getTranslatedLabels = useCallback(
+    (arr: BindingsSaved[]) => {
+      const filtered = arr.filter(
+        (binding: { bindingId: string }) =>
+          binding.bindingId === chosenBinding.id
+      )
+
+      return filtered[0]?.translatedLocales
+    },
+    [chosenBinding.id]
+  )
+
+  // console.log('!!showEditValue', !showEditValue)
   useEffect(() => {
     setFetchedData(translatedData?.bindingInfo ?? [])
-  }, [translatedData?.bindingInfo])
+    const translatedLabels = getTranslatedLabels(
+      translatedData?.bindingInfo ?? []
+    )
+
+    setTranslatedLocales(translatedLabels ?? [])
+    setShowEdit(!!translatedLabels)
+  }, [chosenBinding.id, getTranslatedLabels, translatedData?.bindingInfo])
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -94,6 +144,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             handleChange={handleChange}
             key={i}
             showBindings={showBindings}
+            showEditValue={translatedLocales ?? []}
+            showEdit={showEdit}
           />
         )
       })
@@ -145,30 +197,53 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     saveTranslatedInfo({ variables: dataContainer })
+
     setFetchedData(dataContainer.data)
+    const translatedLabels = getTranslatedLabels(dataContainer.data)
+
+    setTranslatedLocales(translatedLabels ?? [])
+    setShowEdit(true)
     handleOnClose()
   }
 
   return (
-    <Modal isOpen={open} onClose={handleOnClose}>
+    <Modal
+      isOpen={open}
+      onClose={() => {
+        setShowEdit(true)
+        handleOnClose()
+      }}
+    >
       <form onSubmit={onSubmit}>
         <div className="pt6 tc">
           <FormattedMessage id="admin-modal" />
         </div>
         <div className="pt6 flex w-100 flex-column justify-center items-center">
           {showFields()}
-          <div className="flex pt6">
+          {showEdit ? (
             <div className="pr4">
-              <Button variation="tertiary">
-                <FormattedMessage id="admin-cancel" />
+              <Button
+                onClick={() => {
+                  setShowEdit(false)
+                }}
+              >
+                <FormattedMessage id="admin-edit" />
               </Button>
             </div>
-            <div>
-              <Button type="submit">
-                <FormattedMessage id="admin-save" />
-              </Button>
+          ) : (
+            <div className="flex pt6">
+              <div className="pr4">
+                <Button variation="tertiary">
+                  <FormattedMessage id="admin-cancel" />
+                </Button>
+              </div>
+              <div>
+                <Button type="submit">
+                  <FormattedMessage id="admin-save" />
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </form>
     </Modal>
