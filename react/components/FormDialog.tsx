@@ -114,7 +114,6 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     [chosenBinding.id]
   )
 
-  // console.log('!!showEditValue', !showEditValue)
   useEffect(() => {
     setFetchedData(translatedData?.bindingInfo ?? [])
     const translatedLabels = getTranslatedLabels(
