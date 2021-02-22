@@ -27,7 +27,7 @@ const Selector: FC = () => {
     ssr: false,
   })
 
-  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+  const { data: translatedData, refetch } = useQuery<BindingInfoResponse>(bindingInfo, {
     ssr: false,
   })
 
@@ -36,6 +36,8 @@ const Selector: FC = () => {
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
   useEffect(() => {
+    console.log('translatedData', translatedData?.bindingInfo)
+
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
@@ -99,6 +101,8 @@ const Selector: FC = () => {
         chosenBinding={chosenBinding}
         bindings={filteredBindings ?? []}
         showBindings={showBindings}
+        bindingInfoQueryData={translatedData?.bindingInfo ?? []}
+        refetch={refetch}
       />
       <p className="pb4">
         <FormattedMessage id="admin-description" />

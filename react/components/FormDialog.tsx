@@ -1,11 +1,11 @@
 import type { FC, FormEvent, SyntheticEvent } from 'react'
 import React, { useState, useEffect, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Modal, Input, Button } from 'vtex.styleguide'
-import { useMutation, useQuery } from 'react-apollo'
+import { Modal, Button } from 'vtex.styleguide'
+import { useMutation } from 'react-apollo'
 
+import FieldInput from './FieldInput'
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import bindingInfo from '../graphql/bindingInfo.gql'
 
 interface InfoArray {
   id: string
@@ -20,79 +20,31 @@ interface FormDialogProps {
   bindings: Binding[]
   chosenBinding: Binding
   showBindings: { [key: string]: boolean }
+  bindingInfoQueryData: BindingsSaved[]
+  refetch: () => void
 }
 
 interface DataLocaleTypes {
   [key: string]: string
 }
 
-interface FieldInputProps {
-  binding: Binding
-  dataLocales: DataLocaleTypes
-  handleChange: (e: SyntheticEvent) => void
-  key: number
-  showBindings: { [key: string]: boolean }
-  showEditValue: InfoBinding[]
-  showEdit: boolean
-}
-
 interface DataMutation {
   data: BindingsSaved[]
 }
 
-const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
+const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const {
-    binding,
-    dataLocales,
-    handleChange,
-    key,
+    open,
+    handleOnClose,
+    bindings,
+    chosenBinding,
     showBindings,
-    showEditValue,
-    showEdit,
+    bindingInfoQueryData,
+    refetch,
   } = props
 
-  const labelText = showEditValue?.filter((bind) => bind.id === binding.id)[0]
-
-  const LabelTextField = () => {
-    if (labelText?.label) {
-      return <p>{labelText?.label}</p>
-    }
-
-    return <Input disabled />
-  }
-
-  return (
-    <div key={key} className="flex items-center justify-center w-100">
-      <div className="pa4 w-40">
-        <label>
-          {binding.canonicalBaseAddress} ({binding.defaultLocale})
-        </label>
-      </div>
-      <div className="pa4 w-50">
-        {showEdit ? (
-          LabelTextField()
-        ) : (
-          <Input
-            disabled={!showBindings[binding.id]}
-            required={showBindings[binding.id]}
-            name={binding.id}
-            onChange={(e: SyntheticEvent) => handleChange(e)}
-            value={dataLocales[binding.defaultLocale]}
-          />
-        )}
-      </div>
-    </div>
-  )
-}
-
-const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
-  const { open, handleOnClose, bindings, chosenBinding, showBindings } = props
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-
-  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
-    ssr: false,
-  })
 
   const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
 
@@ -112,14 +64,12 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   )
 
   useEffect(() => {
-    setFetchedData(translatedData?.bindingInfo ?? [])
-    const translatedLabels = getTranslatedLabels(
-      translatedData?.bindingInfo ?? []
-    )
+    setFetchedData(bindingInfoQueryData ?? [])
+    const translatedLabels = getTranslatedLabels(bindingInfoQueryData ?? [])
 
     setTranslatedLocales(translatedLabels ?? [])
     setShowEdit(!!translatedLabels)
-  }, [chosenBinding.id, getTranslatedLabels, translatedData?.bindingInfo])
+  }, [chosenBinding.id, getTranslatedLabels, bindingInfoQueryData])
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -134,7 +84,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
       })
       .map((binding: Binding, i: number) => {
         const [showBinding] =
-          translatedData?.bindingInfo.filter(
+          bindingInfoQueryData.filter(
             (bind) => bind.bindingId === binding.id
           ) ?? []
 
@@ -149,6 +99,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             showBindings={showBindings}
             showEditValue={translatedLocales ?? []}
             showEdit={showValue ? showEdit : showValue}
+            showBinding={showBinding}
           />
         )
       })
@@ -180,7 +131,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         canonicalBaseAddress: canonicalBase,
       })
     }
-
+    console.log('here', translatedInfoArray)
     payload.translatedLocales = translatedInfoArray
     payload.show = !!showBindings[chosenBinding.id]
 
@@ -198,7 +149,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
       newArray.push(payload)
       dataContainer.data = newArray
     }
-
+    console.log(dataContainer)
     saveTranslatedInfo({ variables: dataContainer })
 
     setFetchedData(dataContainer.data)
@@ -223,30 +174,18 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         </div>
         <div className="pt6 flex w-100 flex-column justify-center items-center">
           {showFields()}
-          {showEdit ? (
+          <div className="flex pt6">
             <div className="pr4">
-              <Button
-                onClick={() => {
-                  setShowEdit(false)
-                }}
-              >
-                <FormattedMessage id="admin-edit" />
+              <Button variation="tertiary">
+                <FormattedMessage id="admin-cancel" />
               </Button>
             </div>
-          ) : (
-            <div className="flex pt6">
-              <div className="pr4">
-                <Button variation="tertiary">
-                  <FormattedMessage id="admin-cancel" />
-                </Button>
-              </div>
-              <div>
-                <Button type="submit">
-                  <FormattedMessage id="admin-save" />
-                </Button>
-              </div>
+            <div>
+              <Button type="submit">
+                <FormattedMessage id="admin-save" />
+              </Button>
             </div>
-          )}
+          </div>
         </div>
       </form>
     </Modal>
