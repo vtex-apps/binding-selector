@@ -14,3 +14,7 @@ interface TranslatedBinding {
 interface GetResponse {
   data: [TranslatedBinding]
 }
+
+interface GetSalesChannel {
+  salesChannel: boolean
+}
