@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
-import { useQuery } from 'react-apollo'
+import { useQuery, useMutation } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
 
@@ -9,9 +9,14 @@ import getSalesChannel from '../graphql/getSalesChannel.gql'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
 import bindingInfo from '../graphql/bindingInfo.gql'
+import saveBindingInfo from '../graphql/saveBindingInfo.gql'
 
 interface ShowBindings {
   [key: string]: boolean
+}
+
+interface DataMutation {
+  data: BindingsSaved[]
 }
 
 const Selector: FC = () => {
@@ -25,6 +30,8 @@ const Selector: FC = () => {
   const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
     ssr: false,
   })
+
+  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
 
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
@@ -44,6 +51,32 @@ const Selector: FC = () => {
     setShowBindings(initialShowValues)
   }, [translatedData?.bindingInfo])
 
+  const handleToggle = (id: string) => {
+    const bindings = translatedData?.bindingInfo
+    const chosenToggle = bindings?.filter((bind) => bind.bindingId === id)
+    const filtered = bindings?.filter((bind) => bind.bindingId !== id)
+    let editedChosen = {} as BindingsSaved
+    const dataContainer = {} as DataMutation
+
+    if (chosenToggle?.length) {
+      const [extractedInfo] = chosenToggle
+
+      extractedInfo.show = !showBindings[id]
+      editedChosen = extractedInfo
+    } else {
+      const payload = {} as BindingsSaved
+
+      payload.bindingId = id
+      payload.show = true
+      editedChosen = payload
+    }
+
+    filtered?.push(editedChosen)
+
+    dataContainer.data = filtered ?? []
+    saveTranslatedInfo({ variables: dataContainer })
+  }
+
   const handleUpdateSalesChannel = () =>
     setUpdateSalesChannel(!updateSalesChannel)
 
@@ -52,6 +85,7 @@ const Selector: FC = () => {
   const filteredBindings = removeBindingAdmin(bindingData?.tenantInfo.bindings)
 
   const handleShowBindings = (bindingId: string): void => {
+    handleToggle(bindingId)
     setShowBindings((state) => {
       return { ...state, ...{ [bindingId]: !state[bindingId] } }
     })

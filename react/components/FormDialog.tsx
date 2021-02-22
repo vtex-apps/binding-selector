@@ -90,12 +90,9 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
 
-  const { data: translatedData, refetch } = useQuery<BindingInfoResponse>(
-    bindingInfo,
-    {
-      ssr: false,
-    }
-  )
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
 
   const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
 
@@ -136,6 +133,13 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
       })
       .map((binding: Binding, i: number) => {
+        const [showBinding] =
+          translatedData?.bindingInfo.filter(
+            (bind) => bind.bindingId === binding.id
+          ) ?? []
+
+        const showValue = showBinding?.show
+
         return (
           <FieldInput
             binding={binding}
@@ -144,7 +148,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             key={i}
             showBindings={showBindings}
             showEditValue={translatedLocales ?? []}
-            showEdit={showEdit}
+            showEdit={showValue ? showEdit : showValue}
           />
         )
       })
