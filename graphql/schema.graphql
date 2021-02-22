@@ -8,5 +8,6 @@ type Mutation {
     salesChannel: String
     locale: String
   ): PartialOrderForm
+
   saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
 }

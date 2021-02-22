@@ -3,7 +3,7 @@ interface Binding {
   defaultLocale: string
   canonicalBaseAddress: string
   extraContext: {
-    portal?: {
+    portal: {
       salesChannel: string
     }
   }
@@ -19,24 +19,18 @@ interface BindingInfoResponse {
   bindingInfo: BindingsSaved[]
 }
 
-interface InfoBinding {
-  id: string
-  label: string
-  defaultLocale: string
-  canonicalBaseAddress: string
-}
-
-interface FilteredBinding {
+interface AdjustedBinding {
   id: string
   label: string
   salesChannel: string
+  defaultLocale: string
   canonicalBaseAddress: string
 }
 
 interface BindingsSaved {
   bindingId: string
   show: boolean
-  translatedLocales: InfoBinding[]
+  translatedLocales: AdjustedBinding[]
 }
 
 interface UpdateSalesChannelVariables {
