@@ -10,7 +10,7 @@ import AdminBindingList from './AdminBindingList'
 import bindingInfo from '../graphql/bindingInfo.gql'
 import getSalesChannel from '../graphql/getSalesChannel.gql'
 import toggleSalesChannel from '../graphql/toggleSalesChannel.gql'
-import salesChannel from '../graphql/salesChannel.gql'
+import isSalesChannelUpdate from '../graphql/isSalesChannelUpdate.gql'
 
 interface ShowBindings {
   [key: string]: boolean
@@ -30,9 +30,12 @@ const Selector: FC = () => {
     ssr: false,
   })
 
-  const { data: salesData } = useQuery<SalesChannelResponse>(salesChannel, {
-    ssr: false,
-  })
+  const { data: salesData } = useQuery<SalesChannelResponse>(
+    isSalesChannelUpdate,
+    {
+      ssr: false,
+    }
+  )
 
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 

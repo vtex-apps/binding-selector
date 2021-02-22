@@ -1,6 +1,6 @@
 type Query {
   bindingInfo: [TranslatedInfoOutput]
-  salesChannel: Boolean
+  isSalesChannelUpdate: Boolean
 }
 
 type Mutation {
