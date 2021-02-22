@@ -9,6 +9,10 @@ interface Binding {
   }
 }
 
+interface SalesChannelResponse {
+  salesChannel: boolean
+}
+
 interface TenantInfoResponse {
   tenantInfo: {
     bindings: Binding[]
@@ -42,4 +46,11 @@ interface UpdateSalesChannelVariables {
 interface AlternateHrefsVariables {
   id: string
   type: string
+}
+
+interface FilteredBinding {
+  id: string
+  label: string
+  salesChannel: string
+  canonicalBaseAddress: string
 }

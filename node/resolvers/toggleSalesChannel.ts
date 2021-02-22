@@ -1,17 +1,17 @@
 export const toggleSalesChannel = async (
   _: unknown,
   args: {
-    data: [TranslatedBinding]
+    salesChannel: boolean
   },
   ctx: Context
 ) => {
   const { clients } = ctx
-  const { data } = args
+  const { salesChannel } = args
   const { vbase } = clients
 
   await vbase.saveJSON('account.salesChannel', 'configs', {
-    data,
+    salesChannel,
   })
 
-  return data
+  return salesChannel
 }

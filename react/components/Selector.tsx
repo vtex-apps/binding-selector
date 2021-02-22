@@ -1,14 +1,16 @@
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
-import { useQuery } from 'react-apollo'
+import { useQuery, useMutation } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
-import getSalesChannel from '../graphql/getSalesChannel.gql'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
 import bindingInfo from '../graphql/bindingInfo.gql'
+import getSalesChannel from '../graphql/getSalesChannel.gql'
+import toggleSalesChannel from '../graphql/toggleSalesChannel.gql'
+import salesChannel from '../graphql/salesChannel.gql'
 
 interface ShowBindings {
   [key: string]: boolean
@@ -22,13 +24,22 @@ const Selector: FC = () => {
     ssr: false,
   })
 
+  const [toggleSales] = useMutation<SalesChannelResponse>(toggleSalesChannel)
+
   const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
+    ssr: false,
+  })
+
+  const { data: salesData } = useQuery<SalesChannelResponse>(salesChannel, {
     ssr: false,
   })
 
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
   useEffect(() => {
+    const salesChannelValue = salesData?.salesChannel ?? false
+
+    setUpdateSalesChannel(salesChannelValue)
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
@@ -42,10 +53,12 @@ const Selector: FC = () => {
     const initialShowValues = setInitialShowValues()
 
     setShowBindings(initialShowValues)
-  }, [translatedData?.bindingInfo])
+  }, [salesData?.salesChannel, translatedData?.bindingInfo])
 
-  const handleUpdateSalesChannel = () =>
+  const handleUpdateSalesChannel = () => {
     setUpdateSalesChannel(!updateSalesChannel)
+    toggleSales({ variables: { salesChannel: !updateSalesChannel } })
+  }
 
   const handleOnClose = () => setModalOpen(!modalOpen)
 
