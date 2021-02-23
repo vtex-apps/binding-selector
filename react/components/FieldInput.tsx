@@ -13,7 +13,7 @@ interface FieldInputProps {
   key: number
   showBindings: { [key: string]: boolean }
   showEditValue: InfoBinding[]
-  showEdit: boolean
+  showValue: boolean
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
@@ -23,11 +23,11 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
     handleChange,
     key,
     showBindings,
-    showEdit,
+    showValue,
   } = props
 
   const label =
-    dataLocales[binding.id] && showEdit ? dataLocales[binding.id] : ''
+    dataLocales[binding.id] && showValue ? dataLocales[binding.id] : ''
 
   return (
     <div key={key} className="flex items-center justify-center w-100">

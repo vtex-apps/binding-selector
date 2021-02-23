@@ -1,11 +1,11 @@
-import type { SyntheticEvent } from 'react'
+import type { SyntheticEvent, FormEvent, FC } from 'react'
 import React, { useState, useEffect, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import FieldInputGroup from './FieldInputGroup'
+import FieldInput from './FieldInput'
 
 interface InfoArray {
   id: string
@@ -31,8 +31,6 @@ interface DataLocaleTypes {
 interface DataMutation {
   data: BindingsSaved[]
 }
-
-const
 
 const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const {
@@ -146,6 +144,35 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     handleOnClose()
   }
 
+  const showFields = () => {
+    const fields = bindings
+      ?.filter((binding: Binding) => {
+        return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
+      })
+      .map((binding: Binding, i: number) => {
+        const [showBinding] =
+          bindingInfoQueryData.filter(
+            (bind) => bind.bindingId === binding.id
+          ) ?? []
+
+        const showValue: boolean = showBinding?.show
+
+        return (
+          <FieldInput
+            binding={binding}
+            dataLocales={dataLocales}
+            handleChange={handleChange}
+            key={i}
+            showBindings={showBindings}
+            showEditValue={translatedLocales ?? []}
+            showValue={showValue}
+          />
+        )
+      })
+
+    return fields
+  }
+
   return (
     <Modal
       isOpen={open}
@@ -158,14 +185,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
           <FormattedMessage id="admin-modal" />
         </div>
         <div className="pt6 flex w-100 flex-column justify-center items-center">
-          <FieldInputGroup
-            bindings={bindings}
-            bindingInfoQueryData={bindingInfoQueryData}
-            dataLocales={dataLocales}
-            handleChange={handleChange}
-            showBindings={showBindings}
-            translatedLocales={translatedLocales}
-          />
+          {showFields()}
           <div className="flex pt6">
             <div className="pr4">
               <Button variation="tertiary">
