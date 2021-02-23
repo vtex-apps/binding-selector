@@ -9,6 +9,7 @@ import BindingSelectorList from './components/BindingSelectorList'
 import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
+import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import { createRedirectUrl, filterBindings, getMatchRoute } from './utils'
 import Spinner from './components/Spinner'
 
@@ -68,6 +69,10 @@ const BindingSelectorBlock: FC = () => {
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
+  const { data: toogleSalesChannel } = useQuery<SalesChannelResponse>(
+    shouldUpdateSalesChannel
+  )
+
   useEffect(() => {
     if (tenantData) {
       const filteredBindings = filterBindings(tenantData.tenantInfo)
@@ -118,17 +123,19 @@ const BindingSelectorBlock: FC = () => {
     setLoadingRedirect(true)
     setCurrentBiding(selectedBinding)
     setOpen(false)
-    try {
-      await updateSalesChannel({
-        variables: {
-          orderFormId: orderForm.id,
-          salesChannel: selectedBinding.salesChannel,
-          locale: selectedBinding.label,
-        },
-      })
-    } catch (e) {
-      // How to handle when there is an error updating sales channel?
-      console.error(e)
+    if (toogleSalesChannel?.isSalesChannelUpdate) {
+      try {
+        await updateSalesChannel({
+          variables: {
+            orderFormId: orderForm.id,
+            salesChannel: selectedBinding.salesChannel,
+            locale: selectedBinding.label,
+          },
+        })
+      } catch (e) {
+        // How to handle when there is an error updating sales channel?
+        console.error(e)
+      }
     }
 
     getAlternateHrefs()

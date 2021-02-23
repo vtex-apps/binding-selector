@@ -1,5 +1,6 @@
 type Query {
   bindingInfo: [TranslatedInfoOutput]
+  isSalesChannelUpdate: Boolean
 }
 
 type Mutation {
@@ -8,5 +9,7 @@ type Mutation {
     salesChannel: String
     locale: String
   ): PartialOrderForm
+
   saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
+  toggleSalesChannel(salesChannel: Boolean): Boolean
 }

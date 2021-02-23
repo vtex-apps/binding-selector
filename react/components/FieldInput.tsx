@@ -1,4 +1,4 @@
-import type { FC, FormEvent, SyntheticEvent } from 'react'
+import type { FC, SyntheticEvent } from 'react'
 import React from 'react'
 import { Input } from 'vtex.styleguide'
 
@@ -12,7 +12,7 @@ interface FieldInputProps {
   handleChange: (e: SyntheticEvent) => void
   key: number
   showBindings: { [key: string]: boolean }
-  showEditValue: InfoBinding[]
+  showEditValue: FilteredBinding[]
   showValue: boolean
 }
 

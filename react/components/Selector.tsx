@@ -5,11 +5,13 @@ import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
 
 import FormDialog from './FormDialog'
-import getSalesChannel from '../graphql/getSalesChannel.gql'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
 import bindingInfo from '../graphql/bindingInfo.gql'
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
+import getSalesChannel from '../graphql/getSalesChannel.gql'
+import toggleSalesChannel from '../graphql/toggleSalesChannel.gql'
+import isSalesChannelUpdate from '../graphql/isSalesChannelUpdate.gql'
 
 interface ShowBindings {
   [key: string]: boolean
@@ -28,15 +30,26 @@ const Selector: FC = () => {
     ssr: false,
   })
 
+  const [toggleSales] = useMutation<SalesChannelResponse>(toggleSalesChannel)
+
   const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
     ssr: false,
   })
 
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
+  const { data: salesData } = useQuery<SalesChannelResponse>(
+    isSalesChannelUpdate,
+    {
+      ssr: false,
+    }
+  )
 
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
   useEffect(() => {
+    const salesChannelValue = salesData?.isSalesChannelUpdate ?? false
+
+    setUpdateSalesChannel(salesChannelValue)
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
@@ -51,7 +64,11 @@ const Selector: FC = () => {
 
     setShowBindings(initialShowValues)
     setFetchedData(translatedData?.bindingInfo ?? [])
-  }, [bindingData, translatedData?.bindingInfo])
+  }, [
+    bindingData,
+    salesData?.isSalesChannelUpdate,
+    translatedData?.bindingInfo,
+  ])
 
   const handleToggle = (id: string) => {
     const bindings = translatedData?.bindingInfo
@@ -79,8 +96,10 @@ const Selector: FC = () => {
     saveTranslatedInfo({ variables: dataContainer })
   }
 
-  const handleUpdateSalesChannel = () =>
+  const handleUpdateSalesChannel = () => {
     setUpdateSalesChannel(!updateSalesChannel)
+    toggleSales({ variables: { salesChannel: !updateSalesChannel } })
+  }
 
   const handleOnClose = () => setModalOpen(!modalOpen)
 
