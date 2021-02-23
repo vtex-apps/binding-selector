@@ -104,7 +104,7 @@ const BindingSelectorBlock: FC = () => {
           variables: {
             orderFormId: orderForm.id,
             salesChannel: selectedBinding.salesChannel,
-            locale: selectedBinding.label,
+            locale: selectedBinding.defaultLocale,
           },
         })
       } catch (e) {
