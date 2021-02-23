@@ -1,0 +1,3 @@
+mutation toggleSalesChannel($salesChannel: Boolean) {
+  toggleSalesChannel(salesChannel: $salesChannel)
+}

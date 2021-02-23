@@ -9,6 +9,10 @@ interface Binding {
   }
 }
 
+interface SalesChannelResponse {
+  salesChannel: boolean
+}
+
 interface TenantInfoResponse {
   tenantInfo: {
     bindings: Binding[]
