@@ -2,13 +2,14 @@ import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
-import { useMutation, useLazyQuery } from 'react-apollo'
+import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { createRedirectUrl, getMatchRoute } from './utils'
+import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
 
@@ -59,6 +60,10 @@ const BindingSelectorBlock: FC = () => {
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
+  const { data: toogleSalesChannel } = useQuery<SalesChannelResponse>(
+    shouldUpdateSalesChannel
+  )
+
   /**
    * This effect handles the redirect after user selects a new binding.
    * We are handling it here because we couldn't get the hreflang inside the handleSelection method, since the callback from useLazyCallback returns void
@@ -93,17 +98,19 @@ const BindingSelectorBlock: FC = () => {
     setLoadingRedirect(true)
     setCurrentBindingInfo(selectedBinding.id)
     setOpen(false)
-    try {
-      await updateSalesChannel({
-        variables: {
-          orderFormId: orderForm.id,
-          salesChannel: selectedBinding.salesChannel,
-          locale: selectedBinding.defaultLocale,
-        },
-      })
-    } catch (e) {
-      // How to handle when there is an error updating sales channel?
-      console.error(e)
+    if (toogleSalesChannel?.isSalesChannelUpdate) {
+      try {
+        await updateSalesChannel({
+          variables: {
+            orderFormId: orderForm.id,
+            salesChannel: selectedBinding.salesChannel,
+            locale: selectedBinding.label,
+          },
+        })
+      } catch (e) {
+        // How to handle when there is an error updating sales channel?
+        console.error(e)
+      }
     }
 
     getAlternateHrefs()

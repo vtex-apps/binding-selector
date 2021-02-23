@@ -10,7 +10,7 @@ interface Binding {
 }
 
 interface SalesChannelResponse {
-  salesChannel: boolean
+  isSalesChannelUpdate: boolean
 }
 
 interface TenantInfoResponse {

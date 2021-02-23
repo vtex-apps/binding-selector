@@ -40,7 +40,7 @@ const Selector: FC = () => {
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
   useEffect(() => {
-    const salesChannelValue = salesData?.salesChannel ?? false
+    const salesChannelValue = salesData?.isSalesChannelUpdate ?? false
 
     setUpdateSalesChannel(salesChannelValue)
     const setInitialShowValues = () => {
@@ -56,7 +56,7 @@ const Selector: FC = () => {
     const initialShowValues = setInitialShowValues()
 
     setShowBindings(initialShowValues)
-  }, [salesData?.salesChannel, translatedData?.bindingInfo])
+  }, [salesData?.isSalesChannelUpdate, translatedData?.bindingInfo])
 
   const handleUpdateSalesChannel = () => {
     setUpdateSalesChannel(!updateSalesChannel)
