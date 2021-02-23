@@ -14,7 +14,6 @@ interface FieldInputProps {
   showBindings: { [key: string]: boolean }
   showEditValue: InfoBinding[]
   showEdit: boolean
-  showBinding: BindingsSaved
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
@@ -24,19 +23,11 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
     handleChange,
     key,
     showBindings,
-    showEditValue,
     showEdit,
-    showBinding,
   } = props
 
-  const labelText = showBinding?.translatedLocales?.filter(
-    (bind) => bind.id === binding.id
-  )[0]?.label
-
-  const initialValue = labelText ? labelText : ''
-  console.log('binding', labelText)
-  // console.log('hello', dataLocales)
-  // console.log(dataLocales[binding.id])
+  const label =
+    dataLocales[binding.id] && showEdit ? dataLocales[binding.id] : ''
 
   return (
     <div key={key} className="flex items-center justify-center w-100">
@@ -51,7 +42,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
           required={showBindings[binding.id]}
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
-          value={initialValue || dataLocales[binding.id]}
+          value={label}
         />
       </div>
     </div>

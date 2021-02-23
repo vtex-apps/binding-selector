@@ -23,11 +23,12 @@ const Selector: FC = () => {
   const [updateSalesChannel, setUpdateSalesChannel] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [chosenBinding, setChosenBinding] = useState<Binding>(Object)
+  const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
   const { data: bindingData } = useQuery<TenantInfoResponse>(getSalesChannel, {
     ssr: false,
   })
 
-  const { data: translatedData, refetch } = useQuery<BindingInfoResponse>(bindingInfo, {
+  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
     ssr: false,
   })
 
@@ -36,8 +37,6 @@ const Selector: FC = () => {
   const [showBindings, setShowBindings] = useState<ShowBindings>({})
 
   useEffect(() => {
-    console.log('translatedData', translatedData?.bindingInfo)
-
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
@@ -51,7 +50,8 @@ const Selector: FC = () => {
     const initialShowValues = setInitialShowValues()
 
     setShowBindings(initialShowValues)
-  }, [translatedData?.bindingInfo])
+    setFetchedData(translatedData?.bindingInfo ?? [])
+  }, [bindingData, translatedData?.bindingInfo])
 
   const handleToggle = (id: string) => {
     const bindings = translatedData?.bindingInfo
@@ -91,6 +91,19 @@ const Selector: FC = () => {
     setShowBindings((state) => {
       return { ...state, ...{ [bindingId]: !state[bindingId] } }
     })
+
+    if (
+      !translatedData?.bindingInfo.some((info) => info.bindingId === bindingId)
+    ) {
+      const hello = {} as BindingsSaved
+
+      hello.bindingId = bindingId
+      hello.show = false
+      hello.translatedLocales = []
+      translatedData?.bindingInfo.push(hello)
+    }
+
+    setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
   return (
@@ -101,8 +114,8 @@ const Selector: FC = () => {
         chosenBinding={chosenBinding}
         bindings={filteredBindings ?? []}
         showBindings={showBindings}
-        bindingInfoQueryData={translatedData?.bindingInfo ?? []}
-        refetch={refetch}
+        bindingInfoQueryData={fetchedData ?? []}
+        setFetchedData={setFetchedData}
       />
       <p className="pb4">
         <FormattedMessage id="admin-description" />
