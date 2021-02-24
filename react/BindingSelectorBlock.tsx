@@ -2,28 +2,29 @@ import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
-import { useQuery, useMutation, useLazyQuery } from 'react-apollo'
+import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import BindingSelectorList from './components/BindingSelectorList'
-import getSalesChannel from './graphql/getSalesChannel.gql'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
+import { createRedirectUrl, getMatchRoute } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
-import { createRedirectUrl, filterBindings, getMatchRoute } from './utils'
 import Spinner from './components/Spinner'
+import { useBinding } from './hooks/useBindings'
 
 const CSS_HANDLES = [
   'container',
   'relativeContainer',
   'button',
-  'buttonTextClasses',
+  'buttonText',
 ] as const
 
 const BindingSelectorBlock: FC = () => {
-  const [currentBinding, setCurrentBiding] = useState<FilteredBinding>(
-    {} as FilteredBinding
-  )
+  const {
+    data: { currentBinding, bindingList, bindingsError, loadingBindings },
+    actions: { setCurrentBindingInfo },
+  } = useBinding()
 
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
@@ -32,7 +33,6 @@ const BindingSelectorBlock: FC = () => {
     route: {
       pageContext: { id, type },
     },
-    binding: runtimeBinding,
   } = useRuntime()
 
   const queryVariables = {
@@ -45,15 +45,6 @@ const BindingSelectorBlock: FC = () => {
     { data: hrefAltData },
   ] = useLazyQuery<QueryInternal>(alternateHrefsQuery, {
     variables: queryVariables,
-  })
-
-  const [bindingInfo, setBindingInfo] = useState<FilteredBinding[]>([])
-  const {
-    error: tenantError,
-    data: tenantData,
-    loading: loadingTenantInfo,
-  } = useQuery<TenantInfoResponse>(getSalesChannel, {
-    ssr: false,
   })
 
   const [updateSalesChannel] = useMutation<
@@ -73,26 +64,10 @@ const BindingSelectorBlock: FC = () => {
     shouldUpdateSalesChannel
   )
 
-  useEffect(() => {
-    if (tenantData) {
-      const filteredBindings = filterBindings(tenantData.tenantInfo)
-
-      setBindingInfo(filteredBindings)
-    }
-  }, [tenantData])
-
-  useEffect(() => {
-    if (runtimeBinding?.id) {
-      const findBinding = bindingInfo.find(
-        ({ id: bindingId }) => bindingId === runtimeBinding.id
-      )
-
-      if (findBinding) {
-        setCurrentBiding(findBinding)
-      }
-    }
-  }, [bindingInfo, runtimeBinding])
-
+  /**
+   * This effect handles the redirect after user selects a new binding.
+   * We are handling it here because we couldn't get the hreflang inside the handleSelection method, since the callback from useLazyCallback returns void
+   */
   useEffect(() => {
     const { canonicalBaseAddress } = currentBinding
     const { hostname, protocol } = window.location
@@ -118,10 +93,10 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const handleSelection = async (
-    selectedBinding: FilteredBinding
+    selectedBinding: AdjustedBinding
   ): Promise<void> => {
     setLoadingRedirect(true)
-    setCurrentBiding(selectedBinding)
+    setCurrentBindingInfo(selectedBinding.id)
     setOpen(false)
     if (toogleSalesChannel?.isSalesChannelUpdate) {
       try {
@@ -129,7 +104,7 @@ const BindingSelectorBlock: FC = () => {
           variables: {
             orderFormId: orderForm.id,
             salesChannel: selectedBinding.salesChannel,
-            locale: selectedBinding.label,
+            locale: selectedBinding.defaultLocale,
           },
         })
       } catch (e) {
@@ -142,17 +117,14 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const isLoading =
-    loadingTenantInfo ||
-    loadingOrderForm ||
-    !currentBinding.id ||
-    loadingRedirect
+    loadingBindings || loadingOrderForm || !currentBinding.id || loadingRedirect
 
-  const hasError = !!orderFormError || !!tenantError
+  const hasError = !!orderFormError || !!bindingsError
 
   if (hasError) {
     console.error('Error loading Binding Selector', {
       orderFormError,
-      tenantError,
+      bindingsError,
     })
   }
 
@@ -172,14 +144,14 @@ const BindingSelectorBlock: FC = () => {
               onClick={handleClick}
               className={`${handles.button} link pa3 bg-transparent bn flex items-center pointer c-on-base`}
             >
-              <span className={`${handles.buttonTextClasses}`}>
+              <span className={`${handles.buttonText}`}>
                 {currentBinding.label}
               </span>
             </button>
             <BindingSelectorList
               open={open}
               currentBinding={currentBinding}
-              bindingInfo={bindingInfo}
+              bindingInfo={bindingList}
               onSelectBinding={handleSelection}
             />
           </>
