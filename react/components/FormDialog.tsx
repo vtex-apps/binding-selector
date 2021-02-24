@@ -186,7 +186,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
           {showFields()}
           <div className="flex pt6">
             <div className="pr4">
-              <Button variation="tertiary">
+              <Button variation="tertiary" onClick={() => handleOnClose()}>
                 <FormattedMessage id="admin-cancel" />
               </Button>
             </div>
