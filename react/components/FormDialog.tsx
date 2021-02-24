@@ -38,7 +38,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-  const [translatedLocales, setTranslatedLocales] = useState<FilteredBinding[]>(
+  const [translatedLocales, setTranslatedLocales] = useState<AdjustedBinding[]>(
     []
   )
 
