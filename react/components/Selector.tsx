@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
 
+import Spinner from './Spinner'
 import FormDialog from './FormDialog'
 import { removeBindingAdmin } from '../utils'
 import AdminBindingList from './AdminBindingList'
@@ -32,9 +33,12 @@ const Selector: FC = () => {
 
   const [toggleSales] = useMutation<SalesChannelResponse>(toggleSalesChannel)
 
-  const { data: translatedData } = useQuery<BindingInfoResponse>(bindingInfo, {
-    ssr: false,
-  })
+  const { data: translatedData, loading } = useQuery<BindingInfoResponse>(
+    bindingInfo,
+    {
+      ssr: false,
+    }
+  )
 
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
   const { data: salesData } = useQuery<SalesChannelResponse>(
@@ -144,14 +148,20 @@ const Selector: FC = () => {
         label={<FormattedMessage id="admin-label" />}
         onChange={handleUpdateSalesChannel}
       />
-      <AdminBindingList
-        bindings={filteredBindings}
-        modalControl={setModalOpen}
-        modalOpen={modalOpen}
-        setChosenBinding={setChosenBinding}
-        showBindings={showBindings}
-        setShowBindings={handleShowBindings}
-      />
+      {loading ? (
+        <div className="w100 flex justify-center align-center pa7 ma7">
+          <Spinner />
+        </div>
+      ) : (
+        <AdminBindingList
+          bindings={filteredBindings}
+          modalControl={setModalOpen}
+          modalOpen={modalOpen}
+          setChosenBinding={setChosenBinding}
+          showBindings={showBindings}
+          setShowBindings={handleShowBindings}
+        />
+      )}
     </div>
   )
 }
