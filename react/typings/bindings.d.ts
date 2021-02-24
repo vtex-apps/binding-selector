@@ -31,6 +31,10 @@ interface AdjustedBinding {
   canonicalBaseAddress: string
 }
 
+interface DataLocaleTypes {
+  [key: string]: string
+}
+
 interface BindingsSaved {
   bindingId: string
   show: boolean
