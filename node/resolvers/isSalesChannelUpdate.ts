@@ -5,10 +5,21 @@ export const isSalesChannelUpdate = async (
 ) => {
   const { clients } = ctx
   const { vbase } = clients
-  const salesChannelData: GetSalesChannel = await vbase.getJSON(
-    'account.salesChannel',
-    'configs'
-  )
 
-  return salesChannelData.salesChannel
+  try {
+    const salesChannelData: GetSalesChannel = await vbase.getJSON(
+      'account.salesChannel',
+      'configs'
+    )
+
+    return salesChannelData.salesChannel
+  } catch (e) {
+    const { status } = e.response
+
+    if (status === 404) {
+      return null
+    }
+
+    throw e
+  }
 }
