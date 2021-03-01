@@ -8,6 +8,8 @@ It has the possibility to update the Session and Cart's Sales Channel, this chan
 
 The App is geared towards an improvement on Site Experience for the customer and it will have a direct impact on the store's conversion. 
 
+![bindingfunctionality](/docs/bindingfunctionality.gif)
+
 
 ## Configuration
 
