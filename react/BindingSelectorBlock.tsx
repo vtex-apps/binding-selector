@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
-import { OrderFormProvider, useOrderForm } from 'vtex.order-manager/OrderForm'
+import { useOrderItems } from 'vtex.order-items/OrderItems'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
@@ -12,6 +12,7 @@ import { createRedirectUrl, getMatchRoute } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
+import getOrderForm from './graphql/getOrderForm.gql'
 
 const CSS_HANDLES = [
   'container',
@@ -20,6 +21,13 @@ const CSS_HANDLES = [
   'buttonText',
 ] as const
 
+interface GetOrderFormResponse {
+  orderForm: {
+    salesChannel: string
+    orderFormId: string
+  }
+}
+
 const BindingSelectorBlock: FC = () => {
   const {
     data: { currentBinding, bindingList, bindingsError, loadingBindings },
@@ -27,6 +35,7 @@ const BindingSelectorBlock: FC = () => {
   } = useBinding()
 
   const [open, setOpen] = useState<boolean>(false)
+  const [HasRunSyncEffect, setHasRunSyncEffect] = useState(false)
   const handles = useCssHandles(CSS_HANDLES)
   const {
     // @ts-expect-error routes not typed in useRuntime
@@ -34,6 +43,8 @@ const BindingSelectorBlock: FC = () => {
       pageContext: { id, type },
     },
   } = useRuntime()
+
+  const { updateQuantity } = useOrderItems()
 
   const queryVariables = {
     id,
@@ -48,15 +59,20 @@ const BindingSelectorBlock: FC = () => {
   })
 
   const [updateSalesChannel] = useMutation<
-    { updateSalesChannel: { orderFormId: string } },
+    {
+      updateSalesChannel: {
+        orderFormId: string
+        items: Array<{ quantity: number; uniqueId: string }>
+      }
+    },
     UpdateSalesChannelVariables
   >(updateSalesChannelMutation)
 
   const {
-    error: orderFormError,
+    data: orderFormResponse,
     loading: loadingOrderForm,
-    orderForm,
-  } = useOrderForm()
+    error: orderFormError,
+  } = useQuery<GetOrderFormResponse>(getOrderForm)
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
@@ -88,6 +104,58 @@ const BindingSelectorBlock: FC = () => {
     }
   }, [hrefAltData, currentBinding])
 
+  /**
+   * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
+   * If different, it updates the cart sales channel to be the same as the one coming from the sales channel based on the binding url
+   */
+  useEffect(() => {
+    const syncSalesChannel = async () => {
+      const { data } = await updateSalesChannel({
+        variables: {
+          orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
+            .orderFormId,
+          salesChannel: currentBinding.salesChannel,
+          locale: currentBinding.defaultLocale,
+        },
+      })
+
+      const { items } = data?.updateSalesChannel ?? { items: [] }
+
+      for (let i = 0; i < items.length; i++) {
+        const { uniqueId, quantity } = items[i]
+
+        // Trigger a re-render for cart component
+        updateQuantity({
+          uniqueId,
+          quantity,
+        })
+      }
+    }
+
+    if (
+      orderFormResponse &&
+      currentBinding?.id &&
+      toogleSalesChannel?.isSalesChannelUpdate
+    ) {
+      if (
+        orderFormResponse.orderForm.salesChannel !==
+          currentBinding.salesChannel &&
+        !HasRunSyncEffect
+      ) {
+        syncSalesChannel()
+      }
+
+      setHasRunSyncEffect(true)
+    }
+  }, [
+    orderFormResponse,
+    currentBinding,
+    toogleSalesChannel,
+    updateSalesChannel,
+    updateQuantity,
+    HasRunSyncEffect,
+  ])
+
   const handleClick = () => {
     setOpen(!open)
   }
@@ -102,7 +170,8 @@ const BindingSelectorBlock: FC = () => {
       try {
         await updateSalesChannel({
           variables: {
-            orderFormId: orderForm.id,
+            orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
+              .orderFormId,
             salesChannel: selectedBinding.salesChannel,
             locale: selectedBinding.defaultLocale,
           },
@@ -161,12 +230,4 @@ const BindingSelectorBlock: FC = () => {
   )
 }
 
-const BindingSelectorBlockWrapper = () => {
-  return (
-    <OrderFormProvider>
-      <BindingSelectorBlock />
-    </OrderFormProvider>
-  )
-}
-
-export default BindingSelectorBlockWrapper
+export default BindingSelectorBlock
