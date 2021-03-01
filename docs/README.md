@@ -1,6 +1,13 @@
-# Selector Binding
+# Binding Selector 
 
-_TODO_
+The Binding Selector APP, allows multi-language stores, specifically those with a single account-multiple binding architecture, to switch between their configured bindings.
+
+The App will take the context of the binding and the alternate addresses registered for each account, allowing customers to seamlesly switch between stores without returning to Home or leaving the site. 
+
+It has the possibility to update the Session and Cart's Sales Channel, this changes the prices and stock available for each store. It is up to the user to toggle this setting ON of OFF inside the App's settings. 
+
+The App is geared towards an improvement on Site Experience for the customer and it will have a direct impact on the store's conversion. 
+
 
 ## Configuration
 
