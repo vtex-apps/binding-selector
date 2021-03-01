@@ -25,6 +25,7 @@ interface GetOrderFormResponse {
   orderForm: {
     salesChannel: string
     orderFormId: string
+    items: Array<{ id: string }>
   }
 }
 
@@ -133,7 +134,7 @@ const BindingSelectorBlock: FC = () => {
     }
 
     if (
-      orderFormResponse &&
+      orderFormResponse?.orderForm.items.length &&
       currentBinding?.id &&
       toogleSalesChannel?.isSalesChannelUpdate
     ) {
