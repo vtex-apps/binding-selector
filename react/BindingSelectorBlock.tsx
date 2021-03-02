@@ -118,7 +118,6 @@ const BindingSelectorBlock: FC = () => {
           orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
             .orderFormId,
           salesChannel: currentBinding.salesChannel,
-          locale: currentBinding.defaultLocale,
         },
       })
 
@@ -176,7 +175,6 @@ const BindingSelectorBlock: FC = () => {
             orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
               .orderFormId,
             salesChannel: selectedBinding.salesChannel,
-            locale: selectedBinding.defaultLocale,
           },
         })
       } catch (e) {
