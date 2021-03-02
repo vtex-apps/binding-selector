@@ -73,7 +73,9 @@ const BindingSelectorBlock: FC = () => {
     data: orderFormResponse,
     loading: loadingOrderForm,
     error: orderFormError,
-  } = useQuery<GetOrderFormResponse>(getOrderForm)
+  } = useQuery<GetOrderFormResponse>(getOrderForm, {
+    ssr: false,
+  })
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
