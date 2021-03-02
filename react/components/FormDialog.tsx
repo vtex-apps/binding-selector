@@ -111,7 +111,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         id: key,
         defaultLocale,
         canonicalBaseAddress,
-        salesChannel,
+        salesChannel: salesChannel.toString(),
       })
     }
 
