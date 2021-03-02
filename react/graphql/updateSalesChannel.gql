@@ -9,5 +9,9 @@ mutation updateSalesChannel(
     locale: $locale
   ) @context(provider: "vtex.binding-selector") {
     orderFormId
+    items {
+      quantity
+      uniqueId
+    }
   }
 }
