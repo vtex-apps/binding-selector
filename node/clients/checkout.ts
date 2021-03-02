@@ -23,25 +23,6 @@ export class Checkout extends JanusClient {
     })
   }
 
-  public updateSalesChannel = (
-    orderFormId: string,
-    salesChannel: string,
-    clientPreferencesData: CheckoutOrderForm['clientPreferencesData']
-  ) => {
-    return this.post<
-      CheckoutOrderForm,
-      CheckoutOrderForm['clientPreferencesData']
-    >(
-      this.routes.updateSalesChannel(orderFormId, salesChannel),
-      {
-        ...clientPreferencesData,
-      },
-      {
-        metric: 'checkout-updateSalesChannel',
-      }
-    )
-  }
-
   public addItems = (
     orderFormId: string,
     items: CheckoutOrderForm['items'],
@@ -85,8 +66,6 @@ export class Checkout extends JanusClient {
       addItems: (orderFormId: string, salesChannel: string) =>
         `${base}/orderForm/${orderFormId}/items?sc=${salesChannel}`,
       getOrderForm: (orderFormId: string) => `${base}/orderForm/${orderFormId}`,
-      updateSalesChannel: (orderFormId: string, salesChannel: string) =>
-        `${base}/orderForm/${orderFormId}/attachments/clientPreferencesData?sc=${salesChannel}`,
     }
   }
 }
