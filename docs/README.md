@@ -29,6 +29,7 @@ The App consists on **two** main features an **Admin Interface** and a Store Blo
 The Setup for the app is as follows:
 1. on the CLI and run: ```vtex install vtex.binding-selector@0.x```
 2. on the **store-theme** declare the block where it is intended to be displayed, for example, inside the **header.json** declare the block as follows:
+
     ```
     "flex-layout.row#4-desktop": {
     "props": {
@@ -48,14 +49,15 @@ The Setup for the app is as follows:
       "login",
       "minicart.v2"
     ]
-  },
-  ```
+    }
+
 3. Go to your account Admin Panel and under the Account Settings, there will be a new menu item called **Binding Selector**. Here you will have the following options
  3.1. Possibility to toggle whether or not the app will change Sales Channels when switching bindings. When the store changes the Sales Channel, the prices of the store and the checkout will also change.
  3.2. Toggle each store individually to be displayed on the front end component.
  3.2.1 Capacity to modify the store front labels per store language.
 
  ![adminfunctionality](/docs/admininterface.gif)
+
 
 ## Customization
 
