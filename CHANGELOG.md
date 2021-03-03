@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- App doesn't update `clientPreferencesData` when updating sales channel.
+### Fixed
+- Skip SSR for `getOrderForm` query since it has a private scope.
+
 ## [0.1.1] - 2021-02-26
 
 ## [0.1.0] - 2021-02-25

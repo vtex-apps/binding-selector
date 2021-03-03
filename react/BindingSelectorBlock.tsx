@@ -73,7 +73,9 @@ const BindingSelectorBlock: FC = () => {
     data: orderFormResponse,
     loading: loadingOrderForm,
     error: orderFormError,
-  } = useQuery<GetOrderFormResponse>(getOrderForm)
+  } = useQuery<GetOrderFormResponse>(getOrderForm, {
+    ssr: false,
+  })
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
@@ -116,7 +118,6 @@ const BindingSelectorBlock: FC = () => {
           orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
             .orderFormId,
           salesChannel: currentBinding.salesChannel,
-          locale: currentBinding.defaultLocale,
         },
       })
 
@@ -174,7 +175,6 @@ const BindingSelectorBlock: FC = () => {
             orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
               .orderFormId,
             salesChannel: selectedBinding.salesChannel,
-            locale: selectedBinding.defaultLocale,
           },
         })
       } catch (e) {
