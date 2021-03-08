@@ -43,7 +43,6 @@ interface BindingsSaved {
 
 interface UpdateSalesChannelVariables {
   salesChannel: string
-  locale: string
   orderFormId: string
 }
 

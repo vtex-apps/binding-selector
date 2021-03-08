@@ -4,11 +4,7 @@ type Query {
 }
 
 type Mutation {
-  updateSalesChannel(
-    orderFormId: ID
-    salesChannel: String
-    locale: String
-  ): PartialOrderForm
+  updateSalesChannel(orderFormId: ID, salesChannel: String): PartialOrderForm
 
   saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
   toggleSalesChannel(salesChannel: Boolean): Boolean

@@ -10,28 +10,13 @@ export const updateSalesChannel = async (
   ctx: Context
 ): Promise<CheckoutOrderForm> => {
   const { clients } = ctx
-  const { orderFormId, salesChannel, locale } = args
+  const { orderFormId, salesChannel } = args
   const { checkout } = clients
   const orderForm = await checkout.getOrderForm(orderFormId)
-  const { clientPreferencesData } = orderForm
-  const updatedClientPreferencesData = {
-    ...clientPreferencesData,
-    locale,
-    // @ts-expect-error There is a misspelling in the type definition
-    optinNewsLetter: clientPreferencesData?.optinNewsLetter ?? false,
-  }
-
-  const updatedOrderFormPromise = checkout.updateSalesChannel(
-    orderFormId,
-    salesChannel,
-    updatedClientPreferencesData
-  )
 
   if (!orderForm.items.length) {
-    return updatedOrderFormPromise
+    return orderForm
   }
-
-  await updatedOrderFormPromise
 
   return checkout.addItems(orderFormId, orderForm.items, salesChannel)
 }
