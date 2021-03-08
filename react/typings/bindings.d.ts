@@ -54,3 +54,9 @@ interface AlternateHrefsVariables {
 interface BindingsByBindingId {
   [bindingId: string]: AdjustedBinding[]
 }
+
+interface RedirectUrlData {
+  url: string
+  bindingId: string
+  redirectUrl: boolean
+}

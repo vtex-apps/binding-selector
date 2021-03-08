@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { FC, SyntheticEvent } from 'react'
+import type { FC, SyntheticEvent, FormEvent } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Toggle, Button, Divider, Collapsible, Input } from 'vtex.styleguide'
 
@@ -9,6 +9,7 @@ export interface BindingSectionProps {
   setChosenBinding: (binding: Binding) => void
   showBindings: { [key: string]: boolean }
   setShowBindings: (id: string) => void
+  setSetRedirectUrl: (args: RedirectUrlData) => void
 }
 
 interface BindingSectionPropsLocal extends BindingSectionProps {
@@ -23,19 +24,36 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   setChosenBinding,
   showBindings,
   setShowBindings,
+  setSetRedirectUrl,
   i,
 }) => {
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setshowRedirectUrl] = useState(false)
   const [redirectUrl, setRedirectUrl] = useState('')
 
-  const handleChange = (event: SyntheticEvent) => {
+  const handleShowRedirectToggle = () => {
+    setshowRedirectUrl(!showRedirectUrl)
+    if (showRedirectUrl) {
+      setSetRedirectUrl({
+        url: '',
+        bindingId: binding.id,
+        redirectUrl: false,
+      })
+    }
+  }
+
+  const handleChangeRedirectUrl = (event: SyntheticEvent) => {
     setRedirectUrl((event.currentTarget as HTMLInputElement).value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
     // eslint-disable-next-line no-console
-    console.log(redirectUrl)
+    setSetRedirectUrl({
+      url: redirectUrl,
+      bindingId: binding.id,
+      redirectUrl: showRedirectUrl,
+    })
   }
 
   return (
@@ -96,7 +114,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
           <Toggle
             checked={showRedirectUrl}
             label="Set Redirect URL"
-            onChange={() => setshowRedirectUrl(!showRedirectUrl)}
+            onChange={handleShowRedirectToggle}
           />
           <form onSubmit={handleSubmit} className="flex items-center">
             <div className="mv5 width-70">
@@ -104,11 +122,13 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                 value={redirectUrl}
                 disabled={!showRedirectUrl}
                 placeholder="Redirect URL"
-                onChange={handleChange}
+                onChange={handleChangeRedirectUrl}
               />
             </div>
             <div className="ml5">
-              <Button disabled={!redirectUrl}>Save URL</Button>
+              <Button type="submit" disabled={!redirectUrl}>
+                Save URL
+              </Button>
             </div>
           </form>
         </div>

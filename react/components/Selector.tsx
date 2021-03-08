@@ -129,6 +129,25 @@ const Selector: FC = () => {
     setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
+  const handleSetRedirectUrl = ({
+    bindingId,
+    ...redirectUrlData
+  }: RedirectUrlData) => {
+    const transformedData = fetchedData.map((bindng) => {
+      if (bindng.bindingId === bindingId) {
+        return {
+          ...bindng,
+          redirectUrlData,
+        }
+      }
+
+      return bindng
+    })
+
+    // eslint-disable-next-line no-console
+    console.log({ transformedData })
+  }
+
   return (
     <div>
       <FormDialog
@@ -160,6 +179,7 @@ const Selector: FC = () => {
           setChosenBinding={setChosenBinding}
           showBindings={showBindings}
           setShowBindings={handleShowBindings}
+          setSetRedirectUrl={handleSetRedirectUrl}
         />
       )}
     </div>
