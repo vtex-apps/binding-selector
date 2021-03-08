@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { FC } from 'react'
+import type { FC, SyntheticEvent } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Toggle, Button, Divider, Collapsible, Input } from 'vtex.styleguide'
 
@@ -27,6 +27,16 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
 }) => {
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setshowRedirectUrl] = useState(false)
+  const [redirectUrl, setRedirectUrl] = useState('')
+
+  const handleChange = (event: SyntheticEvent) => {
+    setRedirectUrl((event.currentTarget as HTMLInputElement).value)
+  }
+
+  const handleSubmit = () => {
+    // eslint-disable-next-line no-console
+    console.log(redirectUrl)
+  }
 
   return (
     <>
@@ -88,14 +98,19 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             label="Set Redirect URL"
             onChange={() => setshowRedirectUrl(!showRedirectUrl)}
           />
-          <div className="flex items-center">
+          <form onSubmit={handleSubmit} className="flex items-center">
             <div className="mv5 width-70">
-              <Input disabled={!showRedirectUrl} placeholder="Redirect URL" />
+              <Input
+                value={redirectUrl}
+                disabled={!showRedirectUrl}
+                placeholder="Redirect URL"
+                onChange={handleChange}
+              />
             </div>
             <div className="ml5">
-              <Button>Save URL</Button>
+              <Button disabled={!redirectUrl}>Save URL</Button>
             </div>
-          </div>
+          </form>
         </div>
       </Collapsible>
       <div className="mt5">
