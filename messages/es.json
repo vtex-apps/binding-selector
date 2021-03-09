@@ -10,7 +10,9 @@
   "admin-modal": "Customise the store names in this binding’s language.",
   "admin-cancel": "Cancel",
   "admin-save": "Save",
-  "admin-edit": "Edit",
   "admin-hide-binding": "Hide",
-  "admin-show-binding": "Show"
+  "admin-show-binding": "Show",
+  "advanced-settings": "Advanced Settings",
+  "set-external-url": "Set external redirect URL",
+  "external-url-placeholder": "External redirect URL"
 }

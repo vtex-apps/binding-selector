@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import type { FC, SyntheticEvent, FormEvent } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Toggle, Button, Divider, Collapsible, Input } from 'vtex.styleguide'
 
 export interface BindingSectionProps {
@@ -30,6 +30,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setShowRedirectUrl] = useState(false)
   const [urlToRedirect, setRedirectUrl] = useState('')
+  const intl = useIntl()
 
   useEffect(() => {
     const { redirectUrlData } = configSettings
@@ -119,7 +120,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
       <Collapsible
         header={
           <span className="c-action-primary hover-c-action-primary fw5">
-            Advanced settings
+            <FormattedMessage id="advanced-settings" />
           </span>
         }
         isOpen={showAdvConfig}
@@ -128,7 +129,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         <div className="mt4">
           <Toggle
             checked={showRedirectUrl}
-            label="Set Redirect URL"
+            label={<FormattedMessage id="set-external-url" />}
             onChange={handleShowRedirectToggle}
           />
           <form onSubmit={handleSubmit} className="flex items-center">
@@ -136,7 +137,9 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
               <Input
                 value={urlToRedirect}
                 disabled={!showRedirectUrl}
-                placeholder="Redirect URL"
+                placeholder={intl.formatMessage({
+                  id: 'external-url-placeholder',
+                })}
                 onChange={handleChangeRedirectUrl}
               />
             </div>
