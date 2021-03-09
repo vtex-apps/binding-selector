@@ -30,6 +30,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setShowRedirectUrl] = useState(false)
   const [urlToRedirect, setUrlToRedirect] = useState('')
+  const [edit, setEdit] = useState(false)
   const intl = useIntl()
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
       if (redirectUrl) {
         setShowRedirectUrl(redirectUrl)
         setUrlToRedirect(url)
+        setEdit(true)
 
         return
       }
@@ -57,6 +59,8 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         url: '',
         redirectUrl: false,
       })
+    } else {
+      setEdit(false)
     }
   }
 
@@ -70,6 +74,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
       url: urlToRedirect,
       redirectUrl: showRedirectUrl,
     })
+  }
+
+  const handleEditMode = (e: MouseEvent) => {
+    e.preventDefault()
+    setEdit(!edit)
   }
 
   return (
@@ -136,7 +145,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             <div className="mv5 width-70">
               <Input
                 value={urlToRedirect}
-                disabled={!showRedirectUrl}
+                disabled={!showRedirectUrl || edit}
                 placeholder={intl.formatMessage({
                   id: 'external-url-placeholder',
                 })}
@@ -144,9 +153,20 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
               />
             </div>
             <div className="ml5">
-              <Button type="submit" disabled={!urlToRedirect}>
-                <FormattedMessage id="save-url" />
-              </Button>
+              {edit ? (
+                <Button
+                  type="button"
+                  variation="secondary"
+                  disabled={!urlToRedirect}
+                  onClick={handleEditMode}
+                >
+                  <FormattedMessage id="edit-url" />
+                </Button>
+              ) : (
+                <Button type="submit" disabled={!urlToRedirect}>
+                  <FormattedMessage id="save-url" />
+                </Button>
+              )}
             </div>
           </form>
         </div>
