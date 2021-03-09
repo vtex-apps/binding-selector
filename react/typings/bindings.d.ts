@@ -39,7 +39,7 @@ interface BindingsSaved {
   bindingId: string
   show: boolean
   translatedLocales: BindingTranslation[]
-  redirectUrlData: RedirectUrlData | null
+  externalRedirectData: ExternalRedirectData | null
 }
 
 interface UpdateSalesChannelVariables {
@@ -56,11 +56,11 @@ interface BindingsByBindingId {
   [bindingId: string]: TranslationsAndSettings[]
 }
 
-interface RedirectUrlData {
+interface ExternalRedirectData {
   url: string
   redirectUrl: boolean
 }
 
 interface TranslationsAndSettings extends BindingTranslation {
-  redirectUrlData: RedirectUrlData | null
+  externalRedirectData: ExternalRedirectData | null
 }

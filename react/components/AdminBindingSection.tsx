@@ -8,7 +8,7 @@ export interface BindingSectionProps {
   modalOpen: boolean
   setChosenBinding: (binding: Binding) => void
   setShowBindings: (id: string) => void
-  setSetRedirectUrl: (bindingId: string, args: RedirectUrlData) => void
+  setSetRedirectUrl: (bindingId: string, args: ExternalRedirectData) => void
 }
 
 interface BindingSectionPropsLocal extends BindingSectionProps {
@@ -33,10 +33,10 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   const intl = useIntl()
 
   useEffect(() => {
-    const { redirectUrlData } = configSettings
+    const { externalRedirectData } = configSettings
 
-    if (redirectUrlData) {
-      const { redirectUrl, url } = redirectUrlData
+    if (externalRedirectData) {
+      const { redirectUrl, url } = externalRedirectData
 
       if (redirectUrl) {
         setShowRedirectUrl(redirectUrl)

@@ -134,13 +134,13 @@ const Selector: FC = () => {
 
   const handleSetRedirectUrl = async (
     bindingId: string,
-    redirectUrlData: RedirectUrlData
+    externalRedirectData: ExternalRedirectData
   ) => {
     const transformedData = fetchedData.map((binding) => {
       if (binding.bindingId === bindingId) {
         return {
           ...binding,
-          redirectUrlData,
+          externalRedirectData,
         }
       }
 

@@ -12,13 +12,13 @@ const filterBindings = ({
     if (binding.show) {
       const bindingIdAndLabels = {
         [binding.bindingId]: binding.translatedLocales.map((translation) => {
-          const redirectUrlData =
+          const externalRedirectData =
             bindingInfo.find(({ bindingId }) => translation.id === bindingId)
-              ?.redirectUrlData ?? null
+              ?.externalRedirectData ?? null
 
           return {
             ...translation,
-            redirectUrlData,
+            externalRedirectData,
           }
         }),
       }

@@ -168,8 +168,8 @@ const BindingSelectorBlock: FC = () => {
     setLoadingRedirect(true)
     setCurrentBindingInfo(selectedBinding.id)
     setOpen(false)
-    if (selectedBinding.redirectUrlData?.redirectUrl) {
-      window.location.href = selectedBinding.redirectUrlData.url
+    if (selectedBinding.externalRedirectData?.redirectUrl) {
+      window.location.href = selectedBinding.externalRedirectData.url
 
       return
     }
