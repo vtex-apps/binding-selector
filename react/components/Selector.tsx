@@ -147,8 +147,6 @@ const Selector: FC = () => {
       return binding
     })
 
-    // eslint-disable-next-line no-console
-    console.log(transformedData)
     await saveTranslatedInfo({ variables: { data: transformedData } })
     setFetchedData(transformedData)
   }

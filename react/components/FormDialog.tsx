@@ -38,9 +38,9 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-  const [translatedLocales, setTranslatedLocales] = useState<AdjustedBinding[]>(
-    []
-  )
+  const [translatedLocales, setTranslatedLocales] = useState<
+    BindingTranslation[]
+  >([])
 
   const getTranslatedLabels = useCallback(
     (arr: BindingsSaved[]) => {
@@ -93,7 +93,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     const dataContainer = {} as DataMutation
 
     payload.bindingId = chosenBinding.id
-    const translatedInfoArray = [] as AdjustedBinding[]
+    const translatedInfoArray = [] as BindingTranslation[]
 
     for (const [key, value] of Object.entries(dataLocales)) {
       const [

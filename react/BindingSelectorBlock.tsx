@@ -163,7 +163,7 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const handleSelection = async (
-    selectedBinding: AdjustedBinding
+    selectedBinding: BindingTranslation
   ): Promise<void> => {
     setLoadingRedirect(true)
     setCurrentBindingInfo(selectedBinding.id)
