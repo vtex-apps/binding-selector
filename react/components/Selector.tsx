@@ -181,7 +181,7 @@ const Selector: FC = () => {
           modalOpen={modalOpen}
           setChosenBinding={setChosenBinding}
           setShowBindings={handleShowBindings}
-          setSetRedirectUrl={handleSetRedirectUrl}
+          setRedirectUrl={handleSetRedirectUrl}
           configSettingsList={fetchedData}
         />
       )}

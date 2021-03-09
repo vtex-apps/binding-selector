@@ -8,7 +8,7 @@ export interface BindingSectionProps {
   modalOpen: boolean
   setChosenBinding: (binding: Binding) => void
   setShowBindings: (id: string) => void
-  setSetRedirectUrl: (bindingId: string, args: ExternalRedirectData) => void
+  setRedirectUrl: (bindingId: string, args: ExternalRedirectData) => void
 }
 
 interface BindingSectionPropsLocal extends BindingSectionProps {
@@ -23,13 +23,13 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   modalOpen,
   setChosenBinding,
   setShowBindings,
-  setSetRedirectUrl,
+  setRedirectUrl,
   configSettings,
   i,
 }) => {
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setShowRedirectUrl] = useState(false)
-  const [urlToRedirect, setRedirectUrl] = useState('')
+  const [urlToRedirect, setUrlToRedirect] = useState('')
   const intl = useIntl()
 
   useEffect(() => {
@@ -40,20 +40,20 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
 
       if (redirectUrl) {
         setShowRedirectUrl(redirectUrl)
-        setRedirectUrl(url)
+        setUrlToRedirect(url)
 
         return
       }
     }
 
     setShowRedirectUrl(false)
-    setRedirectUrl('')
+    setUrlToRedirect('')
   }, [configSettings, showAdvConfig])
 
   const handleShowRedirectToggle = () => {
     setShowRedirectUrl(!showRedirectUrl)
     if (showRedirectUrl) {
-      setSetRedirectUrl(binding.id, {
+      setRedirectUrl(binding.id, {
         url: '',
         redirectUrl: false,
       })
@@ -61,12 +61,12 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   }
 
   const handleChangeRedirectUrl = (event: SyntheticEvent) => {
-    setRedirectUrl((event.currentTarget as HTMLInputElement).value)
+    setUrlToRedirect((event.currentTarget as HTMLInputElement).value)
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    setSetRedirectUrl(binding.id, {
+    setRedirectUrl(binding.id, {
       url: urlToRedirect,
       redirectUrl: showRedirectUrl,
     })
