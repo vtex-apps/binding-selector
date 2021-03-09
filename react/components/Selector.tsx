@@ -40,7 +40,10 @@ const Selector: FC = () => {
     }
   )
 
-  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
+  const [saveTranslatedInfo] = useMutation<BindingsSaved, DataMutation>(
+    saveBindingInfo
+  )
+
   const { data: salesData } = useQuery<SalesChannelResponse>(
     isSalesChannelUpdate,
     {
@@ -57,7 +60,7 @@ const Selector: FC = () => {
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
-      translatedData?.bindingInfo.forEach((binding) => {
+      translatedData?.bindingInfo?.forEach((binding) => {
         dataHolder[binding.bindingId] = binding.show
       })
 
@@ -129,7 +132,7 @@ const Selector: FC = () => {
     setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
-  const handleSetRedirectUrl = (
+  const handleSetRedirectUrl = async (
     bindingId: string,
     redirectUrlData: RedirectUrlData
   ) => {
@@ -146,6 +149,7 @@ const Selector: FC = () => {
 
     // eslint-disable-next-line no-console
     console.log(transformedData)
+    await saveTranslatedInfo({ variables: { data: transformedData } })
     setFetchedData(transformedData)
   }
 
