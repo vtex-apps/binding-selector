@@ -39,6 +39,7 @@ interface BindingsSaved {
   bindingId: string
   show: boolean
   translatedLocales: AdjustedBinding[]
+  redirectUrlData: RedirectUrlData
 }
 
 interface UpdateSalesChannelVariables {
@@ -57,6 +58,5 @@ interface BindingsByBindingId {
 
 interface RedirectUrlData {
   url: string
-  bindingId: string
   redirectUrl: boolean
 }

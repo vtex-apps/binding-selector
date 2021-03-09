@@ -25,7 +25,7 @@ interface DataMutation {
 const Selector: FC = () => {
   const [updateSalesChannel, setUpdateSalesChannel] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [chosenBinding, setChosenBinding] = useState<Binding>(Object)
+  const [chosenBinding, setChosenBinding] = useState<Binding>({} as Binding)
   const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
   const { data: bindingData } = useQuery<TenantInfoResponse>(getSalesChannel, {
     ssr: false,
@@ -129,23 +129,24 @@ const Selector: FC = () => {
     setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
-  const handleSetRedirectUrl = ({
-    bindingId,
-    ...redirectUrlData
-  }: RedirectUrlData) => {
-    const transformedData = fetchedData.map((bindng) => {
-      if (bindng.bindingId === bindingId) {
+  const handleSetRedirectUrl = (
+    bindingId: string,
+    redirectUrlData: RedirectUrlData
+  ) => {
+    const transformedData = fetchedData.map((binding) => {
+      if (binding.bindingId === bindingId) {
         return {
-          ...bindng,
+          ...binding,
           redirectUrlData,
         }
       }
 
-      return bindng
+      return binding
     })
 
     // eslint-disable-next-line no-console
-    console.log({ transformedData })
+    console.log(transformedData)
+    setFetchedData(transformedData)
   }
 
   return (
@@ -177,9 +178,9 @@ const Selector: FC = () => {
           modalControl={setModalOpen}
           modalOpen={modalOpen}
           setChosenBinding={setChosenBinding}
-          showBindings={showBindings}
           setShowBindings={handleShowBindings}
           setSetRedirectUrl={handleSetRedirectUrl}
+          configSettingsList={fetchedData}
         />
       )}
     </div>
