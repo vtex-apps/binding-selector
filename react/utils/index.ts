@@ -11,7 +11,16 @@ const filterBindings = ({
   for (const binding of bindingInfo) {
     if (binding.show) {
       const bindingIdAndLabels = {
-        [binding.bindingId]: binding.translatedLocales,
+        [binding.bindingId]: binding.translatedLocales.map((translation) => {
+          const redirectUrlData =
+            bindingInfo.find(({ bindingId }) => translation.id === bindingId)
+              ?.redirectUrlData ?? null
+
+          return {
+            ...translation,
+            redirectUrlData,
+          }
+        }),
       }
 
       bindingsById.push(bindingIdAndLabels)

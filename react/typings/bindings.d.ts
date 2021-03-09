@@ -53,10 +53,14 @@ interface AlternateHrefsVariables {
 }
 
 interface BindingsByBindingId {
-  [bindingId: string]: BindingTranslation[]
+  [bindingId: string]: TranslationsAndSettings[]
 }
 
 interface RedirectUrlData {
   url: string
   redirectUrl: boolean
+}
+
+interface TranslationsAndSettings extends BindingTranslation {
+  redirectUrlData: RedirectUrlData | null
 }
