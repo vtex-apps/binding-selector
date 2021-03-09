@@ -14,5 +14,6 @@
   "admin-show-binding": "Show",
   "advanced-settings": "Advanced Settings",
   "set-external-url": "Set external redirect URL",
-  "external-url-placeholder": "External redirect URL"
+  "external-url-placeholder": "External redirect URL",
+  "save-url": "Save URL"
 }

@@ -145,7 +145,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             </div>
             <div className="ml5">
               <Button type="submit" disabled={!urlToRedirect}>
-                Save URL
+                <FormattedMessage id="save-url" />
               </Button>
             </div>
           </form>
