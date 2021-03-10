@@ -150,6 +150,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                   id: 'external-url-placeholder',
                 })}
                 onChange={handleChangeRedirectUrl}
+                pattern="^https:\/\/.+"
               />
               <p className="t-small mw9">
                 <FormattedMessage id="external-url-helper-text" />
