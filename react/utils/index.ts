@@ -8,19 +8,34 @@ const filterBindings = ({
 }: BindingInfoResponse): BindingsByBindingId[] => {
   const bindingsById = []
 
+  const bindnigsToShow: Record<string, boolean> = {}
+  const bindingExternalRedirect: Record<
+    string,
+    ExternalRedirectData | null
+  > = {}
+
+  for (const binding of bindingInfo) {
+    if (binding.show) {
+      bindnigsToShow[binding.bindingId] = true
+      bindingExternalRedirect[binding.bindingId] = binding.externalRedirectData
+    }
+  }
+
   for (const binding of bindingInfo) {
     if (binding.show) {
       const bindingIdAndLabels = {
-        [binding.bindingId]: binding.translatedLocales.map((translation) => {
-          const externalRedirectData =
-            bindingInfo.find(({ bindingId }) => translation.id === bindingId)
-              ?.externalRedirectData ?? null
+        [binding.bindingId]: binding.translatedLocales
+          // filter out translations for bindings set to not show
+          .filter(({ id }) => bindnigsToShow[id])
+          // map over the left ones to add externalRedirect info
+          .map((translation) => {
+            const externalRedirectData = bindingExternalRedirect[translation.id]
 
-          return {
-            ...translation,
-            externalRedirectData,
-          }
-        }),
+            return {
+              ...translation,
+              externalRedirectData,
+            }
+          }),
       }
 
       bindingsById.push(bindingIdAndLabels)
