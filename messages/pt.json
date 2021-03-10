@@ -16,5 +16,6 @@
   "set-external-url": "Set external redirect URL",
   "external-url-placeholder": "External redirect URL",
   "save-url": "Save URL",
-  "edit-url": "Edit URL"
+  "edit-url": "Edit URL",
+  "external-url-helper-text": "Please include https:// in the URL"
 }

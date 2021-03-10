@@ -141,7 +141,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             label={<FormattedMessage id="set-external-url" />}
             onChange={handleShowRedirectToggle}
           />
-          <form onSubmit={handleSubmit} className="flex items-center">
+          <form onSubmit={handleSubmit} className="flex items-baseline">
             <div className="mv5 width-70">
               <Input
                 value={urlToRedirect}
@@ -151,6 +151,9 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                 })}
                 onChange={handleChangeRedirectUrl}
               />
+              <p className="t-small mw9">
+                <FormattedMessage id="external-url-helper-text" />
+              </p>
             </div>
             <div className="ml5">
               {edit ? (
