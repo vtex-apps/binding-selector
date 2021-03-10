@@ -117,3 +117,7 @@ export const getMatchRoute = ({
 
   return route ?? ''
 }
+
+export const transformUserRouteId = (id: string): string => {
+  return id.replace('custom#', 'custom::')
+}
