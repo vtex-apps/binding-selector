@@ -49,7 +49,7 @@ const BindingSelectorBlock: FC = () => {
 
   const queryVariables = {
     id,
-    type,
+    type: type === 'route' ? 'userRoute' : type,
   }
 
   const [
