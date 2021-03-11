@@ -59,10 +59,15 @@ The Setup for the app is as follows:
     ]
     }
 
-3. Go to your account Admin Panel and under the Account Settings, there will be a new menu item called **Binding Selector**. Here you will have the following options
- 3.1. Possibility to toggle whether or not the app will change Sales Channels when switching bindings. When the store changes the Sales Channel, the prices of the store and the checkout will also change.
- 3.2. Toggle each store individually to be displayed on the front end component.
- 3.2.1 Capacity to modify the store front labels per store language.
+4. Go to your account Admin Panel and under the Account Settings, there will be a new menu item called **Binding Selector**. Here you will have the following options:
+
+ 4.1 Possibility to toggle whether or not the app will change Sales Channels when switching bindings. When the store changes the Sales Channel, the prices of the store and the checkout will also change.
+
+ 4.2. Toggle each store individually to be displayed on the front end component.
+
+ 4.3 Modify each displayed option labels clicking on the **Customize Store Names** button. This process has to be done for each active or displayed site.
+
+ **if there are no labels configured, the menu won't display any options!!**
 
  ![adminfunctionality](/docs/admininterface.gif)
 
