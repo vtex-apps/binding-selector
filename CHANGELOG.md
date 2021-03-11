@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- Redirect to the correct alternate hreflang for custom pages.
+
 ## [1.0.0] - 2021-03-03
 
 ### Changed
