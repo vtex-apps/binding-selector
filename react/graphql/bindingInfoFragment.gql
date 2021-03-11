@@ -1,0 +1,15 @@
+fragment BindingInfoFragment on TranslatedInfoOutput {
+  bindingId
+  show
+  translatedLocales {
+    id
+    label
+    defaultLocale
+    canonicalBaseAddress
+    salesChannel
+  }
+  externalRedirectData {
+    url
+    redirectUrl
+  }
+}
