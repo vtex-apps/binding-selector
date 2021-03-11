@@ -30,11 +30,11 @@ The Setup for the app is as follows:
 1. on the CLI and run: ```vtex install vtex.binding-selector@1.x```
 2. declare the block as a dependency inside your store-theme:
 
-```
-"dependencies":{
-  "vtex.binding-selector":"1.x"
-}
-```
+    ```
+    "dependencies":{
+      "vtex.binding-selector":"1.x"
+    }
+    ```
 
 3. on the **store-theme** declare the block where it is intended to be displayed, for example, inside the **header.json** declare the block as follows:
 
