@@ -8,7 +8,7 @@ import { useOrderItems } from 'vtex.order-items/OrderItems'
 import BindingSelectorList from './components/BindingSelectorList'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
-import { createRedirectUrl, getMatchRoute } from './utils'
+import { createRedirectUrl, getMatchRoute, transformUserRouteId } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
@@ -48,8 +48,8 @@ const BindingSelectorBlock: FC = () => {
   const { updateQuantity } = useOrderItems()
 
   const queryVariables = {
-    id,
-    type,
+    id: type === 'route' ? transformUserRouteId(id) : id,
+    type: type === 'route' ? 'userRoute' : type,
   }
 
   const [
