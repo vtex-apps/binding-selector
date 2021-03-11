@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-03-11
+
 ### Added
 - Admin user can set an external URL to redirect user when selecting a specific binding.
 ### Fixed
