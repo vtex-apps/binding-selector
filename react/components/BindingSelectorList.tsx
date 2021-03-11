@@ -4,9 +4,9 @@ import { useCssHandles } from 'vtex.css-handles'
 
 interface Props {
   open: boolean
-  currentBinding: AdjustedBinding
-  bindingInfo: AdjustedBinding[]
-  onSelectBinding: (selectedBinding: AdjustedBinding) => void
+  currentBinding: TranslationsAndSettings
+  bindingInfo: TranslationsAndSettings[]
+  onSelectBinding: (selectedBinding: TranslationsAndSettings) => void
 }
 
 const CSS_HANDLES = ['list', 'listElement'] as const

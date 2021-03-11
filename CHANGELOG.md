@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Admin user can set an external URL to redirect user when selecting a specific binding.
 ### Fixed
 - Redirect to the correct alternate hreflang for custom pages.
 

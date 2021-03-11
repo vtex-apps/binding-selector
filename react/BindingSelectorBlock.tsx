@@ -163,11 +163,17 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const handleSelection = async (
-    selectedBinding: AdjustedBinding
+    selectedBinding: TranslationsAndSettings
   ): Promise<void> => {
     setLoadingRedirect(true)
     setCurrentBindingInfo(selectedBinding.id)
     setOpen(false)
+    if (selectedBinding.externalRedirectData?.redirectUrl) {
+      window.location.href = selectedBinding.externalRedirectData.url
+
+      return
+    }
+
     if (toogleSalesChannel?.isSalesChannelUpdate) {
       try {
         await updateSalesChannel({

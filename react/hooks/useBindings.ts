@@ -6,10 +6,10 @@ import getBindingInfo from '../graphql/bindingInfo.gql'
 import { getCurrentBindingAndList } from '../utils'
 
 export const useBinding = () => {
-  const [bindingList, setBindingList] = useState<AdjustedBinding[]>([])
+  const [bindingList, setBindingList] = useState<TranslationsAndSettings[]>([])
 
-  const [currentBinding, setCurrentBinding] = useState<AdjustedBinding>(
-    {} as AdjustedBinding
+  const [currentBinding, setCurrentBinding] = useState<TranslationsAndSettings>(
+    {} as TranslationsAndSettings
   )
 
   const {
@@ -31,7 +31,7 @@ export const useBinding = () => {
         if (bindingInfo) {
           setBindingList(bindingInfo.currentList)
           setCurrentBinding(
-            bindingInfo.currentBinding ?? ({} as AdjustedBinding)
+            bindingInfo.currentBinding ?? ({} as TranslationsAndSettings)
           )
         }
       }

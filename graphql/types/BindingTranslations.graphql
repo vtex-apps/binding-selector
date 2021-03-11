@@ -2,6 +2,7 @@ input BindingsInput {
   bindingId: String
   show: Boolean
   translatedLocales: [BindingsTranslationInput]
+  externalRedirectData: ExternalRedirectDataInput
 }
 
 input BindingsTranslationInput {
@@ -10,6 +11,11 @@ input BindingsTranslationInput {
   defaultLocale: String
   canonicalBaseAddress: String
   salesChannel: String
+}
+
+input ExternalRedirectDataInput {
+  redirectUrl: Boolean
+  url: String
 }
 
 type BindingsTranslation {
@@ -24,4 +30,10 @@ type TranslatedInfoOutput {
   bindingId: String
   show: Boolean
   translatedLocales: [BindingsTranslation]
+  externalRedirectData: ExternalRedirectData
+}
+
+type ExternalRedirectData {
+  redirectUrl: Boolean
+  url: String
 }

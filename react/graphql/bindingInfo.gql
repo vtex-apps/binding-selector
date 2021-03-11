@@ -9,5 +9,9 @@ query bindingInfo {
       canonicalBaseAddress
       salesChannel
     }
+    externalRedirectData {
+      url
+      redirectUrl
+    }
   }
 }

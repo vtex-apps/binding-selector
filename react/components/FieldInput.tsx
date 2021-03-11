@@ -12,7 +12,7 @@ interface FieldInputProps {
   handleChange: (e: SyntheticEvent) => void
   key: number
   showBindings: { [key: string]: boolean }
-  showEditValue: AdjustedBinding[]
+  showEditValue: BindingTranslation[]
   showValue: boolean
 }
 

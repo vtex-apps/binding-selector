@@ -23,7 +23,7 @@ interface BindingInfoResponse {
   bindingInfo: BindingsSaved[]
 }
 
-interface AdjustedBinding {
+interface BindingTranslation {
   id: string
   label: string
   salesChannel: string
@@ -38,7 +38,8 @@ interface DataLocaleTypes {
 interface BindingsSaved {
   bindingId: string
   show: boolean
-  translatedLocales: AdjustedBinding[]
+  translatedLocales: BindingTranslation[]
+  externalRedirectData: ExternalRedirectData | null
 }
 
 interface UpdateSalesChannelVariables {
@@ -52,5 +53,14 @@ interface AlternateHrefsVariables {
 }
 
 interface BindingsByBindingId {
-  [bindingId: string]: AdjustedBinding[]
+  [bindingId: string]: TranslationsAndSettings[]
+}
+
+interface ExternalRedirectData {
+  url: string
+  redirectUrl: boolean
+}
+
+interface TranslationsAndSettings extends BindingTranslation {
+  externalRedirectData: ExternalRedirectData | null
 }

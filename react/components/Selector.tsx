@@ -25,7 +25,7 @@ interface DataMutation {
 const Selector: FC = () => {
   const [updateSalesChannel, setUpdateSalesChannel] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [chosenBinding, setChosenBinding] = useState<Binding>(Object)
+  const [chosenBinding, setChosenBinding] = useState<Binding>({} as Binding)
   const [fetchedData, setFetchedData] = useState<BindingsSaved[]>([])
   const { data: bindingData } = useQuery<TenantInfoResponse>(getSalesChannel, {
     ssr: false,
@@ -40,7 +40,10 @@ const Selector: FC = () => {
     }
   )
 
-  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
+  const [saveTranslatedInfo] = useMutation<BindingsSaved, DataMutation>(
+    saveBindingInfo
+  )
+
   const { data: salesData } = useQuery<SalesChannelResponse>(
     isSalesChannelUpdate,
     {
@@ -57,7 +60,7 @@ const Selector: FC = () => {
     const setInitialShowValues = () => {
       const dataHolder = {} as ShowBindings
 
-      translatedData?.bindingInfo.forEach((binding) => {
+      translatedData?.bindingInfo?.forEach((binding) => {
         dataHolder[binding.bindingId] = binding.show
       })
 
@@ -129,6 +132,25 @@ const Selector: FC = () => {
     setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
+  const handleSetRedirectUrl = async (
+    bindingId: string,
+    externalRedirectData: ExternalRedirectData
+  ) => {
+    const transformedData = fetchedData.map((binding) => {
+      if (binding.bindingId === bindingId) {
+        return {
+          ...binding,
+          externalRedirectData,
+        }
+      }
+
+      return binding
+    })
+
+    await saveTranslatedInfo({ variables: { data: transformedData } })
+    setFetchedData(transformedData)
+  }
+
   return (
     <div>
       <FormDialog
@@ -158,8 +180,9 @@ const Selector: FC = () => {
           modalControl={setModalOpen}
           modalOpen={modalOpen}
           setChosenBinding={setChosenBinding}
-          showBindings={showBindings}
           setShowBindings={handleShowBindings}
+          setRedirectUrl={handleSetRedirectUrl}
+          configSettingsList={fetchedData}
         />
       )}
     </div>
