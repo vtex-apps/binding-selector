@@ -64,3 +64,7 @@ interface ExternalRedirectData {
 interface TranslationsAndSettings extends BindingTranslation {
   externalRedirectData: ExternalRedirectData | null
 }
+
+interface ShowBindings {
+  [key: string]: boolean
+}

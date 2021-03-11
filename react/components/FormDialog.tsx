@@ -6,13 +6,13 @@ import { useMutation } from 'react-apollo'
 
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
 import FieldInput from './FieldInput'
+import { setShowValues } from '../utils'
 
 interface FormDialogProps {
   open: boolean
   handleOnClose: () => void
   bindings: Binding[]
   chosenBinding: Binding
-  showBindings: { [key: string]: boolean }
   bindingInfoQueryData: BindingsSaved[]
   setFetchedData: (binding: BindingsSaved[]) => void
 }
@@ -31,7 +31,6 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     handleOnClose,
     bindings,
     chosenBinding,
-    showBindings,
     bindingInfoQueryData,
     setFetchedData,
   } = props
@@ -41,6 +40,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   const [translatedLocales, setTranslatedLocales] = useState<
     BindingTranslation[]
   >([])
+
+  const showBindings = setShowValues(bindingInfoQueryData)
 
   const getTranslatedLabels = useCallback(
     (arr: BindingsSaved[]) => {

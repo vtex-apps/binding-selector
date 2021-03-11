@@ -145,3 +145,12 @@ export const getMatchRoute = ({
 export const transformUserRouteId = (id: string): string => {
   return id.replace('custom#', 'custom::')
 }
+
+export const setShowValues = (bindingList: BindingsSaved[]): ShowBindings => {
+  return bindingList.reduce((acc, cur) => {
+    return {
+      ...acc,
+      [cur.bindingId]: cur.show,
+    }
+  }, {})
+}

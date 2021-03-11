@@ -14,12 +14,12 @@ import getSalesChannel from '../graphql/getSalesChannel.gql'
 import toggleSalesChannel from '../graphql/toggleSalesChannel.gql'
 import isSalesChannelUpdate from '../graphql/isSalesChannelUpdate.gql'
 
-interface ShowBindings {
-  [key: string]: boolean
-}
-
 interface DataMutation {
   data: BindingsSaved[]
+}
+
+interface MutationResponse {
+  saveBindingInfo: BindingsSaved[]
 }
 
 const Selector: FC = () => {
@@ -40,7 +40,7 @@ const Selector: FC = () => {
     }
   )
 
-  const [saveTranslatedInfo] = useMutation<BindingsSaved, DataMutation>(
+  const [saveTranslatedInfo] = useMutation<MutationResponse, DataMutation>(
     saveBindingInfo
   )
 
@@ -51,57 +51,19 @@ const Selector: FC = () => {
     }
   )
 
-  const [showBindings, setShowBindings] = useState<ShowBindings>({})
+  useEffect(() => {
+    if (translatedData) {
+      setFetchedData(translatedData?.bindingInfo ?? [])
+    }
+  }, [translatedData])
 
   useEffect(() => {
-    const salesChannelValue = salesData?.isSalesChannelUpdate ?? false
+    if (salesData) {
+      const salesChannelValue = salesData?.isSalesChannelUpdate ?? false
 
-    setUpdateSalesChannel(salesChannelValue)
-    const setInitialShowValues = () => {
-      const dataHolder = {} as ShowBindings
-
-      translatedData?.bindingInfo?.forEach((binding) => {
-        dataHolder[binding.bindingId] = binding.show
-      })
-
-      return dataHolder
+      setUpdateSalesChannel(salesChannelValue)
     }
-
-    const initialShowValues = setInitialShowValues()
-
-    setShowBindings(initialShowValues)
-    setFetchedData(translatedData?.bindingInfo ?? [])
-  }, [
-    bindingData,
-    salesData?.isSalesChannelUpdate,
-    translatedData?.bindingInfo,
-  ])
-
-  const handleToggle = (id: string) => {
-    const bindings = translatedData?.bindingInfo
-    const chosenToggle = bindings?.filter((bind) => bind.bindingId === id)
-    const filtered = bindings?.filter((bind) => bind.bindingId !== id)
-    let editedChosen = {} as BindingsSaved
-    const dataContainer = {} as DataMutation
-
-    if (chosenToggle?.length) {
-      const [extractedInfo] = chosenToggle
-
-      extractedInfo.show = !showBindings[id]
-      editedChosen = extractedInfo
-    } else {
-      const payload = {} as BindingsSaved
-
-      payload.bindingId = id
-      payload.show = true
-      editedChosen = payload
-    }
-
-    filtered?.push(editedChosen)
-
-    dataContainer.data = filtered ?? []
-    saveTranslatedInfo({ variables: dataContainer })
-  }
+  }, [salesData])
 
   const handleUpdateSalesChannel = () => {
     setUpdateSalesChannel(!updateSalesChannel)
@@ -112,24 +74,45 @@ const Selector: FC = () => {
 
   const filteredBindings = removeBindingAdmin(bindingData?.tenantInfo.bindings)
 
-  const handleShowBindings = (bindingId: string): void => {
-    handleToggle(bindingId)
-    setShowBindings((state) => {
-      return { ...state, ...{ [bindingId]: !state[bindingId] } }
+  const handleShowBindings = async (bindingId: string) => {
+    let found = false
+    const modifiedBindings = fetchedData.map((binding) => {
+      if (binding.bindingId === bindingId) {
+        found = true
+        const modifiedBinding = {
+          ...binding,
+          show: !binding.show,
+        }
+
+        return modifiedBinding
+      }
+
+      return binding
     })
 
-    if (
-      !translatedData?.bindingInfo.some((info) => info.bindingId === bindingId)
-    ) {
-      const hello = {} as BindingsSaved
+    const bindingsToSave = found
+      ? modifiedBindings
+      : [
+          ...fetchedData,
+          {
+            bindingId,
+            show: true,
+            translatedLocales: [],
+            externalRedirectData: null,
+          },
+        ]
 
-      hello.bindingId = bindingId
-      hello.show = false
-      hello.translatedLocales = []
-      translatedData?.bindingInfo.push(hello)
+    try {
+      const savedData = await saveTranslatedInfo({
+        variables: { data: bindingsToSave },
+      })
+
+      if (savedData.data) {
+        setFetchedData(savedData.data.saveBindingInfo)
+      }
+    } catch (e) {
+      console.error('error saving data', { e })
     }
-
-    setFetchedData(translatedData?.bindingInfo ?? [])
   }
 
   const handleSetRedirectUrl = async (
@@ -158,7 +141,6 @@ const Selector: FC = () => {
         handleOnClose={handleOnClose}
         chosenBinding={chosenBinding}
         bindings={filteredBindings ?? []}
-        showBindings={showBindings}
         bindingInfoQueryData={fetchedData ?? []}
         setFetchedData={setFetchedData}
       />
