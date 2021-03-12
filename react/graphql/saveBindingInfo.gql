@@ -1,12 +1,7 @@
+#import './bindingInfoFragment.gql'
+
 mutation saveBindingInfo($data: [BindingsInput]) {
   saveBindingInfo(data: $data) {
-    bindingId
-    show
-    translatedLocales {
-      id
-      label
-      defaultLocale
-      canonicalBaseAddress
-    }
+    ...BindingInfoFragment
   }
 }

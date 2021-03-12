@@ -14,3 +14,7 @@ body,
 .width-70 {
   width: 70%;
 }
+
+.z-9999 {
+  z-index: 9999;
+}

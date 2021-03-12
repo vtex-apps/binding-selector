@@ -22,7 +22,7 @@ const BindingSelectorList: FC<Props> = ({
   return (
     <ul
       hidden={!open}
-      className={`${handles.list} absolute z-5 list top-1 ph0 mh0 mt5 bg-base`}
+      className={`absolute z-9999 list top-1 ph0 mh0 mt5 bg-base ${handles.list}`}
     >
       {bindingInfo
         .filter((binding) => {
