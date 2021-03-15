@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.1] - 2021-03-15
+
 ### Changed
 - Give a higher z-index to binding selector
 ### Fixed
