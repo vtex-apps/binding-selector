@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
@@ -83,6 +83,8 @@ const BindingSelectorBlock: FC = () => {
     shouldUpdateSalesChannel
   )
 
+  const relativeContainer = useRef<HTMLDivElement | null>(null)
+
   /**
    * This effect handles the redirect after user selects a new binding.
    * We are handling it here because we couldn't get the hreflang inside the handleSelection method, since the callback from useLazyCallback returns void
@@ -158,6 +160,20 @@ const BindingSelectorBlock: FC = () => {
     HasRunSyncEffect,
   ])
 
+  const handleOutsideClick = (e: MouseEvent) => {
+    if (!relativeContainer.current?.contains(e.target as Node)) {
+      setOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+  }, [])
+
   const handleClick = () => {
     setOpen(!open)
   }
@@ -209,6 +225,7 @@ const BindingSelectorBlock: FC = () => {
       className={`${handles.container} flex items-center justify-center w3 relative`}
     >
       <div
+        ref={relativeContainer}
         className={`${handles.relativeContainer} relative flex justify-center`}
       >
         {isLoading ? (
