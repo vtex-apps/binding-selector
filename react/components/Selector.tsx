@@ -76,9 +76,11 @@ const Selector: FC = () => {
 
   const handleShowBindings = async (bindingId: string) => {
     let found = false
+    let currentToggleStatus = false
     const modifiedBindings = fetchedData.map((binding) => {
       if (binding.bindingId === bindingId) {
         found = true
+        currentToggleStatus = binding.show
         const modifiedBinding = {
           ...binding,
           show: !binding.show,
@@ -89,6 +91,10 @@ const Selector: FC = () => {
 
       return binding
     })
+
+    if (!currentToggleStatus) {
+      setModalOpen(true)
+    }
 
     const bindingsToSave = found
       ? modifiedBindings

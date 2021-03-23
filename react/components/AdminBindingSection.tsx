@@ -111,7 +111,14 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                 <FormattedMessage id="admin-show-binding" />
               )
             }
-            onChange={() => setShowBindings(binding.id)}
+            onChange={() => {
+              setShowBindings(binding.id)
+              if (!configSettings.show) {
+                setChosenBinding(binding)
+              } else {
+                setChosenBinding({} as Binding)
+              }
+            }}
           />
         </div>
         <div>
