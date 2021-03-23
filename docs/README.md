@@ -36,7 +36,7 @@ The Setup for the app is as follows:
     }
     ```
 
-3. on the **store-theme** declare the block where it is intended to be displayed, for example, inside the **header.json** declare the block as follows:
+3. on the **store-theme** declare the block **binding-selector** where it is intended to be displayed, for example, inside the **header.json** declare the block as follows:
 
     ```
     "flex-layout.row#4-desktop": {
