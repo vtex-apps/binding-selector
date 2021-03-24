@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- UX flow and warning to remember use to add translations for all active bindings
+
 ## [1.1.2] - 2021-03-22
 
 ### Added
