@@ -15,6 +15,7 @@ interface BindingSectionPropsLocal extends BindingSectionProps {
   i: number
   binding: Binding
   configSettings: BindingsSaved
+  hasAllabels: boolean
 }
 
 const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
@@ -25,6 +26,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   setShowBindings,
   setRedirectUrl,
   configSettings,
+  hasAllabels,
   i,
 }) => {
   const [showAdvConfig, setShowAdvConfig] = useState(false)
@@ -131,6 +133,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
           >
             <FormattedMessage id="admin-action" />
           </Button>
+          {configSettings.show && !hasAllabels ? (
+            <p className="absolute c-danger i-s">
+              <FormattedMessage id="missing-labels" />
+            </p>
+          ) : null}
         </div>
       </section>
       <Collapsible

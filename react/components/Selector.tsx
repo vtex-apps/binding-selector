@@ -140,6 +140,10 @@ const Selector: FC = () => {
     setFetchedData(transformedData)
   }
 
+  const bindingsToShow = fetchedData
+    .filter(({ show }) => show)
+    .map(({ bindingId }) => bindingId)
+
   return (
     <div>
       <FormDialog
@@ -171,6 +175,7 @@ const Selector: FC = () => {
           setShowBindings={handleShowBindings}
           setRedirectUrl={handleSetRedirectUrl}
           configSettingsList={fetchedData}
+          bindingsToShow={bindingsToShow}
         />
       )}
     </div>
