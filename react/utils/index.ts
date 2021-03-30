@@ -154,3 +154,25 @@ export const setShowValues = (bindingList: BindingsSaved[]): ShowBindings => {
     }
   }, {})
 }
+
+export const hasAllTranslations = ({
+  bindingsToShow,
+  translatedBindings,
+}: {
+  bindingsToShow: string[]
+  translatedBindings: BindingTranslation[]
+}): boolean => {
+  const labelMap = new Map<string, string>()
+
+  for (const { id, label } of translatedBindings) {
+    labelMap.set(id, label)
+  }
+
+  for (const bindingId of bindingsToShow) {
+    if (!labelMap.has(bindingId) || !labelMap.get(bindingId)) {
+      return false
+    }
+  }
+
+  return true
+}
