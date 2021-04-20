@@ -1,0 +1,10 @@
+## Acerca de
+
+This app allows stores with a single account - multiple binding architecture to switch between their stores.
+
+## Características
+-Cambia de una tienda a la otra sin barreras
+-Posibilidad de cambiar Políticas Comerciales entre tiendas
+-Toggle On/Off para los sitios que se desean mostrar
+-Capacidad de tener redirects externos
+-Configuración de etiquetas por idioma
