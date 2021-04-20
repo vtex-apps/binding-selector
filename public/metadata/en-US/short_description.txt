@@ -1,0 +1,1 @@
+Native solution to switch between stores on a single account - multi-binding architecture.
