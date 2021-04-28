@@ -1,1 +1,0 @@
-Solución nativa para cambiar entre tiendas para los clientes en una arquitectura de una cuenta - multiples bindings.

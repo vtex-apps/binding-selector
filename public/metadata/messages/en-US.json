@@ -1,0 +1,16 @@
+{
+  "name": "Country Store Switcher",
+  "headline": "Native solution to switch between stores on a single account - multi-binding architecture.",
+  "overview": "This app allows stores with a single account - multiple binding architecture to switch between their stores.",
+  "features": [
+    "Seamlessly switch between stores",
+    "Possibility to change Sales Channels when switching stores",
+    "Toggle On/Off the sites desired to be shown",
+    "External redirect capability",
+    "Configure labels by language"
+  ],
+  "websiteURL": "https://vtex.com/",
+  "support": {
+    "url": "https://support.vtex.com/hc/requests"
+  }
+}
