@@ -1,0 +1,16 @@
+{
+  "name": "Country Store Switcher",
+  "headline": "Solução nativa para navegação entre lojas em contas com arquitetura single account - multi-bindings.",
+  "overview": "Esta applicação permite navegação entre diferentes lojas para contas com arquitetura single account - multiple bindings.",
+  "features": [
+    "Mudança simples de navegação entre lojas",
+    "Permite alterar Sales Channel do carrinho ao navegar para outra loja",
+    "Escolha de quais lojas serão listadas no seletor de loja",
+    "Permite incluir URL externa para redirecionar usuários a lojas fora da VTEX",
+    "Configuração dos nomes das lojas que serão listadas no seletor"
+  ],
+  "websiteURL": "https://vtex.com/",
+  "support": {
+    "url": "https://support.vtex.com/hc/requests"
+  }
+}

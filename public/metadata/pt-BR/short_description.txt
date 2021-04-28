@@ -1,1 +1,0 @@
-Solução nativa para navegação entre lojas em contas com arquitetura single account - multi-bindings.
