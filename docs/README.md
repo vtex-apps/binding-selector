@@ -27,12 +27,12 @@ The App is geared towards an improvement on Site Experience for the customer and
 The App consists on **two** main features an **Admin Interface** and a Store Block called **binding-selector** to be declared on the Store-Theme. 
 
 The Setup for the app is as follows:
-1. on the CLI and run: ```vtex install vtex.binding-selector@1.x```
-2. declare the block as a dependency inside your store-theme:
+1. on the CLI and run: ```vtex install vtex.binding-selector@2.x```
+2. declare the block as a peerDependency inside your store-theme:
 
     ```
-    "dependencies":{
-      "vtex.binding-selector":"1.x"
+    "peerDependencies":{
+      "vtex.binding-selector":"2.x"
     }
     ```
 
