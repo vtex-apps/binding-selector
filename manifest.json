@@ -8,15 +8,6 @@
   "scripts": {
     "postreleasy": "vtex publish"
   },
-  "billingOptions": {
-    "support": {
-      "url": "https://support.vtex.com/hc/requests"
-    },
-    "type": "free",
-    "availableCountries": [
-      "*"
-    ]
-  },
   "dependencies": {
     "vtex.styleguide": "9.x",
     "vtex.tenant-graphql": "0.x",
