@@ -18,5 +18,6 @@
   "save-url": "Save URL",
   "edit-url": "Edit URL",
   "external-url-helper-text": "Please include https:// in the URL",
-  "missing-labels": "There is a missing label"
+  "missing-labels": "There is a missing label",
+  "hide-label": "Hide"
 }
