@@ -11,13 +11,11 @@ interface FieldInputProps {
   binding: Binding
   dataLocales: DataLocaleTypes
   handleChange: (e: SyntheticEvent) => void
-  showBindings: { [key: string]: boolean }
-  showEditValue: BindingTranslation[]
   showValue: boolean
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
-  const { binding, dataLocales, handleChange, showBindings, showValue } = props
+  const { binding, dataLocales, handleChange, showValue } = props
 
   const [hide, setHide] = useState(false)
 
@@ -33,15 +31,15 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
       </div>
       <div className="pa4 w-50 flex items-center">
         <Input
-          disabled={!showBindings[binding.id] || hide}
-          required={showBindings[binding.id] || !hide}
+          disabled={!showValue || hide}
+          required={showValue || !hide}
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
           value={label}
         />
         <div className="ml3 flex items-center">
           <Checkbox
-            disabled={!showBindings[binding.id]}
+            disabled={!showValue}
             id={`hide-label-${binding.id}`}
             checked={hide}
             onChange={() => setHide(!hide)}

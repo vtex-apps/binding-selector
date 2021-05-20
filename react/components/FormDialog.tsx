@@ -1,12 +1,12 @@
 import type { SyntheticEvent, FormEvent, FC } from 'react'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import FieldInput from './FieldInput'
-import { setShowValues } from '../utils'
+import { removeBindingAdmin, setShowValues } from '../utils'
+import AdminBindingLabelsList from './AdminBindingLabelsList'
 
 interface FormDialogProps {
   open: boolean
@@ -37,30 +37,10 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-  const [translatedLocales, setTranslatedLocales] = useState<
-    BindingTranslation[]
-  >([])
 
   const showBindings = setShowValues(bindingInfoQueryData)
 
-  const getTranslatedLabels = useCallback(
-    (arr: BindingsSaved[]) => {
-      const filtered = arr.filter(
-        (binding: { bindingId: string }) =>
-          binding.bindingId === chosenBinding.id
-      )
-
-      return filtered[0]?.translatedLocales
-    },
-    [chosenBinding.id]
-  )
-
   useEffect(() => {
-    setFetchedData(bindingInfoQueryData)
-    const translatedLabels = getTranslatedLabels(bindingInfoQueryData ?? [])
-
-    setTranslatedLocales(translatedLabels ?? [])
-
     const [chosenBindingData] =
       bindingInfoQueryData.filter(
         (bind) => bind.bindingId === chosenBinding.id
@@ -75,12 +55,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     }
 
     setDataLocales(initialLabels)
-  }, [
-    chosenBinding.id,
-    getTranslatedLabels,
-    bindingInfoQueryData,
-    setFetchedData,
-  ])
+  }, [bindingInfoQueryData, chosenBinding.id])
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLButtonElement
@@ -137,40 +112,11 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     saveTranslatedInfo({ variables: dataContainer })
 
     setFetchedData(dataContainer.data)
-    const translatedLabels = getTranslatedLabels(dataContainer.data)
 
-    setTranslatedLocales(translatedLabels ?? [])
     handleOnClose()
   }
 
-  const showFields = () => {
-    const fields = bindings
-      ?.filter((binding: Binding) => {
-        return binding.canonicalBaseAddress.split('/')[1] !== 'admin'
-      })
-      .map((binding: Binding, i: number) => {
-        const [showBinding] =
-          bindingInfoQueryData.filter(
-            (bind) => bind.bindingId === binding.id
-          ) ?? []
-
-        const showValue: boolean = showBinding?.show
-
-        return (
-          <FieldInput
-            binding={binding}
-            dataLocales={dataLocales}
-            handleChange={handleChange}
-            key={i}
-            showBindings={showBindings}
-            showEditValue={translatedLocales ?? []}
-            showValue={showValue}
-          />
-        )
-      })
-
-    return fields
-  }
+  const bindingsToBeLabeled = removeBindingAdmin(bindings)
 
   return (
     <Modal
@@ -184,7 +130,12 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
           <FormattedMessage id="admin-modal" />
         </div>
         <div className="pt6 flex w-100 flex-column justify-center items-center">
-          {showFields()}
+          <AdminBindingLabelsList
+            bindings={bindingsToBeLabeled}
+            activeBindings={showBindings}
+            dataLocales={dataLocales}
+            handleChange={handleChange}
+          />
           <div className="flex pt6">
             <div className="pr4">
               <Button variation="tertiary" onClick={() => handleOnClose()}>
