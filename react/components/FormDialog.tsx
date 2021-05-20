@@ -5,7 +5,7 @@ import { Modal, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import { removeBindingAdmin, setShowValues } from '../utils'
+import { removeBindingAdmin, setShowValues, createHideLabelMap } from '../utils'
 import AdminBindingLabelsList from './AdminBindingLabelsList'
 
 interface FormDialogProps {
@@ -37,7 +37,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
   const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-
+  const [hideLabelMap, setHideLabelMap] = useState<Record<string, boolean>>({})
   const showBindings = setShowValues(bindingInfoQueryData)
 
   useEffect(() => {
@@ -46,15 +46,20 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         (bind) => bind.bindingId === chosenBinding.id
       ) ?? []
 
-    const initialLabels = {} as DataLocaleTypes
-
+    // eslint-disable-next-line vtex/prefer-early-return
     if (chosenBindingData?.translatedLocales?.length) {
+      const initialLabels = {} as DataLocaleTypes
+
       chosenBindingData?.translatedLocales?.forEach((b) => {
         initialLabels[b.id] = b.label ? b.label : ''
       })
-    }
+      setDataLocales(initialLabels)
+      const hideLabelInfo = createHideLabelMap(
+        chosenBindingData.translatedLocales
+      )
 
-    setDataLocales(initialLabels)
+      setHideLabelMap(hideLabelInfo)
+    }
   }, [bindingInfoQueryData, chosenBinding.id])
 
   const handleChange = (event: SyntheticEvent) => {
@@ -88,6 +93,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
         defaultLocale,
         canonicalBaseAddress,
         salesChannel: salesChannel.toString(),
+        hide: hideLabelMap[key],
       })
     }
 
@@ -118,6 +124,19 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const bindingsToBeLabeled = removeBindingAdmin(bindings)
 
+  const handleHideLabel = ({
+    bindingId,
+    status,
+  }: {
+    bindingId: string
+    status: boolean
+  }) => {
+    setHideLabelMap({
+      ...hideLabelMap,
+      [bindingId]: status,
+    })
+  }
+
   return (
     <Modal
       isOpen={open}
@@ -135,6 +154,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
             activeBindings={showBindings}
             dataLocales={dataLocales}
             handleChange={handleChange}
+            hiddenLabels={hideLabelMap}
+            handleHideLabel={handleHideLabel}
           />
           <div className="flex pt6">
             <div className="pr4">

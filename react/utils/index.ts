@@ -176,3 +176,14 @@ export const hasAllTranslations = ({
 
   return true
 }
+
+export const createHideLabelMap = (
+  translatedLocales: BindingTranslation[] = []
+): Record<string, boolean> => {
+  return translatedLocales.reduce((acc, curr) => {
+    return {
+      ...acc,
+      [curr.id]: curr.hide,
+    }
+  }, {})
+}

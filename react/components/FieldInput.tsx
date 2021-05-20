@@ -12,12 +12,25 @@ interface FieldInputProps {
   dataLocales: DataLocaleTypes
   handleChange: (e: SyntheticEvent) => void
   showValue: boolean
+  hiddenLabel: boolean
+  handleHideLabel: ({
+    bindingId,
+    status,
+  }: {
+    bindingId: string
+    status: boolean
+  }) => void
 }
 
 const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
-  const { binding, dataLocales, handleChange, showValue } = props
-
-  const [hide, setHide] = useState(false)
+  const {
+    binding,
+    dataLocales,
+    handleChange,
+    showValue,
+    hiddenLabel,
+    handleHideLabel,
+  } = props
 
   const label =
     dataLocales[binding.id] && showValue ? dataLocales[binding.id] : ''
@@ -31,8 +44,8 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
       </div>
       <div className="pa4 w-50 flex items-center">
         <Input
-          disabled={!showValue || hide}
-          required={showValue || !hide}
+          disabled={!showValue || hiddenLabel}
+          required={showValue || !hiddenLabel}
           name={binding.id}
           onChange={(e: SyntheticEvent) => handleChange(e)}
           value={label}
@@ -41,8 +54,10 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
           <Checkbox
             disabled={!showValue}
             id={`hide-label-${binding.id}`}
-            checked={hide}
-            onChange={() => setHide(!hide)}
+            checked={hiddenLabel}
+            onChange={() =>
+              handleHideLabel({ status: !hiddenLabel, bindingId: binding.id })
+            }
           />
           <label htmlFor={`hide-label-${binding.id}`} className="ml3">
             <FormattedMessage id="hide-label" />
