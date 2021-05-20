@@ -11,6 +11,7 @@ input BindingsTranslationInput {
   defaultLocale: String
   canonicalBaseAddress: String
   salesChannel: String
+  hide: Boolean
 }
 
 input ExternalRedirectDataInput {
@@ -24,6 +25,7 @@ type BindingsTranslation {
   defaultLocale: String
   canonicalBaseAddress: String
   salesChannel: String
+  hide: Boolean
 }
 
 type TranslatedInfoOutput {

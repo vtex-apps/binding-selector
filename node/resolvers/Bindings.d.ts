@@ -3,6 +3,7 @@ interface TranslatedInfo {
   label: string
   canonicalBaseAddress: string
   defaultLocale: string
+  hide: boolean
 }
 
 interface TranslatedBinding {
