@@ -11,7 +11,6 @@ import {
   createBindingsToLabel,
 } from '../utils'
 import AdminBindingLabelsList from './AdminBindingLabelsList'
-import { useBinding } from '../hooks/useBindings'
 
 interface FormDialogProps {
   open: boolean
@@ -46,20 +45,16 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
 
   const showBindings = setShowValues(bindingInfoQueryData)
 
-  const {
-    data: { bindingList },
-    actions: { setCurrentBindingInfo },
-  } = useBinding()
-
   useEffect(() => {
-    setCurrentBindingInfo(chosenBinding.id)
-  }, [chosenBinding.id, setCurrentBindingInfo])
-
-  useEffect(() => {
-    const bindingsToLabel = createBindingsToLabel(bindings, bindingList)
+    const bindingsToLabel = createBindingsToLabel(
+      bindings,
+      bindingInfoQueryData.find(
+        (binding) => binding.bindingId === chosenBinding.id
+      )?.translatedLocales ?? []
+    )
 
     setTranslationMap(bindingsToLabel)
-  }, [bindingList, bindings])
+  }, [bindingInfoQueryData, bindings, chosenBinding.id])
 
   const handleChange = (event: SyntheticEvent) => {
     const { name, value } = event.target as HTMLInputElement
