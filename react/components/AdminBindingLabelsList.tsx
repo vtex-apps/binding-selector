@@ -6,13 +6,12 @@ import FieldInput from './FieldInput'
 const AdminBindingLabelsList = ({
   bindings = [],
   activeBindings,
-  hiddenLabels,
+  translationsMap,
   ...props
 }: {
   bindings: Binding[]
   activeBindings: Record<string, boolean>
-  hiddenLabels: Record<string, boolean>
-  dataLocales: Record<string, string>
+  translationsMap: Record<string, BindingTranslation>
   handleChange: (e: SyntheticEvent) => void
   handleHideLabel: ({
     bindingId,
@@ -30,7 +29,7 @@ const AdminBindingLabelsList = ({
             key={binding.id}
             binding={binding}
             showValue={activeBindings[binding.id]}
-            hiddenLabel={!!hiddenLabels[binding.id]}
+            translationInfo={translationsMap[binding.id]}
             {...props}
           />
         )

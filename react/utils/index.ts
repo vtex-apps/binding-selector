@@ -177,13 +177,41 @@ export const hasAllTranslations = ({
   return true
 }
 
-export const createHideLabelMap = (
-  translatedLocales: BindingTranslation[] = []
-): Record<string, boolean> => {
-  return translatedLocales.reduce((acc, curr) => {
+export const createBindingsToLabel = (
+  bindings: Binding[],
+  currentTranslations: BindingTranslation[]
+): Record<string, BindingTranslation> => {
+  const translationsMap: Record<string, BindingTranslation> = {}
+
+  for (const translation of currentTranslations) {
+    translationsMap[translation.id] = {
+      id: translation.id,
+      label: translation.label,
+      salesChannel: translation.salesChannel,
+      defaultLocale: translation.defaultLocale,
+      canonicalBaseAddress: translation.canonicalBaseAddress,
+      hide: translation.hide,
+    }
+  }
+
+  return bindings.reduce((map, binding) => {
+    if (translationsMap[binding.id]) {
+      return {
+        ...map,
+        [binding.id]: translationsMap[binding.id],
+      }
+    }
+
     return {
-      ...acc,
-      [curr.id]: curr.hide,
+      ...map,
+      [binding.id]: {
+        id: binding.id,
+        label: '',
+        salesChannel: '',
+        defaultLocale: '',
+        canonicalBaseAddress: '',
+        hide: false,
+      },
     }
   }, {})
 }

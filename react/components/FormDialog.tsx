@@ -5,8 +5,13 @@ import { Modal, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
 import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import { removeBindingAdmin, setShowValues, createHideLabelMap } from '../utils'
+import {
+  removeBindingAdmin,
+  setShowValues,
+  createBindingsToLabel,
+} from '../utils'
 import AdminBindingLabelsList from './AdminBindingLabelsList'
+import { useBinding } from '../hooks/useBindings'
 
 interface FormDialogProps {
   open: boolean
@@ -15,10 +20,6 @@ interface FormDialogProps {
   chosenBinding: Binding
   bindingInfoQueryData: BindingsSaved[]
   setFetchedData: (binding: BindingsSaved[]) => void
-}
-
-interface DataLocaleTypes {
-  [key: string]: string
 }
 
 interface DataMutation {
@@ -35,89 +36,62 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     setFetchedData,
   } = props
 
-  const [dataLocales, setDataLocales] = useState<DataLocaleTypes>({})
-  const [saveTranslatedInfo] = useMutation<BindingsSaved>(saveBindingInfo)
-  const [hideLabelMap, setHideLabelMap] = useState<Record<string, boolean>>({})
+  const [saveTranslatedInfo] = useMutation<BindingsSaved, DataMutation>(
+    saveBindingInfo
+  )
+
+  const [translationsMap, setTranslationMap] = useState<
+    Record<string, BindingTranslation>
+  >({})
+
   const showBindings = setShowValues(bindingInfoQueryData)
 
+  const {
+    data: { bindingList },
+    actions: { setCurrentBindingInfo },
+  } = useBinding()
+
   useEffect(() => {
-    const [chosenBindingData] =
-      bindingInfoQueryData.filter(
-        (bind) => bind.bindingId === chosenBinding.id
-      ) ?? []
+    setCurrentBindingInfo(chosenBinding.id)
+  }, [chosenBinding.id, setCurrentBindingInfo])
 
-    // eslint-disable-next-line vtex/prefer-early-return
-    if (chosenBindingData?.translatedLocales?.length) {
-      const initialLabels = {} as DataLocaleTypes
+  useEffect(() => {
+    const bindingsToLabel = createBindingsToLabel(bindings, bindingList)
 
-      chosenBindingData?.translatedLocales?.forEach((b) => {
-        initialLabels[b.id] = b.label ? b.label : ''
-      })
-      setDataLocales(initialLabels)
-      const hideLabelInfo = createHideLabelMap(
-        chosenBindingData.translatedLocales
-      )
-
-      setHideLabelMap(hideLabelInfo)
-    }
-  }, [bindingInfoQueryData, chosenBinding.id])
+    setTranslationMap(bindingsToLabel)
+  }, [bindingList, bindings])
 
   const handleChange = (event: SyntheticEvent) => {
-    const { name, value } = event.target as HTMLButtonElement
+    const { name, value } = event.target as HTMLInputElement
 
-    setDataLocales({ ...dataLocales, [name]: value })
+    setTranslationMap({
+      ...translationsMap,
+      [name]: {
+        ...translationsMap[name],
+        label: value,
+      },
+    })
   }
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const payload = {} as BindingsSaved
-    const dataContainer = {} as DataMutation
 
-    payload.bindingId = chosenBinding.id
-    const translatedInfoArray = [] as BindingTranslation[]
+    const transformedData = bindingInfoQueryData.map<BindingsSaved>(
+      (binding) => {
+        if (binding.bindingId === chosenBinding.id) {
+          return {
+            ...binding,
+            translatedLocales: Object.values(translationsMap),
+          }
+        }
 
-    for (const [key, value] of Object.entries(dataLocales)) {
-      const [
-        {
-          defaultLocale,
-          canonicalBaseAddress,
-          extraContext: {
-            portal: { salesChannel },
-          },
-        },
-      ] = bindings.filter(({ id }) => id === key)
+        return binding
+      }
+    )
 
-      translatedInfoArray.push({
-        label: value,
-        id: key,
-        defaultLocale,
-        canonicalBaseAddress,
-        salesChannel: salesChannel.toString(),
-        hide: hideLabelMap[key],
-      })
-    }
+    saveTranslatedInfo({ variables: { data: transformedData } })
 
-    payload.translatedLocales = translatedInfoArray
-    payload.show = !!showBindings[chosenBinding.id]
-
-    if (bindingInfoQueryData.length) {
-      const filteredFromChosenId = bindingInfoQueryData.filter(
-        (item: { bindingId: string }) => item.bindingId !== chosenBinding.id
-      )
-
-      filteredFromChosenId.push(payload)
-
-      dataContainer.data = filteredFromChosenId
-    } else {
-      const newArray = [] as BindingsSaved[]
-
-      newArray.push(payload)
-      dataContainer.data = newArray
-    }
-
-    saveTranslatedInfo({ variables: dataContainer })
-
-    setFetchedData(dataContainer.data)
+    setFetchedData(transformedData)
 
     handleOnClose()
   }
@@ -131,9 +105,12 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     bindingId: string
     status: boolean
   }) => {
-    setHideLabelMap({
-      ...hideLabelMap,
-      [bindingId]: status,
+    setTranslationMap({
+      ...translationsMap,
+      [bindingId]: {
+        ...translationsMap[bindingId],
+        hide: status,
+      },
     })
   }
 
@@ -152,9 +129,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
           <AdminBindingLabelsList
             bindings={bindingsToBeLabeled}
             activeBindings={showBindings}
-            dataLocales={dataLocales}
             handleChange={handleChange}
-            hiddenLabels={hideLabelMap}
+            translationsMap={translationsMap}
             handleHideLabel={handleHideLabel}
           />
           <div className="flex pt6">
