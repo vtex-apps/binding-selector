@@ -19,6 +19,7 @@ const CSS_HANDLES = [
   'relativeContainer',
   'button',
   'buttonText',
+  'active',
 ] as const
 
 interface GetOrderFormResponse {
@@ -222,7 +223,9 @@ const BindingSelectorBlock: FC = () => {
 
   return hasError ? null : (
     <div
-      className={`${handles.container} flex items-center justify-center w3 relative`}
+      className={`${handles.container} ${
+        open ? handles.active : ''
+      } flex items-center justify-center w3 relative`}
     >
       <div
         ref={relativeContainer}
