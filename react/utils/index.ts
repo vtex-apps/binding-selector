@@ -163,13 +163,18 @@ export const hasAllTranslations = ({
   translatedBindings: BindingTranslation[]
 }): boolean => {
   const labelMap = new Map<string, string>()
+  const hideLabelMap = new Map<string, boolean>()
 
-  for (const { id, label } of translatedBindings) {
+  for (const { id, label, hide } of translatedBindings) {
     labelMap.set(id, label)
+    hideLabelMap.set(id, hide)
   }
 
   for (const bindingId of bindingsToShow) {
-    if (!labelMap.has(bindingId) || !labelMap.get(bindingId)) {
+    if (
+      !labelMap.has(bindingId) ||
+      (!hideLabelMap.get(bindingId) && !labelMap.get(bindingId))
+    ) {
       return false
     }
   }
