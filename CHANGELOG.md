@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added 
+### Added
+- Allow user to hide labels for specific bindings in the drop down menu through the admin panel
 - Add `active` class to css handles when dropdown is open.
 ## [1.2.1] - 2021-04-28
 

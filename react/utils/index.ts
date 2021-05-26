@@ -163,16 +163,60 @@ export const hasAllTranslations = ({
   translatedBindings: BindingTranslation[]
 }): boolean => {
   const labelMap = new Map<string, string>()
+  const hideLabelMap = new Map<string, boolean>()
 
-  for (const { id, label } of translatedBindings) {
+  for (const { id, label, hide } of translatedBindings) {
     labelMap.set(id, label)
+    hideLabelMap.set(id, hide)
   }
 
   for (const bindingId of bindingsToShow) {
-    if (!labelMap.has(bindingId) || !labelMap.get(bindingId)) {
+    if (
+      !labelMap.has(bindingId) ||
+      (!hideLabelMap.get(bindingId) && !labelMap.get(bindingId))
+    ) {
       return false
     }
   }
 
   return true
+}
+
+export const createBindingsToLabel = (
+  bindings: Binding[],
+  currentTranslations: BindingTranslation[]
+): Record<string, BindingTranslation> => {
+  const translationsMap: Record<string, BindingTranslation> = {}
+
+  for (const translation of currentTranslations) {
+    translationsMap[translation.id] = {
+      id: translation.id,
+      label: translation.label,
+      salesChannel: translation.salesChannel,
+      defaultLocale: translation.defaultLocale,
+      canonicalBaseAddress: translation.canonicalBaseAddress,
+      hide: translation.hide,
+    }
+  }
+
+  return bindings.reduce((map, binding) => {
+    if (translationsMap[binding.id]) {
+      return {
+        ...map,
+        [binding.id]: translationsMap[binding.id],
+      }
+    }
+
+    return {
+      ...map,
+      [binding.id]: {
+        id: binding.id,
+        label: '',
+        salesChannel: '',
+        defaultLocale: '',
+        canonicalBaseAddress: '',
+        hide: false,
+      },
+    }
+  }, {})
 }

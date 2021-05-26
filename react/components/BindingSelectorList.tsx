@@ -26,7 +26,7 @@ const BindingSelectorList: FC<Props> = ({
     >
       {bindingInfo
         .filter((binding) => {
-          return binding.id !== currentBinding.id
+          return binding.id !== currentBinding.id && !binding.hide
         })
         .map((binding) => (
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions

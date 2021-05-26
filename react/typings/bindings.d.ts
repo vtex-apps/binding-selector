@@ -29,6 +29,7 @@ interface BindingTranslation {
   salesChannel: string
   defaultLocale: string
   canonicalBaseAddress: string
+  hide: boolean
 }
 
 interface DataLocaleTypes {
