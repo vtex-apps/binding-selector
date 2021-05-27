@@ -186,24 +186,30 @@ export const createBindingsToLabel = (
   bindings: Binding[],
   currentTranslations: BindingTranslation[]
 ): Record<string, BindingTranslation> => {
-  const translationsMap: Record<string, BindingTranslation> = {}
+  const translationsMap: Record<string, Partial<BindingTranslation>> = {}
 
   for (const translation of currentTranslations) {
     translationsMap[translation.id] = {
       id: translation.id,
       label: translation.label,
-      salesChannel: translation.salesChannel,
-      defaultLocale: translation.defaultLocale,
-      canonicalBaseAddress: translation.canonicalBaseAddress,
-      hide: translation.hide,
+      hide: !!translation.hide,
     }
   }
 
   return bindings.reduce((map, binding) => {
+    const staticInfo = {
+      canonicalBaseAddress: binding.canonicalBaseAddress,
+      salesChannel: String(binding.extraContext.portal.salesChannel),
+      defaultLocale: binding.defaultLocale,
+    }
+
     if (translationsMap[binding.id]) {
       return {
         ...map,
-        [binding.id]: translationsMap[binding.id],
+        [binding.id]: {
+          ...translationsMap[binding.id],
+          ...staticInfo,
+        },
       }
     }
 
@@ -212,10 +218,8 @@ export const createBindingsToLabel = (
       [binding.id]: {
         id: binding.id,
         label: '',
-        salesChannel: '',
-        defaultLocale: '',
-        canonicalBaseAddress: '',
         hide: false,
+        ...staticInfo,
       },
     }
   }, {})
