@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- Issue keeping old information into configuration. It now updates `canonicalBaseAddress`, `salesChannel` and `defaultLocale` based on information coming from `tenant` app every time user saves new information inside `costumize store name`.
+
 ## [1.3.0] - 2021-05-26
 
 ### Added
