@@ -1,6 +1,7 @@
 type Query {
-  bindingInfo: [TranslatedInfoOutput] @cacheControl(scope: PUBLIC)
-  isSalesChannelUpdate: Boolean @cacheControl(scope: PUBLIC)
+  bindingInfo: [TranslatedInfoOutput]
+    @cacheControl(scope: PUBLIC, maxAge: SHORT)
+  isSalesChannelUpdate: Boolean @cacheControl(scope: PUBLIC, maxAge: SHORT)
 }
 
 type Mutation {

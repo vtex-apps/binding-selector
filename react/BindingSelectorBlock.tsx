@@ -81,7 +81,10 @@ const BindingSelectorBlock: FC = () => {
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
   const { data: toogleSalesChannel } = useQuery<SalesChannelResponse>(
-    shouldUpdateSalesChannel
+    shouldUpdateSalesChannel,
+    {
+      ssr: false,
+    }
   )
 
   const relativeContainer = useRef<HTMLDivElement | null>(null)
@@ -101,12 +104,16 @@ const BindingSelectorBlock: FC = () => {
 
       path = getMatchRoute({ routes, currentBindingId: currentBinding.id })
 
-      window.location.href = createRedirectUrl({
+      const urlToRedirect = createRedirectUrl({
         canonicalBaseAddress,
         hostname,
         protocol,
         path,
       })
+
+      console.info(`Redirecting to ${urlToRedirect}`)
+
+      window.location.href = urlToRedirect
     }
   }, [hrefAltData, currentBinding])
 
