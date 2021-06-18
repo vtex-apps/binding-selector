@@ -16,7 +16,9 @@ export const useBinding = () => {
     data: bindingData,
     loading: loadingBindings,
     error: bindingsError,
-  } = useQuery<BindingInfoResponse>(getBindingInfo)
+  } = useQuery<BindingInfoResponse>(getBindingInfo, {
+    ssr: false,
+  })
 
   const { binding: runtimeBinding } = useRuntime()
 
