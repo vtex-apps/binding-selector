@@ -109,20 +109,29 @@ interface RedirectUrlArgs {
   hostname: Window['location']['hostname']
   protocol: Window['location']['protocol']
   path: string
+  hash: string
+  locationPathname: string
 }
+
+export const isMyAccount = (pathname: string): boolean =>
+  pathname.indexOf('/account') !== -1
 
 export const createRedirectUrl = ({
   canonicalBaseAddress,
   hostname,
   protocol,
   path,
+  hash,
+  locationPathname,
 }: RedirectUrlArgs): string => {
   const queryString = `?__bindingAddress=${canonicalBaseAddress}`
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
-  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${path}${
-    isMyVtex ? queryString : ''
-  }`
+  const myAccount = isMyAccount(locationPathname)
+
+  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${
+    !myAccount ? path : locationPathname
+  }${isMyVtex ? queryString : ''}${hash}`
 }
 
 interface MatchRoute {

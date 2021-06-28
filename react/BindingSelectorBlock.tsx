@@ -95,7 +95,13 @@ const BindingSelectorBlock: FC = () => {
    */
   useEffect(() => {
     const { canonicalBaseAddress } = currentBinding
-    const { hostname, protocol } = window.location
+    const {
+      hostname,
+      protocol,
+      hash,
+      pathname: locationPathname,
+    } = window.location
+
     let path = ''
 
     // eslint-disable-next-line vtex/prefer-early-return
@@ -109,6 +115,8 @@ const BindingSelectorBlock: FC = () => {
         hostname,
         protocol,
         path,
+        hash,
+        locationPathname,
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
