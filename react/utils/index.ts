@@ -110,11 +110,11 @@ interface RedirectUrlArgs {
   protocol: Window['location']['protocol']
   path: string
   hash: string
-  locationPathname: string
+  pageType: string
 }
 
-export const isMyAccount = (pathname: string): boolean =>
-  pathname.indexOf('/account') !== -1
+export const isMyAccount = (pageType: string): boolean =>
+  pageType === 'store.account'
 
 export const createRedirectUrl = ({
   canonicalBaseAddress,
@@ -122,12 +122,12 @@ export const createRedirectUrl = ({
   protocol,
   path,
   hash,
-  locationPathname,
+  pageType,
 }: RedirectUrlArgs): string => {
   const queryString = `?__bindingAddress=${canonicalBaseAddress}`
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
-  const myAccount = isMyAccount(locationPathname)
+  const myAccount = isMyAccount(pageType)
 
   return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${
     !myAccount ? path : '/account'

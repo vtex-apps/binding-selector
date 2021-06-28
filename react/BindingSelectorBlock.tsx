@@ -95,13 +95,7 @@ const BindingSelectorBlock: FC = () => {
    */
   useEffect(() => {
     const { canonicalBaseAddress } = currentBinding
-    const {
-      hostname,
-      protocol,
-      hash,
-      pathname: locationPathname,
-    } = window.location
-
+    const { hostname, protocol, hash } = window.location
     let path = ''
 
     // eslint-disable-next-line vtex/prefer-early-return
@@ -116,14 +110,14 @@ const BindingSelectorBlock: FC = () => {
         protocol,
         path,
         hash,
-        locationPathname,
+        pageType: id,
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
     }
-  }, [hrefAltData, currentBinding])
+  }, [hrefAltData, currentBinding, id])
 
   /**
    * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
