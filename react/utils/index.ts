@@ -130,7 +130,7 @@ export const createRedirectUrl = ({
   const myAccount = isMyAccount(locationPathname)
 
   return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${
-    !myAccount ? path : locationPathname
+    !myAccount ? path : '/account'
   }${isMyVtex ? queryString : ''}${hash}`
 }
 
