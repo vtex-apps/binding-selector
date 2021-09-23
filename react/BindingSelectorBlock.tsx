@@ -13,6 +13,7 @@ import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
 import getOrderForm from './graphql/getOrderForm.gql'
+// import { patchSalesChannelToSession } from './utils/patchSalesChannelToSession'
 
 const CSS_HANDLES = [
   'container',
@@ -43,8 +44,14 @@ const BindingSelectorBlock: FC = () => {
     // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
+      queryString,
     },
   } = useRuntime()
+
+  const keepSalesChannel = true
+
+  // eslint-disable-next-line no-console
+  console.log({ queryString })
 
   const { updateQuantity } = useOrderItems()
 
@@ -111,13 +118,15 @@ const BindingSelectorBlock: FC = () => {
         path,
         hash,
         pageType: id,
+        keepSalesChannel,
+        salesChannel: '3',
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
     }
-  }, [hrefAltData, currentBinding, id])
+  }, [hrefAltData, currentBinding, id, keepSalesChannel])
 
   /**
    * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
@@ -175,6 +184,13 @@ const BindingSelectorBlock: FC = () => {
       setOpen(false)
     }
   }
+
+  // useEffect(() => {
+  //   if (keepSalesChannel && queryString.keepSC) {
+  //     console.log('not here')
+  //     patchSalesChannelToSession(queryString.keepSC)
+  //   }
+  // }, [keepSalesChannel, queryString])
 
   useEffect(() => {
     document.addEventListener('mousedown', handleOutsideClick)

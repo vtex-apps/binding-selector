@@ -119,9 +119,7 @@ const createQueryString = ({
 }: CreateQueryStringArgs): string => {
   const bindingAddressQueryString = `__bindingAddress=${canonicalBaseAddress}`
 
-  const salesChannelQueryString = keepSalesChannel
-    ? `keepSC=${salesChannel}`
-    : ''
+  const salesChannelQueryString = keepSalesChannel ? `sc=${salesChannel}` : ''
 
   if (isMyVtex) {
     return keepSalesChannel
