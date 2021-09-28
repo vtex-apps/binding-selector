@@ -39,13 +39,13 @@ const BindingSelectorBlock: FC = () => {
 
   const [open, setOpen] = useState<boolean>(false)
   const [HasRunSyncEffect, setHasRunSyncEffect] = useState(false)
-  // const [salesChannel, setSalesChannel] = useState('')
+  const [salesChannel, setSalesChannel] = useState('')
   const handles = useCssHandles(CSS_HANDLES)
   const {
     // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
-      // queryString,
+      queryString,
     },
   } = useRuntime()
 
@@ -119,14 +119,14 @@ const BindingSelectorBlock: FC = () => {
         hash,
         pageType: id,
         keepSalesChannel,
-        salesChannel: channel,
+        salesChannel: salesChannel || channel,
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
     }
-  }, [hrefAltData, currentBinding, id, toogleSalesChannel])
+  }, [hrefAltData, currentBinding, id, toogleSalesChannel, salesChannel])
 
   /**
    * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
@@ -178,6 +178,12 @@ const BindingSelectorBlock: FC = () => {
     updateQuantity,
     HasRunSyncEffect,
   ])
+
+  useEffect(() => {
+    if (queryString.sc && !salesChannel) {
+      setSalesChannel(queryString.sc)
+    }
+  }, [queryString, salesChannel])
 
   // useEffect(() => {
   //   const asyncGetSc = async () => {
