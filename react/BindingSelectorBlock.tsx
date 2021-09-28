@@ -13,7 +13,6 @@ import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
 import getOrderForm from './graphql/getOrderForm.gql'
-// import { getSalesChannel } from './utils/patchSalesChannelToSession'
 
 const CSS_HANDLES = [
   'container',
@@ -119,6 +118,11 @@ const BindingSelectorBlock: FC = () => {
         hash,
         pageType: id,
         keepSalesChannel,
+        /**
+         * We try to use the salesChannel set on state, but the first load
+         * will not have it - we trust that segmentToken on runtime will be right.
+         * See more details in the useEffect below.
+         */
         salesChannel: salesChannel || channel,
       })
 
@@ -179,33 +183,18 @@ const BindingSelectorBlock: FC = () => {
     HasRunSyncEffect,
   ])
 
+  /**
+   * This effect sets the target sales channel after the user changes binding
+   * for the first time. This allows the user to change to a different binding multiple
+   * times wihtout losing reference from the first one visited. It was necessary because
+   * `window.__RUNTIME__.segmentToken` (for some weird reason) didn't keep sync'ed with the
+   * sales channel in the session cookie.
+   */
   useEffect(() => {
     if (queryString.sc && !salesChannel) {
       setSalesChannel(queryString.sc)
     }
   }, [queryString, salesChannel])
-
-  // useEffect(() => {
-  //   const asyncGetSc = async () => {
-  //     const {
-  //       namespaces: {
-  //         store: { channel },
-  //       },
-  //     } = await getSalesChannel()
-
-  //     setSalesChannel(channel)
-  //   }
-
-  //   if (queryString.sc) {
-  //     setSalesChannel(queryString.sc)
-
-  //     return
-  //   }
-
-  //   if (toogleSalesChannel && !toogleSalesChannel.isSalesChannelUpdate) {
-  //     asyncGetSc()
-  //   }
-  // }, [queryString, toogleSalesChannel])
 
   const handleOutsideClick = (e: MouseEvent) => {
     if (!relativeContainer.current?.contains(e.target as Node)) {

@@ -119,6 +119,7 @@ const createQueryString = ({
 }: CreateQueryStringArgs): string => {
   const bindingAddressQueryString = `__bindingAddress=${canonicalBaseAddress}`
 
+  // Add `sc` search string will force the session to be that salesChannel
   const salesChannelQueryString = keepSalesChannel ? `sc=${salesChannel}` : ''
 
   if (isMyVtex) {
