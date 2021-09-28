@@ -13,7 +13,7 @@ import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
 import getOrderForm from './graphql/getOrderForm.gql'
-// import { patchSalesChannelToSession } from './utils/patchSalesChannelToSession'
+// import { getSalesChannel } from './utils/patchSalesChannelToSession'
 
 const CSS_HANDLES = [
   'container',
@@ -39,19 +39,15 @@ const BindingSelectorBlock: FC = () => {
 
   const [open, setOpen] = useState<boolean>(false)
   const [HasRunSyncEffect, setHasRunSyncEffect] = useState(false)
+  // const [salesChannel, setSalesChannel] = useState('')
   const handles = useCssHandles(CSS_HANDLES)
   const {
     // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
-      queryString,
+      // queryString,
     },
   } = useRuntime()
-
-  const keepSalesChannel = true
-
-  // eslint-disable-next-line no-console
-  console.log({ queryString })
 
   const { updateQuantity } = useOrderItems()
 
@@ -111,6 +107,10 @@ const BindingSelectorBlock: FC = () => {
 
       path = getMatchRoute({ routes, currentBindingId: currentBinding.id })
 
+      const keepSalesChannel = !toogleSalesChannel?.isSalesChannelUpdate
+
+      const { channel } = JSON.parse(atob(window.__RUNTIME__.segmentToken))
+
       const urlToRedirect = createRedirectUrl({
         canonicalBaseAddress,
         hostname,
@@ -119,14 +119,14 @@ const BindingSelectorBlock: FC = () => {
         hash,
         pageType: id,
         keepSalesChannel,
-        salesChannel: '3',
+        salesChannel: channel,
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
     }
-  }, [hrefAltData, currentBinding, id, keepSalesChannel])
+  }, [hrefAltData, currentBinding, id, toogleSalesChannel])
 
   /**
    * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
@@ -179,18 +179,33 @@ const BindingSelectorBlock: FC = () => {
     HasRunSyncEffect,
   ])
 
+  // useEffect(() => {
+  //   const asyncGetSc = async () => {
+  //     const {
+  //       namespaces: {
+  //         store: { channel },
+  //       },
+  //     } = await getSalesChannel()
+
+  //     setSalesChannel(channel)
+  //   }
+
+  //   if (queryString.sc) {
+  //     setSalesChannel(queryString.sc)
+
+  //     return
+  //   }
+
+  //   if (toogleSalesChannel && !toogleSalesChannel.isSalesChannelUpdate) {
+  //     asyncGetSc()
+  //   }
+  // }, [queryString, toogleSalesChannel])
+
   const handleOutsideClick = (e: MouseEvent) => {
     if (!relativeContainer.current?.contains(e.target as Node)) {
       setOpen(false)
     }
   }
-
-  // useEffect(() => {
-  //   if (keepSalesChannel && queryString.keepSC) {
-  //     console.log('not here')
-  //     patchSalesChannelToSession(queryString.keepSC)
-  //   }
-  // }, [keepSalesChannel, queryString])
 
   useEffect(() => {
     document.addEventListener('mousedown', handleOutsideClick)
