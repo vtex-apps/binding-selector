@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Keep user in the same sales channel when selecting a new binding and the store has the flag `Update Sales Channel` off 
+
 ## [1.3.3] - 2021-06-30
 
 ### Fixed
