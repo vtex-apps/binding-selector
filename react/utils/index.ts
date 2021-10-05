@@ -104,6 +104,33 @@ export const removeBindingAdmin = (bindings: Binding[] = []): Binding[] => {
   )
 }
 
+interface CreateQueryStringArgs {
+  isMyVtex: boolean
+  canonicalBaseAddress: string
+  keepSalesChannel: boolean
+  salesChannel?: string
+}
+
+const createQueryString = ({
+  isMyVtex,
+  canonicalBaseAddress,
+  keepSalesChannel,
+  salesChannel,
+}: CreateQueryStringArgs): string => {
+  const bindingAddressQueryString = `__bindingAddress=${canonicalBaseAddress}`
+
+  // Add `sc` search string will force the session to be that salesChannel
+  const salesChannelQueryString = keepSalesChannel ? `sc=${salesChannel}` : ''
+
+  if (isMyVtex) {
+    return keepSalesChannel
+      ? `?${bindingAddressQueryString}&${salesChannelQueryString}`
+      : `?${bindingAddressQueryString}`
+  }
+
+  return keepSalesChannel ? `?${salesChannelQueryString}` : ''
+}
+
 interface RedirectUrlArgs {
   canonicalBaseAddress: string
   hostname: Window['location']['hostname']
@@ -111,6 +138,8 @@ interface RedirectUrlArgs {
   path: string
   hash: string
   pageType: string
+  keepSalesChannel?: boolean
+  salesChannel?: string
 }
 
 export const isMyAccount = (pageType: string): boolean =>
@@ -123,15 +152,23 @@ export const createRedirectUrl = ({
   path,
   hash,
   pageType,
+  keepSalesChannel = false,
+  salesChannel,
 }: RedirectUrlArgs): string => {
-  const queryString = `?__bindingAddress=${canonicalBaseAddress}`
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
   const myAccount = isMyAccount(pageType)
 
+  const queryString = createQueryString({
+    keepSalesChannel,
+    salesChannel,
+    canonicalBaseAddress,
+    isMyVtex,
+  })
+
   return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${
     !myAccount ? path : '/account'
-  }${isMyVtex ? queryString : ''}${hash}`
+  }${queryString}${hash}`
 }
 
 interface MatchRoute {

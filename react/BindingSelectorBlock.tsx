@@ -38,11 +38,13 @@ const BindingSelectorBlock: FC = () => {
 
   const [open, setOpen] = useState<boolean>(false)
   const [HasRunSyncEffect, setHasRunSyncEffect] = useState(false)
+  const [salesChannel, setSalesChannel] = useState('')
   const handles = useCssHandles(CSS_HANDLES)
   const {
     // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
+      queryString,
     },
   } = useRuntime()
 
@@ -104,6 +106,10 @@ const BindingSelectorBlock: FC = () => {
 
       path = getMatchRoute({ routes, currentBindingId: currentBinding.id })
 
+      const keepSalesChannel = !toogleSalesChannel?.isSalesChannelUpdate
+
+      const { channel } = JSON.parse(atob(window.__RUNTIME__.segmentToken))
+
       const urlToRedirect = createRedirectUrl({
         canonicalBaseAddress,
         hostname,
@@ -111,13 +117,20 @@ const BindingSelectorBlock: FC = () => {
         path,
         hash,
         pageType: id,
+        keepSalesChannel,
+        /**
+         * We try to use the salesChannel set on state, but the first load
+         * will not have it - we trust that segmentToken on runtime will be right.
+         * See more details in the useEffect below.
+         */
+        salesChannel: salesChannel || channel,
       })
 
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
     }
-  }, [hrefAltData, currentBinding, id])
+  }, [hrefAltData, currentBinding, id, toogleSalesChannel, salesChannel])
 
   /**
    * This effect handles the synchronization between binding sales channel on page load and cart sales channel.
@@ -169,6 +182,19 @@ const BindingSelectorBlock: FC = () => {
     updateQuantity,
     HasRunSyncEffect,
   ])
+
+  /**
+   * This effect sets the target sales channel after the user changes binding
+   * for the first time. This allows the user to change to a different binding multiple
+   * times wihtout losing reference from the first one visited. It was necessary because
+   * `window.__RUNTIME__.segmentToken` (for some weird reason) didn't keep sync'ed with the
+   * sales channel in the session cookie.
+   */
+  useEffect(() => {
+    if (queryString.sc && !salesChannel) {
+      setSalesChannel(queryString.sc)
+    }
+  }, [queryString, salesChannel])
 
   const handleOutsideClick = (e: MouseEvent) => {
     if (!relativeContainer.current?.contains(e.target as Node)) {

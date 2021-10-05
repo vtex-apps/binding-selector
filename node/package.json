@@ -19,6 +19,6 @@
     "vtex.tenant-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql"
   },
   "dependencies": {
-    "@vtex/api": "6.43.0"
+    "@vtex/api": "6.45.4"
   }
 }
