@@ -10,7 +10,17 @@
     "@types/react-intl": "^3.0.0",
     "prop-types": "^15.7.2",
     "react-intl": "^5.13.2",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "vtex.binding-selector": "https://sanz--powerplanet.myvtex.com/_v/private/typings/linked/v1/vtex.binding-selector@1.4.0+build1637106425/public/@types/vtex.binding-selector",
+    "vtex.checkout-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.checkout-graphql@0.63.0/public/@types/vtex.checkout-graphql",
+    "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.4/public/@types/vtex.css-handles",
+    "vtex.order-items": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.order-items@0.13.1/public/@types/vtex.order-items",
+    "vtex.order-manager": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.order-manager@0.11.1/public/@types/vtex.order-manager",
+    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.132.3/public/@types/vtex.render-runtime",
+    "vtex.rewriter": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.rewriter@1.54.0/public/@types/vtex.rewriter",
+    "vtex.store-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.147.4/public/@types/vtex.store-graphql",
+    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.145.2/public/@types/vtex.styleguide",
+    "vtex.tenant-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.tenant-graphql@0.1.2/public/@types/vtex.tenant-graphql"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",

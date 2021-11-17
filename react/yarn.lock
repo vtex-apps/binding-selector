@@ -868,6 +868,10 @@ vfile@^2.0.0:
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
 
+"vtex.binding-selector@https://sanz--powerplanet.myvtex.com/_v/private/typings/linked/v1/vtex.binding-selector@1.4.0+build1637106425/public/@types/vtex.binding-selector":
+  version "1.4.0"
+  resolved "https://sanz--powerplanet.myvtex.com/_v/private/typings/linked/v1/vtex.binding-selector@1.4.0+build1637106425/public/@types/vtex.binding-selector#8f12d3468ce59444dba9f62dd71eb5855442ec6f"
+
 "vtex.checkout-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.checkout-graphql@0.56.1/public/@types/vtex.checkout-graphql":
   version "0.56.1"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.checkout-graphql@0.56.1/public/@types/vtex.checkout-graphql#c1153ec5faf232f92abfe495f867019bfb7d510f"
@@ -887,6 +891,14 @@ vfile@^2.0.0:
 "vtex.render-runtime@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.126.11/public/@types/vtex.render-runtime":
   version "8.126.11"
   resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.126.11/public/@types/vtex.render-runtime#aceb734766093b56954ec19a074574b4c2c95242"
+
+"vtex.rewriter@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.rewriter@1.54.0/public/@types/vtex.rewriter":
+  version "1.54.0"
+  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.rewriter@1.54.0/public/@types/vtex.rewriter#e4b61bfb68e7dea04cc4fe8478a9fc6794a2d02c"
+
+"vtex.store-graphql@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.147.4/public/@types/vtex.store-graphql":
+  version "2.147.4"
+  resolved "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.147.4/public/@types/vtex.store-graphql#8340064d04c59b01d1b4053b3fba671552199660"
 
 "vtex.styleguide@http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.135.1/public/@types/vtex.styleguide":
   version "9.135.1"

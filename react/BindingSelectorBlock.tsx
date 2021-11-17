@@ -11,6 +11,7 @@ import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { createRedirectUrl, getMatchRoute, transformUserRouteId } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
+import ButtonList from './components/ButtonList'
 import { useBinding } from './hooks/useBindings'
 import getOrderForm from './graphql/getOrderForm.gql'
 
@@ -30,7 +31,17 @@ interface GetOrderFormResponse {
   }
 }
 
-const BindingSelectorBlock: FC = () => {
+interface Props {
+  /* How the list of bindings is rendered */
+  layout: 'dropwdown' | 'list'
+  /* How we display each binding */
+  display: 'text' | 'flags' | 'combined'
+}
+
+const BindingSelectorBlock: FC<Props> = ({
+  layout = 'dropdown',
+  display = 'text',
+}) => {
   const {
     data: { currentBinding, bindingList, bindingsError, loadingBindings },
     actions: { setCurrentBindingInfo },
@@ -254,6 +265,17 @@ const BindingSelectorBlock: FC = () => {
       orderFormError,
       bindingsError,
     })
+  }
+
+  if (layout === 'list') {
+    return hasError ? null : (
+      <ButtonList
+        bindingList={bindingList}
+        onSelectBinding={handleSelection}
+        currentBinding={currentBinding.id}
+        display={display}
+      />
+    )
   }
 
   return hasError ? null : (
