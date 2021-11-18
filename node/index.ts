@@ -7,6 +7,7 @@ import type {
 import { LRUCache, Service } from '@vtex/api'
 
 import { Clients } from './clients'
+import { routes } from './routes'
 import { queries, mutations } from './resolvers'
 
 const TIMEOUT_MS = 10 * 1000
@@ -38,6 +39,7 @@ declare global {
 // Export a service that defines route handlers and client options.
 export default new Service<Clients, RecorderState, ParamsContext>({
   clients,
+  routes,
   graphql: {
     resolvers: {
       Query: {
