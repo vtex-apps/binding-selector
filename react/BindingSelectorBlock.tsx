@@ -33,9 +33,9 @@ interface GetOrderFormResponse {
 
 interface Props {
   /* How the list of bindings is rendered */
-  layout: 'dropwdown' | 'list'
+  layout: 'dropwdown' | 'list' | 'selector'
   /* How we display each binding */
-  display: 'text' | 'flags' | 'combined'
+  display: Display
 }
 
 const BindingSelectorBlock: FC<Props> = ({
@@ -52,7 +52,6 @@ const BindingSelectorBlock: FC<Props> = ({
   const [salesChannel, setSalesChannel] = useState('')
   const handles = useCssHandles(CSS_HANDLES)
   const {
-    // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
       queryString,
@@ -202,7 +201,7 @@ const BindingSelectorBlock: FC<Props> = ({
    * sales channel in the session cookie.
    */
   useEffect(() => {
-    if (queryString.sc && !salesChannel) {
+    if (queryString?.sc && !salesChannel) {
       setSalesChannel(queryString.sc)
     }
   }, [queryString, salesChannel])

@@ -69,3 +69,5 @@ interface TranslationsAndSettings extends BindingTranslation {
 interface ShowBindings {
   [key: string]: boolean
 }
+
+type Display = 'text' | 'flag' | 'combined'

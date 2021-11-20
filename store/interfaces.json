@@ -4,5 +4,8 @@
   },
   "current-binding": {
     "component": "CurrentBinding"
+  },
+  "binding-challenge": {
+    "component": "BindingChallenge"
   }
 }

@@ -3,8 +3,14 @@ import type { FC } from 'react'
 
 import { useBinding } from './hooks/useBindings'
 import Spinner from './components/Spinner'
+import { getLabel } from './components/LabelsFlags'
 
-const CurrentBinding: FC = () => {
+interface Props {
+  /* How we display the current binding */
+  display: Display
+}
+
+const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
   const {
     data: { currentBinding, bindingsError, loadingBindings },
   } = useBinding()
@@ -21,7 +27,11 @@ const CurrentBinding: FC = () => {
 
   return hasError ? null : (
     <div className="flex items-center justify-center h-100 mh4">
-      {isLoading ? <Spinner /> : <span>{currentBinding.label}</span>}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <span>{getLabel(currentBinding, display)}</span>
+      )}
     </div>
   )
 }
