@@ -4,6 +4,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
+import { useOrderForm } from 'vtex.order-manager/OrderForm'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
@@ -12,7 +13,6 @@ import { createRedirectUrl, getMatchRoute, transformUserRouteId } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
 import { useBinding } from './hooks/useBindings'
-import getOrderForm from './graphql/getOrderForm.gql'
 
 const CSS_HANDLES = [
   'container',
@@ -23,11 +23,9 @@ const CSS_HANDLES = [
 ] as const
 
 interface GetOrderFormResponse {
-  orderForm: {
-    salesChannel: string
-    orderFormId: string
-    items: Array<{ id: string }>
-  }
+  salesChannel: string
+  orderFormId: string
+  items: Array<{ id: string }>
 }
 
 const BindingSelectorBlock: FC = () => {
@@ -73,12 +71,10 @@ const BindingSelectorBlock: FC = () => {
   >(updateSalesChannelMutation)
 
   const {
-    data: orderFormResponse,
+    orderForm: orderFormResponse,
     loading: loadingOrderForm,
     error: orderFormError,
-  } = useQuery<GetOrderFormResponse>(getOrderForm, {
-    ssr: false,
-  })
+  } = useOrderForm()
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
@@ -140,8 +136,7 @@ const BindingSelectorBlock: FC = () => {
     const syncSalesChannel = async () => {
       const { data } = await updateSalesChannel({
         variables: {
-          orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
-            .orderFormId,
+          orderFormId: (orderFormResponse as GetOrderFormResponse).orderFormId,
           salesChannel: currentBinding.salesChannel,
         },
       })
@@ -160,13 +155,12 @@ const BindingSelectorBlock: FC = () => {
     }
 
     if (
-      orderFormResponse?.orderForm.items.length &&
+      orderFormResponse?.items.length &&
       currentBinding?.id &&
       toogleSalesChannel?.isSalesChannelUpdate
     ) {
       if (
-        orderFormResponse.orderForm.salesChannel !==
-          currentBinding.salesChannel &&
+        orderFormResponse.salesChannel !== currentBinding.salesChannel &&
         !HasRunSyncEffect
       ) {
         syncSalesChannel()
@@ -191,7 +185,7 @@ const BindingSelectorBlock: FC = () => {
    * sales channel in the session cookie.
    */
   useEffect(() => {
-    if (queryString.sc && !salesChannel) {
+    if (queryString?.sc && !salesChannel) {
       setSalesChannel(queryString.sc)
     }
   }, [queryString, salesChannel])
@@ -230,7 +224,7 @@ const BindingSelectorBlock: FC = () => {
       try {
         await updateSalesChannel({
           variables: {
-            orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
+            orderFormId: (orderFormResponse as GetOrderFormResponse)
               .orderFormId,
             salesChannel: selectedBinding.salesChannel,
           },
