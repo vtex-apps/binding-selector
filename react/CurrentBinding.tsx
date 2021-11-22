@@ -15,7 +15,9 @@ const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
     data: { currentBinding, bindingsError, loadingBindings },
   } = useBinding()
 
-  const isLoading = loadingBindings || !currentBinding.id
+  const isLoading = loadingBindings
+
+  const noBinding = !isLoading && !currentBinding.id
 
   const hasError = !!bindingsError
 
@@ -23,6 +25,10 @@ const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
     console.error('Error loading Current Binding', {
       bindingsError,
     })
+  }
+
+  if (noBinding) {
+    return null
   }
 
   return hasError ? null : (

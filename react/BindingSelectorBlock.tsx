@@ -4,16 +4,18 @@ import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
+import { useOrderForm } from 'vtex.order-manager/OrderForm'
 
-import BindingSelectorList from './components/BindingSelectorList'
+import BindingSelectorDropdown from './components/BindingSelectorDropdown'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { createRedirectUrl, getMatchRoute, transformUserRouteId } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
 import Spinner from './components/Spinner'
-import ButtonList from './components/ButtonList'
+import BindingSelectorList from './components/BindingSelectorList'
+import BindingSelectorSelect from './components/BindingSelectorSelect'
 import { useBinding } from './hooks/useBindings'
-import getOrderForm from './graphql/getOrderForm.gql'
+/* import getOrderForm from './graphql/getOrderForm.gql' */
 
 const CSS_HANDLES = [
   'container',
@@ -24,11 +26,9 @@ const CSS_HANDLES = [
 ] as const
 
 interface GetOrderFormResponse {
-  orderForm: {
-    salesChannel: string
-    orderFormId: string
-    items: Array<{ id: string }>
-  }
+  salesChannel: string
+  orderFormId: string
+  items: Array<{ id: string }>
 }
 
 interface Props {
@@ -83,12 +83,18 @@ const BindingSelectorBlock: FC<Props> = ({
   >(updateSalesChannelMutation)
 
   const {
+    orderForm,
+    loading: loadingOrderForm,
+    error: orderFormError,
+  } = useOrderForm()
+
+  /* const {
     data: orderFormResponse,
     loading: loadingOrderForm,
     error: orderFormError,
   } = useQuery<GetOrderFormResponse>(getOrderForm, {
     ssr: false,
-  })
+  }) */
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
@@ -150,8 +156,7 @@ const BindingSelectorBlock: FC<Props> = ({
     const syncSalesChannel = async () => {
       const { data } = await updateSalesChannel({
         variables: {
-          orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
-            .orderFormId,
+          orderFormId: (orderForm as GetOrderFormResponse).orderFormId,
           salesChannel: currentBinding.salesChannel,
         },
       })
@@ -170,13 +175,12 @@ const BindingSelectorBlock: FC<Props> = ({
     }
 
     if (
-      orderFormResponse?.orderForm.items.length &&
+      orderForm.items.length &&
       currentBinding?.id &&
       toogleSalesChannel?.isSalesChannelUpdate
     ) {
       if (
-        orderFormResponse.orderForm.salesChannel !==
-          currentBinding.salesChannel &&
+        orderForm.salesChannel !== currentBinding.salesChannel &&
         !HasRunSyncEffect
       ) {
         syncSalesChannel()
@@ -185,7 +189,7 @@ const BindingSelectorBlock: FC<Props> = ({
       setHasRunSyncEffect(true)
     }
   }, [
-    orderFormResponse,
+    orderForm,
     currentBinding,
     toogleSalesChannel,
     updateSalesChannel,
@@ -240,8 +244,7 @@ const BindingSelectorBlock: FC<Props> = ({
       try {
         await updateSalesChannel({
           variables: {
-            orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
-              .orderFormId,
+            orderFormId: (orderForm as GetOrderFormResponse).orderFormId,
             salesChannel: selectedBinding.salesChannel,
           },
         })
@@ -257,6 +260,8 @@ const BindingSelectorBlock: FC<Props> = ({
   const isLoading =
     loadingBindings || loadingOrderForm || !currentBinding.id || loadingRedirect
 
+  const noBinding = !loadingBindings && !loadingOrderForm && !currentBinding.id
+
   const hasError = !!orderFormError || !!bindingsError
 
   if (hasError) {
@@ -266,18 +271,34 @@ const BindingSelectorBlock: FC<Props> = ({
     })
   }
 
+  if (noBinding || hasError) {
+    return null
+  }
+
   if (layout === 'list') {
-    return hasError ? null : (
-      <ButtonList
+    return (
+      <BindingSelectorList
         bindingList={bindingList}
         onSelectBinding={handleSelection}
-        currentBinding={currentBinding.id}
+        currentBinding={currentBinding}
         display={display}
+        isLoading={isLoading}
       />
     )
   }
 
-  return hasError ? null : (
+  if (layout === 'selector') {
+    return (
+      <BindingSelectorSelect
+        bindingList={bindingList}
+        onSelectBinding={handleSelection}
+        currentBinding={currentBinding}
+        isLoading={isLoading}
+      />
+    )
+  }
+
+  return (
     <div
       className={`${handles.container} ${
         open ? handles.active : ''
@@ -300,7 +321,7 @@ const BindingSelectorBlock: FC<Props> = ({
                 {currentBinding.label}
               </span>
             </button>
-            <BindingSelectorList
+            <BindingSelectorDropdown
               open={open}
               currentBinding={currentBinding}
               bindingInfo={bindingList}

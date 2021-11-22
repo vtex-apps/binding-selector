@@ -19,5 +19,6 @@
   "edit-url": "Edit URL",
   "external-url-helper-text": "Please include https:// in the URL",
   "missing-labels": "There is a missing label",
-  "hide-label": "Hide"
+  "hide-label": "Hide",
+  "store/binding-bar.action-text": "The text for the binding action bar"
 }

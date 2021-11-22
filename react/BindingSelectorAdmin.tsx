@@ -7,7 +7,7 @@ import Selector from './components/Selector'
 
 import './styles.global.css'
 
-const BindingSelector: FC = () => {
+const BindingSelectorAdmin: FC = () => {
   return (
     <Layout
       pageHeader={
@@ -21,4 +21,4 @@ const BindingSelector: FC = () => {
   )
 }
 
-export default BindingSelector
+export default BindingSelectorAdmin
