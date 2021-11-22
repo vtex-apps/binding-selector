@@ -1,15 +1,14 @@
-import { NotFoundError } from '@vtex/api'
+import { CLOUDFRONT_VIEWER_COUNTRY, VTEX_IO_VIEWER_COUNTRY } from '../constants'
 
 export async function viewerCountry(ctx: Context) {
   const {
     request: { header },
   } = ctx
 
-  try {
-    const countryCode = header['cloudfront-viewer-country']
+  const countryCode =
+    header[CLOUDFRONT_VIEWER_COUNTRY] ||
+    header[VTEX_IO_VIEWER_COUNTRY] ||
+    'Viewer country could not be retrieved'
 
-    ctx.body = countryCode
-  } catch {
-    throw new NotFoundError('Viewer country could not be found')
-  }
+  ctx.body = countryCode
 }
