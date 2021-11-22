@@ -6,9 +6,7 @@ export async function viewerCountry(ctx: Context) {
   } = ctx
 
   const countryCode =
-    header[CLOUDFRONT_VIEWER_COUNTRY] ||
-    header[VTEX_IO_VIEWER_COUNTRY] ||
-    'Viewer country could not be retrieved'
+    header[CLOUDFRONT_VIEWER_COUNTRY] || header[VTEX_IO_VIEWER_COUNTRY] || null
 
   ctx.body = countryCode
 }
