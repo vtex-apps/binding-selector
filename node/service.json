@@ -7,7 +7,7 @@
   "maxReplicas": 20,
   "routes": {
     "viewerCountry": {
-      "path": "/_v/binding-selector/v1/viewer-country",
+      "path": "/_v/binding-selector/viewer-country",
       "public": true
     }
   }
