@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { EXPERIMENTAL_Select as Select } from 'vtex.styleguide'
 
 interface Props {
@@ -14,30 +14,35 @@ const BindingSelectorSelect = ({
   onSelectBinding,
   isLoading,
 }: Props) => {
-  const [currentOption, setCurrentOption] = useState(currentBinding.id)
+  const [currentBindingId, setCurrentBindingId] = useState(currentBinding.id)
 
-  const options = bindingList.map((binding) => {
+  useEffect(() => {
+    setCurrentBindingId(currentBinding.id)
+  }, [currentBinding.id])
+
+  /* memoize it */
+  const bindings = bindingList.map((binding) => {
     return { label: binding.label, value: binding.id }
   })
 
-  const selectedOption = options.find((option) => {
-    return option.value === currentOption
+  /* Value of the select.
+  value: PropTypes.oneOfType([OptionShape, OptionsShape]) */
+  const selectedBinding = bindings.find(({ value }) => {
+    return value === currentBindingId
   })
 
-  const handleChange = (optionValue: string) => {
-    setCurrentOption(optionValue)
+  const handleChange = (selectedBindingId: string) => {
+    setCurrentBindingId(selectedBindingId)
     onSelectBinding(
-      bindingList[
-        bindingList.findIndex((binding) => binding.id === optionValue)
-      ]
+      bindingList[bindingList.findIndex(({ id }) => id === selectedBindingId)]
     )
   }
 
   return (
     <Select
       size="small"
-      options={options}
-      value={[selectedOption]}
+      options={bindings}
+      value={[selectedBinding]}
       loading={isLoading}
       multi={false}
       clearable={false}
