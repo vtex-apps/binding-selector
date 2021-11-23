@@ -1,10 +1,10 @@
 import { method } from '@vtex/api'
 
-import { errorHandler, viewerCountry } from './middlewares'
+import { viewerCountry } from './middlewares'
 
 const routes = {
   viewerCountry: method({
-    GET: [errorHandler, viewerCountry],
+    GET: [viewerCountry],
   }),
 }
 
