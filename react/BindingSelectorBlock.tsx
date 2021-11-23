@@ -5,6 +5,7 @@ import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
+import { useRenderSession } from 'vtex.session-client'
 
 import BindingSelectorList from './components/BindingSelectorList'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
@@ -22,9 +23,8 @@ const CSS_HANDLES = [
   'active',
 ] as const
 
-interface GetOrderFormResponse {
-  salesChannel: string
-  orderFormId: string
+interface OrderFormFragment {
+  id: string
   items: Array<{ id: string }>
 }
 
@@ -71,10 +71,16 @@ const BindingSelectorBlock: FC = () => {
   >(updateSalesChannelMutation)
 
   const {
-    orderForm: orderFormResponse,
+    orderForm,
     loading: loadingOrderForm,
     error: orderFormError,
   } = useOrderForm()
+
+  const {
+    session,
+    loading: sessionLoading,
+    error: sessionError,
+  } = useRenderSession()
 
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
 
@@ -136,7 +142,7 @@ const BindingSelectorBlock: FC = () => {
     const syncSalesChannel = async () => {
       const { data } = await updateSalesChannel({
         variables: {
-          orderFormId: (orderFormResponse as GetOrderFormResponse).orderFormId,
+          orderFormId: (orderForm as OrderFormFragment).id,
           salesChannel: currentBinding.salesChannel,
         },
       })
@@ -155,12 +161,13 @@ const BindingSelectorBlock: FC = () => {
     }
 
     if (
-      orderFormResponse?.items.length &&
+      orderForm?.items.length &&
       currentBinding?.id &&
       toogleSalesChannel?.isSalesChannelUpdate
     ) {
       if (
-        orderFormResponse.salesChannel !== currentBinding.salesChannel &&
+        session?.namespaces?.store?.channel?.value !==
+          currentBinding.salesChannel &&
         !HasRunSyncEffect
       ) {
         syncSalesChannel()
@@ -169,12 +176,13 @@ const BindingSelectorBlock: FC = () => {
       setHasRunSyncEffect(true)
     }
   }, [
-    orderFormResponse,
+    orderForm,
     currentBinding,
     toogleSalesChannel,
     updateSalesChannel,
     updateQuantity,
     HasRunSyncEffect,
+    session?.namespaces?.store?.channel?.value,
   ])
 
   /**
@@ -224,8 +232,7 @@ const BindingSelectorBlock: FC = () => {
       try {
         await updateSalesChannel({
           variables: {
-            orderFormId: (orderFormResponse as GetOrderFormResponse)
-              .orderFormId,
+            orderFormId: (orderForm as OrderFormFragment).id,
             salesChannel: selectedBinding.salesChannel,
           },
         })
@@ -239,14 +246,19 @@ const BindingSelectorBlock: FC = () => {
   }
 
   const isLoading =
-    loadingBindings || loadingOrderForm || !currentBinding.id || loadingRedirect
+    loadingBindings ||
+    loadingOrderForm ||
+    !currentBinding.id ||
+    loadingRedirect ||
+    sessionLoading
 
-  const hasError = !!orderFormError || !!bindingsError
+  const hasError = !!orderFormError || !!bindingsError || sessionError
 
   if (hasError) {
     console.error('Error loading Binding Selector', {
       orderFormError,
       bindingsError,
+      sessionError,
     })
   }
 
