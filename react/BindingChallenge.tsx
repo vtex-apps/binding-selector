@@ -13,29 +13,36 @@ interface Props {
 
 const BindingChallenge = ({ barText }: Props) => {
   const [show, setDisplay] = useState(false)
-  const [viewerCountry] = useState('')
+  const [viewerCountry, setViewerCountry] = useState<string | null>(null)
 
   const {
-    data: { currentBinding, bindingList, bindingsError, loadingBindings },
-    actions: { setCurrentBindingInfo },
+    data: { currentBinding, bindingsError, loadingBindings },
   } = useBinding()
 
-  const [desiredBinding, setDesiredBinding] = useState(currentBinding.id)
-
-  const bindingLocale = currentBinding?.defaultLocale
-    ?.substr(3, 2)
-    .toUpperCase()
-
-  /* useEffect(() => {
-    fetch('/_v/viewer-country').then((response) =>
-      response.json().then((data) => console.log(data))
+  useEffect(() => {
+    fetch('/_v/binding-selector/viewer-country').then((response) =>
+      response.text().then((countryISO: string | null) => {
+        !countryISO || setViewerCountry(countryISO)
+      })
     )
-  }, []) */
+  }, [])
 
   useEffect(() => {
+    if (!viewerCountry || !currentBinding.defaultLocale) {
+      return
+    }
+
     if (localStorage.getItem('hasShownBindingBar') === 'true') {
       return
     }
+
+    /* viewer country is ISO2
+    so we compare the last 2 digits of the locale
+    i.e es-ES === ES
+    */
+    const bindingLocale = currentBinding.defaultLocale
+      ?.substr(3, 2)
+      .toUpperCase()
 
     if (viewerCountry === bindingLocale) {
       return
@@ -43,23 +50,17 @@ const BindingChallenge = ({ barText }: Props) => {
 
     setDisplay(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentBinding])
+  }, [currentBinding, viewerCountry])
 
   const handleActionBar = () => {
     localStorage.setItem('hasShownBindingBar', 'true')
     setDisplay(false)
   }
 
-  const handleSelection = (id: string) => {
-    setDesiredBinding(id)
-  }
-
   const text = barText || (
     <FormattedMessage id="store/binding-bar.action-text" />
   )
 
-  /* We calculate if a floating action bar, explaining that
-  your current binding != current country, should be rendered */
   const shouldShowActionBar =
     show && !bindingsError && !loadingBindings && currentBinding.id
 
