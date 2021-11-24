@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import type { FC } from 'react'
 import { Button, ButtonGroup } from 'vtex.styleguide'
+import { useCssHandles } from 'vtex.css-handles'
 
 import { getLabel } from './LabelsFlags'
+
+const CSS_HANDLES = ['listContainer'] as const
 
 interface Props {
   bindingList: TranslationsAndSettings[]
@@ -20,6 +23,7 @@ const BindingSelectorList: FC<Props> = ({
   isLoading,
 }) => {
   const [loading, setLoading] = useState(false)
+  const handles = useCssHandles(CSS_HANDLES)
 
   const mappedBindings = bindingList
     .filter((binding) => {
@@ -40,7 +44,7 @@ const BindingSelectorList: FC<Props> = ({
     ))
 
   return (
-    <div>
+    <div className={`${handles.listContainer}`}>
       <ButtonGroup buttons={mappedBindings} />
     </div>
   )

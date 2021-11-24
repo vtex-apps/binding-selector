@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Block interface `BindingChallenge`
+- Block interface `CurrentBinding`
+- 2 new types of selectors, a `select` and a `list`
+
 ## [1.4.0] - 2021-10-05
 
 ### Changed

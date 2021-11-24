@@ -1,9 +1,12 @@
 import React from 'react'
 import type { FC } from 'react'
+import { useCssHandles } from 'vtex.css-handles'
 
 import { useBinding } from './hooks/useBindings'
 import Spinner from './components/Spinner'
 import { getLabel } from './components/LabelsFlags'
+
+const CSS_HANDLES = ['currentBinding'] as const
 
 interface Props {
   /* How we display the current binding */
@@ -15,6 +18,8 @@ const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
     data: { currentBinding, bindingsError, loadingBindings },
   } = useBinding()
 
+  const handles = useCssHandles(CSS_HANDLES)
+
   const isLoading = loadingBindings
 
   const noBinding = !isLoading && !currentBinding.id
@@ -22,17 +27,25 @@ const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
   const hasError = !!bindingsError
 
   if (hasError) {
-    console.error('Error loading Current Binding', {
+    console.error('Error loading current Binding', {
       bindingsError,
     })
-  }
 
-  if (noBinding) {
     return null
   }
 
-  return hasError ? null : (
-    <div className="flex items-center justify-center h-100 mh4">
+  if (noBinding) {
+    console.warn('No Binding assigned to the current Binding', {
+      bindingsError,
+    })
+
+    return null
+  }
+
+  return (
+    <div
+      className={`${handles.currentBinding} flex items-center justify-center h-100 mh4`}
+    >
       {isLoading ? (
         <Spinner />
       ) : (

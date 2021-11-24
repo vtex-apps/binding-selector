@@ -20,5 +20,7 @@
   "external-url-helper-text": "Please include https:// in the URL",
   "missing-labels": "There is a missing label",
   "hide-label": "Hide",
-  "store/binding-bar.action-text": "The text for the binding action bar"
+  "store/challenge-bar.action-text": "Content for the challenge binding action bar",
+  "admin/editor.challenge-bar.title": "Site editor challenge bar title",
+  "admin/editor.challenge-bar.barText.title": "Challenge bar action-text title"
 }

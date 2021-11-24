@@ -274,9 +274,13 @@ const BindingSelectorBlock: FC<Props> = ({
       orderFormError,
       bindingsError,
     })
+
+    return null
   }
 
-  if (noBinding || hasError) {
+  if (noBinding) {
+    console.warn('No Binding assigned to the current Binding')
+
     return null
   }
 
@@ -287,7 +291,8 @@ const BindingSelectorBlock: FC<Props> = ({
         onSelectBinding={handleSelection}
         currentBinding={currentBinding}
         display={display}
-        isLoading={isLoading}
+        /* Don't want to check for loadingRedirect */
+        isLoading={loadingBindings || loadingOrderForm || !currentBinding.id}
       />
     )
   }

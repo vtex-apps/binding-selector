@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { ButtonWithIcon, IconClose } from 'vtex.styleguide'
 import { FormattedMessage } from 'react-intl'
+import { useDevice } from 'vtex.device-detector'
+import { useCssHandles } from 'vtex.css-handles'
 
 import { useBinding } from './hooks/useBindings'
 import BindingSelectorBlock from './BindingSelectorBlock'
 
 const close = <IconClose />
+
+const CSS_HANDLES = ['challengeBar', 'actionCTA', 'actionContainer'] as const
 
 interface Props {
   barText: string
@@ -14,6 +18,8 @@ interface Props {
 const BindingChallenge = ({ barText }: Props) => {
   const [show, setDisplay] = useState(false)
   const [viewerCountry, setViewerCountry] = useState<string | null>(null)
+  const handles = useCssHandles(CSS_HANDLES)
+  const { device } = useDevice()
 
   const {
     data: { currentBinding, bindingsError, loadingBindings },
@@ -58,7 +64,7 @@ const BindingChallenge = ({ barText }: Props) => {
   }
 
   const text = barText || (
-    <FormattedMessage id="store/binding-bar.action-text" />
+    <FormattedMessage id="store/challenge-bar.action-text" />
   )
 
   const shouldShowActionBar =
@@ -69,32 +75,45 @@ const BindingChallenge = ({ barText }: Props) => {
   }
 
   return (
-    <div className="flex items-center justify-center shadow-active w-100 bg-base pa4 tc">
-      <span>{text}</span>
-      <span className="mh5 w-10">
-        <BindingSelectorBlock layout="selector" display="text" />
+    <div
+      className={`${
+        handles.challengeBar
+      } flex items-center justify-center shadow-active w-100 bg-base pa4 tc ${
+        device === 'phone' ? 'flex-column' : ''
+      }`}
+    >
+      <span
+        className={`${handles.actionCTA} t-small ${
+          device === 'phone' ? 'pb3' : ''
+        }`}
+      >
+        {text}
       </span>
-      <span>
-        <ButtonWithIcon
-          size="small"
-          icon={close}
-          variation="tertiary"
-          onClick={() => {
-            handleActionBar()
-          }}
-        />
-      </span>
+      <div className={`${handles.actionContainer} flex`}>
+        <span className="mh5 w-10" style={{ width: 180 }}>
+          <BindingSelectorBlock layout="selector" display="text" />
+        </span>
+        <span>
+          <ButtonWithIcon
+            size="small"
+            icon={close}
+            variation="tertiary"
+            onClick={() => {
+              handleActionBar()
+            }}
+          />
+        </span>
+      </div>
     </div>
   )
 }
 
 BindingChallenge.schema = {
-  title: 'admin/editor.binding-bar.title',
-  description: 'admin/editor.binding-bar.description',
+  title: 'admin/editor.challenge-bar.title',
   type: 'object',
   properties: {
     barText: {
-      title: 'admin/editor.binding-bar.barText.title',
+      title: 'admin/editor.challenge-bar.barText.title',
       type: 'string',
     },
   },
