@@ -83,12 +83,6 @@ const BindingSelectorBlock: FC<Props> = ({
     UpdateSalesChannelVariables
   >(updateSalesChannelMutation)
 
-  /* const {
-    orderForm,
-    loading: loadingOrderForm,
-    error: orderFormError,
-  } = useOrderForm() */
-
   const {
     data: orderFormResponse,
     loading: loadingOrderForm,
