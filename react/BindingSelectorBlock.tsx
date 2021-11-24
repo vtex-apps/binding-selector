@@ -4,7 +4,6 @@ import { useCssHandles } from 'vtex.css-handles'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
-/* import { useOrderForm } from 'vtex.order-manager/OrderForm' */
 
 import BindingSelectorDropdown from './components/BindingSelectorDropdown'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
