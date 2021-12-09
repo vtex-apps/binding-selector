@@ -26,11 +26,18 @@ const BindingChallenge = ({ barText }: Props) => {
   } = useBinding()
 
   useEffect(() => {
-    fetch('/_v/binding-selector/viewer-country').then((response) =>
-      response.text().then((countryISO: string | null) => {
+    async function fetchViewerCountry() {
+      try {
+        const response = await fetch(`/_v/binding-selector/viewer-country`)
+        const countryISO = await response.text()
+
         !countryISO || setViewerCountry(countryISO)
-      })
-    )
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    fetchViewerCountry()
   }, [])
 
   useEffect(() => {
@@ -55,7 +62,6 @@ const BindingChallenge = ({ barText }: Props) => {
     }
 
     setDisplay(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentBinding, viewerCountry])
 
   const handleActionBar = () => {
