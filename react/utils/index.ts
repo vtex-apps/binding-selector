@@ -166,9 +166,9 @@ export const createRedirectUrl = ({
     isMyVtex,
   })
 
-  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress}${
-    !myAccount ? path : '/account'
-  }${queryString}${hash}`
+  return `${protocol}//${
+    isMyVtex ? hostname : canonicalBaseAddress.replace(/\/$/, '')
+  }${!myAccount ? path : '/account'}${queryString}${hash}`
 }
 
 interface MatchRoute {
