@@ -71,3 +71,8 @@ interface ShowBindings {
 }
 
 type Display = 'text' | 'flag' | 'combined'
+
+interface DropzoneFile {
+  size: number
+  type: string
+}

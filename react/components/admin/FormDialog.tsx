@@ -1,15 +1,15 @@
-import type { SyntheticEvent, FormEvent, FC } from 'react'
+import type { SyntheticEvent, FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Modal, Button } from 'vtex.styleguide'
 import { useMutation } from 'react-apollo'
 
-import saveBindingInfo from '../graphql/saveBindingInfo.gql'
+import saveBindingInfo from '../../graphql/saveBindingInfo.gql'
 import {
   removeBindingAdmin,
   setShowValues,
   createBindingsToLabel,
-} from '../utils'
+} from '../../utils'
 import AdminBindingLabelsList from './AdminBindingLabelsList'
 
 interface FormDialogProps {
@@ -68,8 +68,8 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     })
   }
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault()
+  const onSubmit = () => {
+    /*  e.preventDefault() */
 
     const transformedData = bindingInfoQueryData.map<BindingsSaved>(
       (binding) => {
@@ -112,36 +112,36 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   return (
     <Modal
       isOpen={open}
+      title={<FormattedMessage id="admin-modal" />}
       onClose={() => {
         handleOnClose()
       }}
-    >
-      <form onSubmit={onSubmit}>
-        <div className="pt6 tc">
-          <FormattedMessage id="admin-modal" />
-        </div>
-        <div className="pt6 flex w-100 flex-column justify-center items-center">
-          <AdminBindingLabelsList
-            bindings={bindingsToBeLabeled}
-            activeBindings={showBindings}
-            handleChange={handleChange}
-            translationsMap={translationsMap}
-            handleHideLabel={handleHideLabel}
-          />
-          <div className="flex pt6">
-            <div className="pr4">
-              <Button variation="tertiary" onClick={() => handleOnClose()}>
-                <FormattedMessage id="admin-cancel" />
-              </Button>
-            </div>
-            <div>
-              <Button type="submit">
-                <FormattedMessage id="admin-save" />
-              </Button>
-            </div>
+      bottomBar={
+        <div className="flex">
+          <div className="pr4">
+            <Button variation="tertiary" onClick={() => handleOnClose()}>
+              <FormattedMessage id="admin-cancel" />
+            </Button>
+          </div>
+          <div>
+            <Button onClick={() => onSubmit()}>
+              <FormattedMessage id="admin-save" />
+            </Button>
           </div>
         </div>
-      </form>
+      }
+    >
+      {/* <form onSubmit={onSubmit}> */}
+      <div className="pb6 pt3 flex w-100 flex-column justify-center items-center">
+        <AdminBindingLabelsList
+          bindings={bindingsToBeLabeled}
+          activeBindings={showBindings}
+          handleChange={handleChange}
+          translationsMap={translationsMap}
+          handleHideLabel={handleHideLabel}
+        />
+      </div>
+      {/* </form> */}
     </Modal>
   )
 }

@@ -4,15 +4,15 @@ import { useQuery, useMutation } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import { Toggle } from 'vtex.styleguide'
 
-import Spinner from './Spinner'
+import Spinner from '../Spinner'
 import FormDialog from './FormDialog'
-import { removeBindingAdmin } from '../utils'
+import { removeBindingAdmin } from '../../utils'
 import AdminBindingList from './AdminBindingList'
-import bindingInfo from '../graphql/bindingInfo.gql'
-import saveBindingInfo from '../graphql/saveBindingInfo.gql'
-import getSalesChannel from '../graphql/getSalesChannel.gql'
-import toggleSalesChannel from '../graphql/toggleSalesChannel.gql'
-import isSalesChannelUpdate from '../graphql/isSalesChannelUpdate.gql'
+import bindingInfo from '../../graphql/bindingInfo.gql'
+import saveBindingInfo from '../../graphql/saveBindingInfo.gql'
+import getSalesChannel from '../../graphql/getSalesChannel.gql'
+import toggleSalesChannel from '../../graphql/toggleSalesChannel.gql'
+import isSalesChannelUpdate from '../../graphql/isSalesChannelUpdate.gql'
 
 interface DataMutation {
   data: BindingsSaved[]
@@ -154,13 +154,11 @@ const Selector: FC = () => {
         bindingInfoQueryData={fetchedData ?? []}
         setFetchedData={setFetchedData}
       />
-      <p className="pb4">
-        <FormattedMessage id="admin-description" />
-      </p>
       <Toggle
         checked={updateSalesChannel}
         label={<FormattedMessage id="admin-label" />}
         onChange={handleUpdateSalesChannel}
+        helpText={<FormattedMessage id="admin-description" />}
       />
       {loading ? (
         <div className="w100 flex justify-center align-center pa7 ma7">

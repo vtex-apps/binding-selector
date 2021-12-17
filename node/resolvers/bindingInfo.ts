@@ -1,5 +1,6 @@
 export const bindingInfo = async (_: unknown, __: unknown, ctx: Context) => {
   const { clients } = ctx
+
   const { vbase } = clients
 
   try {
@@ -7,6 +8,9 @@ export const bindingInfo = async (_: unknown, __: unknown, ctx: Context) => {
       'account.binding',
       'configs'
     )
+
+    // eslint-disable-next-line no-console
+    console.log(savedTranslations.data)
 
     return savedTranslations.data
   } catch (e) {

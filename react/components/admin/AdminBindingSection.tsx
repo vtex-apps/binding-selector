@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import type { FC, SyntheticEvent, FormEvent } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Toggle, Button, Divider, Collapsible, Input } from 'vtex.styleguide'
+import {
+  Toggle,
+  Button,
+  Divider,
+  Collapsible,
+  Input,
+  Tooltip,
+  IconExternalLink,
+} from 'vtex.styleguide'
+import { CountryFlag } from 'vtex.country-flags'
+
+import CustomFlagSetting from './CustomFlagSetting'
 
 export interface BindingSectionProps {
   modalControl: (modalOpen: boolean) => void
@@ -29,6 +40,12 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   hasAllabels,
   i,
 }) => {
+  console.log(
+    '%c configSettings ',
+    'background: #fff; color: #333',
+    configSettings
+  )
+
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setShowRedirectUrl] = useState(false)
   const [urlToRedirect, setUrlToRedirect] = useState('')
@@ -85,59 +102,91 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
 
   return (
     <>
-      <section key={binding.id} className="flex items-center justify-between">
-        <div className="flex-grow-1 flex-basis-33">
-          <p>
-            <FormattedMessage
-              id="admin-store"
-              values={{
-                index: i + 1,
-                address: binding.canonicalBaseAddress,
+      <div className="mt6">
+        <Divider orientation="horizontal" />
+      </div>
+      <section
+        key={binding.id}
+        className="flex items-center justify-between mb3"
+      >
+        <div className="flex items-center flex-basis-50">
+          <span className="mr4">
+            <Button disabled size="small">
+              <CountryFlag
+                iso2={binding.defaultLocale.substring(3, 5).toUpperCase()}
+              />
+            </Button>
+          </span>
+          <div className="flex flex-column mv5 flex-grow-1 flex-basis-33">
+            <span className="b">
+              <FormattedMessage
+                id="admin-store"
+                values={{
+                  index: i + 1,
+                  address: binding.canonicalBaseAddress,
+                }}
+              />
+            </span>
+            <span>
+              <FormattedMessage
+                id="admin-locale"
+                values={{ locale: binding.defaultLocale }}
+              />
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center flex-basis-50 justify-end">
+          {showRedirectUrl && (
+            <div>
+              <Tooltip label="This binding has an external redirect URL">
+                <span className="c-on-base pointer">
+                  <IconExternalLink />
+                </span>
+              </Tooltip>
+            </div>
+          )}
+
+          <div className="flex-basis-50 tc">
+            <Button
+              disabled={!configSettings.show}
+              onClick={() => {
+                modalControl(!modalOpen)
+                setChosenBinding(binding)
+              }}
+              size="small"
+              variation="secondary"
+            >
+              <FormattedMessage id="admin-action" />
+            </Button>
+            {configSettings.show && !hasAllabels ? (
+              <p className="absolute c-danger i-s">
+                <FormattedMessage id="missing-labels" />
+              </p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-basis-25 justify-end">
+            <Toggle
+              checked={configSettings.show}
+              semantic
+              label={
+                configSettings.show ? (
+                  <FormattedMessage id="admin-hide-binding" />
+                ) : (
+                  <FormattedMessage id="admin-show-binding" />
+                )
+              }
+              onChange={() => {
+                setShowBindings(binding.id)
+                if (!configSettings.show) {
+                  setChosenBinding(binding)
+                } else {
+                  setChosenBinding({} as Binding)
+                }
               }}
             />
-          </p>
-          <p>
-            <FormattedMessage
-              id="admin-locale"
-              values={{ locale: binding.defaultLocale }}
-            />
-          </p>
-        </div>
-        <div className="flex-grow-1 flex justify-left">
-          <Toggle
-            checked={configSettings.show}
-            label={
-              configSettings.show ? (
-                <FormattedMessage id="admin-hide-binding" />
-              ) : (
-                <FormattedMessage id="admin-show-binding" />
-              )
-            }
-            onChange={() => {
-              setShowBindings(binding.id)
-              if (!configSettings.show) {
-                setChosenBinding(binding)
-              } else {
-                setChosenBinding({} as Binding)
-              }
-            }}
-          />
-        </div>
-        <div>
-          <Button
-            disabled={!configSettings.show}
-            onClick={() => {
-              modalControl(!modalOpen)
-              setChosenBinding(binding)
-            }}
-          >
-            <FormattedMessage id="admin-action" />
-          </Button>
-          {configSettings.show && !hasAllabels ? (
-            <p className="absolute c-danger i-s">
-              <FormattedMessage id="missing-labels" />
-            </p>
-          ) : null}
+          </div>
         </div>
       </section>
       <Collapsible
@@ -149,14 +198,14 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         isOpen={showAdvConfig}
         onClick={() => setShowAdvConfig(!showAdvConfig)}
       >
-        <div className="mt4">
+        <div className="mt7">
           <Toggle
             checked={showRedirectUrl}
             label={<FormattedMessage id="set-external-url" />}
             onChange={handleShowRedirectToggle}
           />
-          <form onSubmit={handleSubmit} className="flex items-baseline">
-            <div className="mv5 width-70">
+          <form onSubmit={handleSubmit} className="mt4 flex">
+            <div className="width-70">
               <Input
                 value={urlToRedirect}
                 disabled={!showRedirectUrl || edit}
@@ -165,10 +214,8 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                 })}
                 onChange={handleChangeRedirectUrl}
                 pattern="^https?:\/\/.+"
+                helpText={<FormattedMessage id="external-url-helper-text" />}
               />
-              <p className="t-small mw9">
-                <FormattedMessage id="external-url-helper-text" />
-              </p>
             </div>
             <div className="ml5">
               {edit ? (
@@ -188,10 +235,10 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             </div>
           </form>
         </div>
+        <div className="mt7">
+          <CustomFlagSetting customFlag={false} />
+        </div>
       </Collapsible>
-      <div className="mt5">
-        <Divider orientation="horizontal" />
-      </div>
     </>
   )
 }

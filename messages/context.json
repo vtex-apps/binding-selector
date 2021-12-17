@@ -6,7 +6,7 @@
   "admin-label": "Update Sales Channel",
   "admin-store": "Store {index}: {address}",
   "admin-locale": "Locale: {locale}",
-  "admin-action": "Customise store names",
+  "admin-action": "Custom store names",
   "admin-modal": "Customise the store names in this binding’s language.",
   "admin-cancel": "Cancel",
   "admin-save": "Save",
@@ -22,5 +22,13 @@
   "hide-label": "Hide",
   "store/challenge-bar.action-text": "Content for the challenge binding action bar",
   "admin/editor.challenge-bar.title": "Site editor challenge bar title",
-  "admin/editor.challenge-bar.barText.title": "Challenge bar action-text title"
+  "admin/editor.challenge-bar.barText.title": "Challenge bar action-text title",
+  "admin/custom-flag.toggle": "Custom binding flag toggle label",
+  "admin/custom-flag.helpText": "Custom binding flag toggle help text",
+  "admin/custom-flag.cta": "Custom binding flag button call to action",
+  "admin/custom-flag.modal-title": "Custom binding flag modal title",
+  "admin/custom-flag.modal-error": "You uploaded a/an {type} weighting {size} KB and only images of less than 512 KB are allowed",
+  "admin/custom-flag.modal-dropzone-title": "Drop your file here or",
+  "admin/custom-flag.modal-dropzone-cta": "choose a file",
+  "admin/custom-flag.modal-dropzone-limit": "Maximum file size of {max_size} KB."
 }

@@ -3,7 +3,7 @@ import type { FC } from 'react'
 
 import type { BindingSectionProps } from './AdminBindingSection'
 import AdminBindingSection from './AdminBindingSection'
-import { hasAllTranslations } from '../utils'
+import { hasAllTranslations } from '../../utils'
 
 interface BindingListProps extends BindingSectionProps {
   bindings: Binding[]
@@ -18,7 +18,7 @@ const BindingList: FC<BindingListProps> = ({
   ...props
 }) => {
   return (
-    <div className="pt6">
+    <div>
       {bindings.map((binding, i) => {
         const configSettings =
           configSettingsList.find(
