@@ -97,7 +97,7 @@ const BindingChallenge = ({ barText }: Props) => {
       </span>
       <div className={`${handles.actionContainer} flex`}>
         <span className="mh5 w-10" style={{ width: 180 }}>
-          <BindingSelectorBlock layout="selector" display="text" />
+          <BindingSelectorBlock layout="select" display="text" />
         </span>
         <span>
           <ButtonWithIcon
