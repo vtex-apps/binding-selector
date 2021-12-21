@@ -27,8 +27,9 @@
   "admin/custom-flag.helpText": "Custom binding flag toggle help text",
   "admin/custom-flag.cta": "Custom binding flag button call to action",
   "admin/custom-flag.modal-title": "Custom binding flag modal title",
-  "admin/custom-flag.modal-error": "You uploaded a/an {type} weighting {size} KB and only images of less than 512 KB are allowed",
-  "admin/custom-flag.modal-dropzone-title": "Drop your file here or",
-  "admin/custom-flag.modal-dropzone-cta": "choose a file",
-  "admin/custom-flag.modal-dropzone-limit": "Maximum file size of {max_size} KB."
+  "admin/custom-flag.modal-error": "Modal upload error",
+  "admin/custom-flag.modal-dropzone-title": "First line of modal's text",
+  "admin/custom-flag.modal-dropzone-cta": "Modal's call to action",
+  "admin/custom-flag.modal-dropzone-limit": "Modal's file limit",
+  "admin/redirect-url.tooltip-label": "Tooltip text describing the use of a redirect url"
 }

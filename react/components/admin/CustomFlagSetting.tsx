@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react'
 import type { FC } from 'react'
+import { useMutation } from 'react-apollo'
 import { FormattedMessage } from 'react-intl'
 import {
   Toggle,
@@ -12,52 +12,95 @@ import {
   Alert,
 } from 'vtex.styleguide'
 
+import UPLOAD_MUTATION from '../../graphql/uploadFile.gql'
+
 const edit = <IconEdit />
 
-/* 512kb */
-const MAX_SIZE = 512000
+/* 512 KB */
+const MAX_SIZE = 512000 as const
 
-const UPLOAD_ERROR = {
+const RESET_ERROR = {
   error: false,
   size: 0,
   type: '',
 }
 
-type Props = {
-  customFlag: boolean
+interface IncomingFile {
+  uploadFile: { fileUrl: string }
 }
 
-const CustomFlagSetting: FC<Props> = ({ customFlag = false }) => {
+type Props = {
+  customFlag: boolean
+  handleFlagToggle: (active: boolean) => void
+  handleSubmitFlag: (inmutableUrl: string) => void
+}
+
+/**
+ * Enables the advanced setting to upload a custom 'flag' as
+ * an icon for the bindings.
+ * @note Even when the user closes the modal when
+ * uploading a file, it will still run on the background.
+ * @param customFlag - controls weather the setting is
+ * activated; a side effect of the display of the custom icon on
+ * the binding summary
+ * @param handleSubmitFlag - handler to update binding's settings
+ */
+const CustomFlagSetting: FC<Props> = ({
+  customFlag = false,
+  handleFlagToggle,
+  handleSubmitFlag,
+}) => {
   const [hasCustomFlag, toggleSetting] = useState(customFlag)
   const [isOpen, toggleModal] = useState(false)
   const [canUpload, setCanUpload] = useState(false)
   const [uploadingFile, setUploading] = useState(false)
-  const [alert, throwAlert] = useState(UPLOAD_ERROR)
+  const [flag, prepareFile] = useState({})
+  const [alert, handleAlert] = useState(RESET_ERROR)
 
-  /* MUTATION => URL */
+  /**
+   * Save file (returns file's immutable URL)
+   * @see file-manager-graphql
+   */
+  const [saveFile] = useMutation<IncomingFile>(UPLOAD_MUTATION, {
+    variables: { file: flag },
+  })
 
-  /* USE EFFECT [URL] => saveTranlatingInfo & setFetchedData */
-
-  const submitCustomFlag = () => {
-    console.log('ALOHA')
-    setUploading(true)
-  }
-
-  const dropAccepted = (file: File[]) => {
-    console.log('accepted')
-    console.log(file)
-    setCanUpload(true)
+  const handleToggle = () => {
+    toggleSetting(!hasCustomFlag)
+    handleFlagToggle(!hasCustomFlag)
   }
 
   const dropRejected = (file: File[]) => {
-    console.log('rejected')
-    console.log(file)
     setCanUpload(false)
-    throwAlert({
+    handleAlert({
       error: true,
       size: Math.floor(file[0].size / 1000),
       type: file[0].type,
     })
+  }
+
+  const dropAccepted = (file: File[]) => {
+    setCanUpload(true)
+    prepareFile(file[0])
+  }
+
+  const handleUpload = async () => {
+    setUploading(true)
+
+    try {
+      const {
+        data: {
+          uploadFile: { fileUrl },
+        },
+      } = (await saveFile()) as { data: IncomingFile }
+
+      if (fileUrl) {
+        /* This will trigger a parent re-render */
+        handleSubmitFlag(fileUrl)
+      }
+    } catch (e) {
+      console.error('Error saving data', { e })
+    }
   }
 
   return (
@@ -65,7 +108,7 @@ const CustomFlagSetting: FC<Props> = ({ customFlag = false }) => {
       <Toggle
         label={<FormattedMessage id="admin/custom-flag.toggle" />}
         checked={hasCustomFlag}
-        onChange={() => toggleSetting(!hasCustomFlag)}
+        onChange={() => handleToggle()}
         helpText={<FormattedMessage id="admin/custom-flag.helpText" />}
       />
       {hasCustomFlag && (
@@ -87,7 +130,7 @@ const CustomFlagSetting: FC<Props> = ({ customFlag = false }) => {
           toggleModal(!isOpen)
         }}
         bottomBar={
-          <Button onClick={() => submitCustomFlag()} disabled={!canUpload}>
+          <Button onClick={() => handleUpload()} disabled={!canUpload}>
             <FormattedMessage id="admin-save" />
           </Button>
         }
@@ -95,7 +138,7 @@ const CustomFlagSetting: FC<Props> = ({ customFlag = false }) => {
         <div className="mb4">
           {alert.error && (
             <div className="mb4">
-              <Alert onClose={() => throwAlert(UPLOAD_ERROR)} type="error">
+              <Alert onClose={() => handleAlert(RESET_ERROR)} type="error">
                 <FormattedMessage
                   id="admin/custom-flag.modal-error"
                   values={{
@@ -104,7 +147,6 @@ const CustomFlagSetting: FC<Props> = ({ customFlag = false }) => {
                   }}
                 />
               </Alert>
-              {console.log(alert.size, alert.type)}
             </div>
           )}
           <Dropzone

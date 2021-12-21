@@ -85,7 +85,7 @@ Renders a component that allows the user to select a different binding for your 
 
 | Prop name | Type     | Description                                                                                    | Default value |
 | --------- | -------- | ---------------------------------------------------------------------------------------------- | ------------- |
-| `layout`  | `string` | How the bindings are grouped. Possible values are: `dropdown` - `list` - `selector`            | `dropdown`    |
+| `layout`  | `string` | How the bindings are grouped. Possible values are: `dropdown` - `list` - `select`            | `dropdown`    |
 | `display` | `string` | How the bindings are displayed in the group. Possible values are: `text` - `flag` - `combined` | `text`        |
 
 ### `current-binding` block

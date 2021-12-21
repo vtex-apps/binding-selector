@@ -75,11 +75,11 @@ const Selector: FC = () => {
   const filteredBindings = removeBindingAdmin(bindingData?.tenantInfo.bindings)
 
   const handleShowBindings = async (bindingId: string) => {
-    let found = false
+    let bindingFound = false
     let currentToggleStatus = false
     const modifiedBindings = fetchedData.map((binding) => {
       if (binding.bindingId === bindingId) {
-        found = true
+        bindingFound = true
         currentToggleStatus = binding.show
         const modifiedBinding = {
           ...binding,
@@ -96,7 +96,7 @@ const Selector: FC = () => {
       setModalOpen(true)
     }
 
-    const bindingsToSave = found
+    const bindingsToSave = bindingFound
       ? modifiedBindings
       : [
           ...fetchedData,
@@ -105,6 +105,7 @@ const Selector: FC = () => {
             show: true,
             translatedLocales: [],
             externalRedirectData: null,
+            customFlagData: null,
           },
         ]
 
@@ -121,15 +122,16 @@ const Selector: FC = () => {
     }
   }
 
-  const handleSetRedirectUrl = async (
+  const handleSetAdvancedSettings = async (
     bindingId: string,
-    externalRedirectData: ExternalRedirectData
+    type: SettingType,
+    extraData: ExternalRedirectData | CustomFlagData
   ) => {
     const transformedData = fetchedData.map((binding) => {
       if (binding.bindingId === bindingId) {
         return {
           ...binding,
-          externalRedirectData,
+          ...(extraData && { [type]: extraData }),
         }
       }
 
@@ -171,7 +173,7 @@ const Selector: FC = () => {
           modalOpen={modalOpen}
           setChosenBinding={setChosenBinding}
           setShowBindings={handleShowBindings}
-          setRedirectUrl={handleSetRedirectUrl}
+          setAdvancedSettings={handleSetAdvancedSettings}
           configSettingsList={fetchedData}
           bindingsToShow={bindingsToShow}
         />

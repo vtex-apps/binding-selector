@@ -19,7 +19,11 @@ export interface BindingSectionProps {
   modalOpen: boolean
   setChosenBinding: (binding: Binding) => void
   setShowBindings: (id: string) => void
-  setRedirectUrl: (bindingId: string, args: ExternalRedirectData) => void
+  setAdvancedSettings: (
+    bindingId: string,
+    type: SettingType,
+    extraData: ExternalRedirectData | CustomFlagData
+  ) => void
 }
 
 interface BindingSectionPropsLocal extends BindingSectionProps {
@@ -35,22 +39,18 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   modalOpen,
   setChosenBinding,
   setShowBindings,
-  setRedirectUrl,
+  setAdvancedSettings,
   configSettings,
   hasAllabels,
   i,
 }) => {
-  console.log(
-    '%c configSettings ',
-    'background: #fff; color: #333',
-    configSettings
-  )
-
   const [showAdvConfig, setShowAdvConfig] = useState(false)
   const [showRedirectUrl, setShowRedirectUrl] = useState(false)
   const [urlToRedirect, setUrlToRedirect] = useState('')
   const [edit, setEdit] = useState(false)
   const intl = useIntl()
+
+  const flag = configSettings.customFlagData
 
   useEffect(() => {
     const { externalRedirectData } = configSettings
@@ -74,7 +74,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
   const handleShowRedirectToggle = () => {
     setShowRedirectUrl(!showRedirectUrl)
     if (showRedirectUrl) {
-      setRedirectUrl(binding.id, {
+      setAdvancedSettings(binding.id, 'externalRedirectData', {
         url: '',
         redirectUrl: false,
       })
@@ -87,11 +87,26 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
     setUrlToRedirect((event.currentTarget as HTMLInputElement).value)
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleFlagToggle = (active: boolean) => {
+    /* We should always try to keep the original url */
+    setAdvancedSettings(binding.id, 'customFlagData', {
+      ...(flag?.url ? { url: flag.url } : { url: '' }),
+      isCustom: active,
+    })
+  }
+
+  const handleSubmitRedirect = (e: FormEvent) => {
     e.preventDefault()
-    setRedirectUrl(binding.id, {
+    setAdvancedSettings(binding.id, 'externalRedirectData', {
       url: urlToRedirect,
       redirectUrl: showRedirectUrl,
+    })
+  }
+
+  const handleSubmitFlag = (inmutableUrl: string) => {
+    setAdvancedSettings(binding.id, 'customFlagData', {
+      url: inmutableUrl,
+      isCustom: true,
     })
   }
 
@@ -112,9 +127,19 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         <div className="flex items-center flex-basis-50">
           <span className="mr4">
             <Button disabled size="small">
-              <CountryFlag
-                iso2={binding.defaultLocale.substring(3, 5).toUpperCase()}
-              />
+              {flag?.isCustom && flag?.url ? (
+                <img
+                  src={flag.url}
+                  alt="A flag of the binding's locale"
+                  width="24"
+                  height="24"
+                  style={{ maxWidth: 24, maxHeight: 24 }}
+                />
+              ) : (
+                <CountryFlag
+                  iso2={binding.defaultLocale.substring(3, 5).toUpperCase()}
+                />
+              )}
             </Button>
           </span>
           <div className="flex flex-column mv5 flex-grow-1 flex-basis-33">
@@ -139,7 +164,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         <div className="flex items-center flex-basis-50 justify-end">
           {showRedirectUrl && (
             <div>
-              <Tooltip label="This binding has an external redirect URL">
+              <Tooltip
+                label={
+                  <FormattedMessage id="admin/redirect-url.tooltip-label" />
+                }
+              >
                 <span className="c-on-base pointer">
                   <IconExternalLink />
                 </span>
@@ -204,7 +233,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             label={<FormattedMessage id="set-external-url" />}
             onChange={handleShowRedirectToggle}
           />
-          <form onSubmit={handleSubmit} className="mt4 flex">
+          <form onSubmit={handleSubmitRedirect} className="mt4 flex">
             <div className="width-70">
               <Input
                 value={urlToRedirect}
@@ -236,7 +265,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
           </form>
         </div>
         <div className="mt7">
-          <CustomFlagSetting customFlag={false} />
+          <CustomFlagSetting
+            customFlag={Boolean(flag?.isCustom)}
+            handleFlagToggle={handleFlagToggle}
+            handleSubmitFlag={handleSubmitFlag}
+          />
         </div>
       </Collapsible>
     </>

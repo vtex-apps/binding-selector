@@ -30,5 +30,6 @@
   "admin/custom-flag.modal-error": "You uploaded a/an {type} weighting {size} KB and only images of less than 512 KB are allowed",
   "admin/custom-flag.modal-dropzone-title": "Drop your file here or",
   "admin/custom-flag.modal-dropzone-cta": "choose a file",
-  "admin/custom-flag.modal-dropzone-limit": "Maximum file size of {max_size} KB."
+  "admin/custom-flag.modal-dropzone-limit": "Maximum file size of {max_size} KB.",
+  "admin/redirect-url.tooltip-label": "This binding has an external redirect URL"
 }

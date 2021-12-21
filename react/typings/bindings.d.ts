@@ -41,6 +41,7 @@ interface BindingsSaved {
   show: boolean
   translatedLocales: BindingTranslation[]
   externalRedirectData: ExternalRedirectData | null
+  customFlagData: CustomFlagData | null
 }
 
 interface UpdateSalesChannelVariables {
@@ -62,17 +63,20 @@ interface ExternalRedirectData {
   redirectUrl: boolean
 }
 
+interface CustomFlagData {
+  url: string
+  isCustom: boolean
+}
+
 interface TranslationsAndSettings extends BindingTranslation {
   externalRedirectData: ExternalRedirectData | null
+  customFlagData: CustomFlagData | null
 }
 
 interface ShowBindings {
   [key: string]: boolean
 }
 
-type Display = 'text' | 'flag' | 'combined'
+type FlagDisplay = 'text' | 'flag' | 'combined'
 
-interface DropzoneFile {
-  size: number
-  type: string
-}
+type SettingType = 'externalRedirectData' | 'customFlagData'

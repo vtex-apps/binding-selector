@@ -18,7 +18,8 @@
     "vtex.checkout-graphql": "0.x",
     "vtex.store-graphql": "2.x",
     "vtex.country-flags": "0.x",
-    "vtex.device-detector": "0.x"
+    "vtex.device-detector": "0.x",
+    "vtex.file-manager-graphql": "0.x"
   },
   "builders": {
     "react": "3.x",
