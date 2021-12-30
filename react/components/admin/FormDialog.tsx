@@ -68,9 +68,7 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     })
   }
 
-  const onSubmit = () => {
-    /*  e.preventDefault() */
-
+  const handleOnSave = () => {
     const transformedData = bindingInfoQueryData.map<BindingsSaved>(
       (binding) => {
         if (binding.bindingId === chosenBinding.id) {
@@ -113,25 +111,22 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
     <Modal
       isOpen={open}
       title={<FormattedMessage id="admin-modal" />}
-      onClose={() => {
-        handleOnClose()
-      }}
+      onClose={handleOnClose}
       bottomBar={
         <div className="flex">
           <div className="pr4">
-            <Button variation="tertiary" onClick={() => handleOnClose()}>
+            <Button variation="tertiary" onClick={handleOnClose}>
               <FormattedMessage id="admin-cancel" />
             </Button>
           </div>
           <div>
-            <Button onClick={() => onSubmit()}>
+            <Button onClick={handleOnSave}>
               <FormattedMessage id="admin-save" />
             </Button>
           </div>
         </div>
       }
     >
-      {/* <form onSubmit={onSubmit}> */}
       <div className="pb6 pt3 flex w-100 flex-column justify-center items-center">
         <AdminBindingLabelsList
           bindings={bindingsToBeLabeled}
@@ -141,7 +136,6 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
           handleHideLabel={handleHideLabel}
         />
       </div>
-      {/* </form> */}
     </Modal>
   )
 }
