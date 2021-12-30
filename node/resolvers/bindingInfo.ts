@@ -9,9 +9,6 @@ export const bindingInfo = async (_: unknown, __: unknown, ctx: Context) => {
       'configs'
     )
 
-    // eslint-disable-next-line no-console
-    console.log(savedTranslations.data)
-
     return savedTranslations.data
   } catch (e) {
     const { status } = e.response
