@@ -4,7 +4,7 @@ import { useCssHandles } from 'vtex.css-handles'
 
 import { useBinding } from './hooks/useBindings'
 import Spinner from './components/Spinner'
-import { renderBinding } from './components/LabelsFlags'
+import LabelOption from './components/LabelsFlags'
 
 const CSS_HANDLES = ['currentBinding'] as const
 
@@ -50,19 +50,7 @@ const CurrentBinding: FC<Props> = ({ display = 'text' }) => {
       {loadingBindings ? (
         <Spinner />
       ) : (
-        <>
-          {flag?.isCustom && flag.url ? (
-            <img
-              src={flag.url}
-              alt="A flag of the binding's locale"
-              width="24"
-              height="24"
-              style={{ maxWidth: 24, maxHeight: 24 }}
-            />
-          ) : (
-            renderBinding(currentBinding, display)
-          )}
-        </>
+        <LabelOption binding={currentBinding} display={display} flag={flag} />
       )}
     </div>
   )

@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { Button, ButtonGroup } from 'vtex.styleguide'
 import { useCssHandles } from 'vtex.css-handles'
 
-import { renderBinding } from './LabelsFlags'
+import LabelOption from './LabelsFlags'
 
 const CSS_HANDLES = ['listContainer'] as const
 
@@ -42,17 +42,7 @@ const BindingSelectorList: FC<Props> = ({
             setLoading(true)
           }}
         >
-          {flag?.isCustom && flag.url ? (
-            <img
-              src={flag.url}
-              alt="A flag of the binding's locale"
-              width="24"
-              height="24"
-              style={{ maxWidth: 24, maxHeight: 24 }}
-            />
-          ) : (
-            renderBinding(binding, display)
-          )}
+          <LabelOption binding={binding} display={display} flag={flag} />
         </Button>
       )
     })
