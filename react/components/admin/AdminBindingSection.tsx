@@ -23,7 +23,7 @@ export interface BindingSectionProps {
     bindingId: string,
     type: SettingType,
     extraData: ExternalRedirectData | CustomFlagData
-  ) => void
+  ) => Promise<void>
 }
 
 interface BindingSectionPropsLocal extends BindingSectionProps {
@@ -103,8 +103,8 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
     })
   }
 
-  const handleSubmitFlag = (inmutableUrl: string) => {
-    setAdvancedSettings(binding.id, 'customFlagData', {
+  const handleSubmitFlag = async (inmutableUrl: string) => {
+    await setAdvancedSettings(binding.id, 'customFlagData', {
       url: inmutableUrl,
       isCustom: true,
     })

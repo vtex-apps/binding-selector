@@ -32,7 +32,7 @@ interface IncomingFile {
 type Props = {
   customFlag: boolean
   handleFlagToggle: (active: boolean) => void
-  handleSubmitFlag: (inmutableUrl: string) => void
+  handleSubmitFlag: (inmutableUrl: string) => Promise<void>
 }
 
 /**
@@ -83,23 +83,32 @@ const CustomFlagSetting: FC<Props> = ({
     setCanUpload(true)
     prepareFile(file[0])
   }
+  /**
+   * @todo: Add toast to display success or error for the user
+   * Not only here, but for all other saving operations
+   */
 
   const handleUpload = async () => {
     setUploading(true)
 
     try {
-      const {
-        data: {
-          uploadFile: { fileUrl },
-        },
-      } = (await saveFile()) as { data: IncomingFile }
+      const { data, errors } = await saveFile()
+
+      if (errors) {
+        throw new Error('Error saving custom flag')
+      }
+
+      const { fileUrl } = data?.uploadFile ?? {}
 
       if (fileUrl) {
         /* This will trigger a parent re-render */
-        handleSubmitFlag(fileUrl)
+        await handleSubmitFlag(fileUrl)
       }
     } catch (e) {
       console.error('Error saving data', { e })
+    } finally {
+      setUploading(false)
+      toggleModal(false)
     }
   }
 

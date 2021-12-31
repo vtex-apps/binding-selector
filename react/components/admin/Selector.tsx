@@ -126,7 +126,7 @@ const Selector: FC = () => {
     bindingId: string,
     type: SettingType,
     extraData: ExternalRedirectData | CustomFlagData
-  ) => {
+  ): Promise<void> => {
     const transformedData = fetchedData.map((binding) => {
       if (binding.bindingId === bindingId) {
         return {
