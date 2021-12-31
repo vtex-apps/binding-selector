@@ -73,9 +73,17 @@ The Setup for the app is as follows:
 
    4.2. Toggle each store individually to be displayed on the front end component.
 
-   4.3 Modify each displayed option labels clicking on the **Customize Store Names** button. This process has to be done for each active or displayed site.
+   4.3 Modify each displayed option labels clicking on the **Custom Store Names** button. This process has to be done for each active or displayed site.
 
-**if there are no labels configured, the menu won't display any options!!**
+    **if there are no labels configured, the menu won't display any options!!**
+
+   4.4 _Advanced Settings_
+
+    4.4.1 External redirect URL
+      - When set, user will redirect to the given URL when clicking the binding in the store
+
+    4.4.2 Custom Flag
+      - It's possible to customize the flags that represents the bindings. SVG files, with a 24x24px size, is recommended to mantain consistency.
 
 ![adminfunctionality](/docs/admininterface.gif)
 
