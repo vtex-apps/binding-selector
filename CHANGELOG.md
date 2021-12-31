@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Block interface `BindingChallenge`
 - Block interface `CurrentBinding`
 - 2 new types of selectors, a `select` and a `list`
+- Flags to label bindings. It allows custom images or defaults to `defaultLocale` country code.
 
 ## [1.4.0] - 2021-10-05
 
