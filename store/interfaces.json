@@ -1,5 +1,11 @@
 {
   "binding-selector": {
     "component": "BindingSelectorBlock"
+  },
+  "current-binding": {
+    "component": "CurrentBinding"
+  },
+  "binding-challenge": {
+    "component": "BindingChallenge"
   }
 }

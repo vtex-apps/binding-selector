@@ -11,6 +11,14 @@ body,
   flex-basis: 33%;
 }
 
+.flex-basis-25 {
+  flex-basis: 25%;
+}
+
+.flex-basis-50 {
+  flex-basis: 50%;
+}
+
 .width-70 {
   width: 70%;
 }

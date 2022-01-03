@@ -3,6 +3,7 @@ input BindingsInput {
   show: Boolean
   translatedLocales: [BindingsTranslationInput]
   externalRedirectData: ExternalRedirectDataInput
+  customFlagData: CustomFlagDataInput
 }
 
 input BindingsTranslationInput {
@@ -33,9 +34,20 @@ type TranslatedInfoOutput {
   show: Boolean
   translatedLocales: [BindingsTranslation]
   externalRedirectData: ExternalRedirectData
+  customFlagData: CustomFlagData
 }
 
 type ExternalRedirectData {
   redirectUrl: Boolean
+  url: String
+}
+
+input CustomFlagDataInput {
+  isCustom: Boolean
+  url: String
+}
+
+type CustomFlagData {
+  isCustom: Boolean
   url: String
 }

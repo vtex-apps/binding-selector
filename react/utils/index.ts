@@ -9,15 +9,19 @@ const filterBindings = ({
   const bindingsById = []
 
   const bindnigsToShow: Record<string, boolean> = {}
+
   const bindingExternalRedirect: Record<
     string,
     ExternalRedirectData | null
   > = {}
 
+  const bindingCustomFlag: Record<string, CustomFlagData | null> = {}
+
   for (const binding of bindingInfo) {
     if (binding.show) {
       bindnigsToShow[binding.bindingId] = true
       bindingExternalRedirect[binding.bindingId] = binding.externalRedirectData
+      bindingCustomFlag[binding.bindingId] = binding.customFlagData
     }
   }
 
@@ -30,10 +34,12 @@ const filterBindings = ({
           // map over the left ones to add externalRedirect info
           .map((translation) => {
             const externalRedirectData = bindingExternalRedirect[translation.id]
+            const customFlagData = bindingCustomFlag[translation.id]
 
             return {
               ...translation,
               externalRedirectData,
+              customFlagData,
             }
           }),
       }
