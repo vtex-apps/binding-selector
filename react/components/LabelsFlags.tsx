@@ -36,7 +36,7 @@ const LabelOption = ({ binding, display, flag }: Props) => {
     )
   }
 
-  return <p>{binding.label}</p>
+  return <span>{binding.label}</span>
 }
 
 export default LabelOption
