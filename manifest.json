@@ -1,7 +1,7 @@
 {
   "name": "binding-selector",
   "vendor": "vtex",
-  "version": "1.4.2",
+  "version": "2.1.0",
   "title": "Binding Selector App",
   "description": "",
   "mustUpdateAt": "2022-08-28",
@@ -44,11 +44,9 @@
   ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema",
   "billingOptions": {
-    "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
     "support": {
       "url": "https://support.vtex.com/hc/requests"
     },
-    "free": true,
     "type": "free",
     "availableCountries": ["*"]
   }
