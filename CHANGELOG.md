@@ -8,20 +8,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Billing options
-
-## [1.4.1] - 2021-12-09
-
-### Added
 - Block interface `BindingChallenge`
 - Block interface `CurrentBinding`
 - 2 new types of selectors, a `select` and a `list`
 - Flags to label bindings. It allows custom images or defaults to `defaultLocale` country code.
 - User location detection.
 
+## [1.5.0] - 2022-01-28
+
+### Added
+- Italian translation.
+
+### Fixed
+- Spanish translation.
+
+## [1.4.1] - 2021-12-09
 ## [1.4.0] - 2021-10-05
 
 ### Changed
-- Keep user in the same sales channel when selecting a new binding and the store has the flag `Update Sales Channel` off 
+- Keep user in the same sales channel when selecting a new binding and the store has the flag `Update Sales Channel` off
 
 ## [1.3.3] - 2021-06-30
 
