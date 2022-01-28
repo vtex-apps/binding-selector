@@ -13,4 +13,8 @@ fragment BindingInfoFragment on TranslatedInfoOutput {
     url
     redirectUrl
   }
+  customFlagData {
+    isCustom
+    url
+  }
 }

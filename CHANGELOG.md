@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Billing options
+- Block interface `BindingChallenge`
+- Block interface `CurrentBinding`
+- 2 new types of selectors, a `select` and a `list`
+- Flags to label bindings. It allows custom images or defaults to `defaultLocale` country code.
+- User location detection.
 
 ## [1.5.0] - 2022-01-28
 
@@ -16,7 +23,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Spanish translation.
 
 ## [1.4.1] - 2021-12-09
-
 ## [1.4.0] - 2021-10-05
 
 ### Changed

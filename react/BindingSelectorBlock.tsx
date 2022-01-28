@@ -1,26 +1,18 @@
 import type { FC } from 'react'
-import React, { useState, useEffect, useRef } from 'react'
-import { useCssHandles } from 'vtex.css-handles'
+import React, { useState, useEffect } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { useMutation, useLazyQuery, useQuery } from 'react-apollo'
 import { useOrderItems } from 'vtex.order-items/OrderItems'
 
-import BindingSelectorList from './components/BindingSelectorList'
+import BindingSelectorDropdown from './components/BindingSelectorDropdown'
 import updateSalesChannelMutation from './graphql/updateSalesChannel.gql'
 import alternateHrefsQuery from './graphql/alternateHrefs.gql'
 import { createRedirectUrl, getMatchRoute, transformUserRouteId } from './utils'
 import shouldUpdateSalesChannel from './graphql/isSalesChannelUpdate.gql'
-import Spinner from './components/Spinner'
+import BindingSelectorList from './components/BindingSelectorList'
+import BindingSelectorSelect from './components/BindingSelectorSelect'
 import { useBinding } from './hooks/useBindings'
 import getOrderForm from './graphql/getOrderForm.gql'
-
-const CSS_HANDLES = [
-  'container',
-  'relativeContainer',
-  'button',
-  'buttonText',
-  'active',
-] as const
 
 interface GetOrderFormResponse {
   orderForm: {
@@ -30,18 +22,25 @@ interface GetOrderFormResponse {
   }
 }
 
-const BindingSelectorBlock: FC = () => {
+interface Props {
+  /* How the list of bindings is rendered */
+  layout: 'dropwdown' | 'list' | 'select'
+  /* How we display each binding */
+  display: FlagDisplay
+}
+
+const BindingSelectorBlock: FC<Props> = ({
+  layout = 'dropdown',
+  display = 'text',
+}) => {
   const {
     data: { currentBinding, bindingList, bindingsError, loadingBindings },
     actions: { setCurrentBindingInfo },
   } = useBinding()
 
-  const [open, setOpen] = useState<boolean>(false)
   const [HasRunSyncEffect, setHasRunSyncEffect] = useState(false)
   const [salesChannel, setSalesChannel] = useState('')
-  const handles = useCssHandles(CSS_HANDLES)
   const {
-    // @ts-expect-error routes not typed in useRuntime
     route: {
       pageContext: { id, type },
       queryString,
@@ -72,6 +71,11 @@ const BindingSelectorBlock: FC = () => {
     UpdateSalesChannelVariables
   >(updateSalesChannelMutation)
 
+  /**
+   * @todo We are using this query only because the order-manager doesn't
+   * expose the salesChannel. If we make a PR to checkout-graphql to add it
+   * we could dispose of this query to avoid waiting for the block to render
+   */
   const {
     data: orderFormResponse,
     loading: loadingOrderForm,
@@ -88,8 +92,6 @@ const BindingSelectorBlock: FC = () => {
       ssr: false,
     }
   )
-
-  const relativeContainer = useRef<HTMLDivElement | null>(null)
 
   /**
    * This effect handles the redirect after user selects a new binding.
@@ -175,12 +177,12 @@ const BindingSelectorBlock: FC = () => {
       setHasRunSyncEffect(true)
     }
   }, [
-    orderFormResponse,
     currentBinding,
     toogleSalesChannel,
     updateSalesChannel,
     updateQuantity,
     HasRunSyncEffect,
+    orderFormResponse,
   ])
 
   /**
@@ -191,35 +193,17 @@ const BindingSelectorBlock: FC = () => {
    * sales channel in the session cookie.
    */
   useEffect(() => {
-    if (queryString.sc && !salesChannel) {
+    if (queryString?.sc && !salesChannel) {
       setSalesChannel(queryString.sc)
     }
   }, [queryString, salesChannel])
-
-  const handleOutsideClick = (e: MouseEvent) => {
-    if (!relativeContainer.current?.contains(e.target as Node)) {
-      setOpen(false)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick)
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick)
-    }
-  }, [])
-
-  const handleClick = () => {
-    setOpen(!open)
-  }
 
   const handleSelection = async (
     selectedBinding: TranslationsAndSettings
   ): Promise<void> => {
     setLoadingRedirect(true)
     setCurrentBindingInfo(selectedBinding.id)
-    setOpen(false)
+
     if (selectedBinding.externalRedirectData?.redirectUrl) {
       window.location.href = selectedBinding.externalRedirectData.url
 
@@ -247,6 +231,8 @@ const BindingSelectorBlock: FC = () => {
   const isLoading =
     loadingBindings || loadingOrderForm || !currentBinding.id || loadingRedirect
 
+  const noBinding = !loadingBindings && !loadingOrderForm && !currentBinding.id
+
   const hasError = !!orderFormError || !!bindingsError
 
   if (hasError) {
@@ -254,41 +240,47 @@ const BindingSelectorBlock: FC = () => {
       orderFormError,
       bindingsError,
     })
+
+    return null
   }
 
-  return hasError ? null : (
-    <div
-      className={`${handles.container} ${
-        open ? handles.active : ''
-      } flex items-center justify-center w3 relative`}
-    >
-      <div
-        ref={relativeContainer}
-        className={`${handles.relativeContainer} relative flex justify-center`}
-      >
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={handleClick}
-              className={`${handles.button} link pa3 bg-transparent bn flex items-center pointer c-on-base`}
-            >
-              <span className={`${handles.buttonText}`}>
-                {currentBinding.label}
-              </span>
-            </button>
-            <BindingSelectorList
-              open={open}
-              currentBinding={currentBinding}
-              bindingInfo={bindingList}
-              onSelectBinding={handleSelection}
-            />
-          </>
-        )}
-      </div>
-    </div>
+  if (noBinding) {
+    console.warn('No Binding assigned to the current Binding')
+
+    return null
+  }
+
+  if (layout === 'list') {
+    return (
+      <BindingSelectorList
+        bindingList={bindingList}
+        currentBinding={currentBinding}
+        onSelectBinding={handleSelection}
+        display={display}
+        /* Don't want to check for loadingRedirect */
+        isLoading={loadingBindings || loadingOrderForm || !currentBinding.id}
+      />
+    )
+  }
+
+  if (layout === 'select') {
+    return (
+      <BindingSelectorSelect
+        bindingList={bindingList}
+        currentBinding={currentBinding}
+        onSelectBinding={handleSelection}
+        isLoading={isLoading}
+      />
+    )
+  }
+
+  return (
+    <BindingSelectorDropdown
+      bindingInfo={bindingList}
+      currentBinding={currentBinding}
+      onSelectBinding={handleSelection}
+      isLoading={isLoading}
+    />
   )
 }
 
