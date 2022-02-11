@@ -94,7 +94,7 @@ Renders a component that allows the user to select a different binding for your 
 | Prop name | Type     | Description                                                                                    | Default value |
 | --------- | -------- | ---------------------------------------------------------------------------------------------- | ------------- |
 | `layout`  | `string` | How the bindings are grouped. Possible values are: `dropdown` - `list` - `select`            | `dropdown`    |
-| `display` | `string` | How the bindings are displayed in the group. Possible values are: `text` - `flag` - `combined` | `text`        |
+| `display` | `string` | How the bindings are displayed in the group. Possible values are: `text` - `flag` - `combined`. Please keep in mind that the `select` layout cannot be paired with `flag` or `combined`, as the native HTML tag 'select' can only render text | `text`        |
 
 ### `current-binding` block
 
