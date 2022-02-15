@@ -77,7 +77,11 @@ const BindingSelectorDropdown: FC<Props> = ({
               className={`${handles.button} link pa3 bg-transparent bn flex items-center pointer c-on-base`}
             >
               <span className={`${handles.buttonText}`}>
-                <LabelOption binding={currentBinding} display={display} flag={currentBinding.customFlagData} />
+                <LabelOption
+                  binding={currentBinding}
+                  display={display}
+                  flag={currentBinding.customFlagData}
+                />
               </span>
             </button>
             <ul
@@ -101,7 +105,11 @@ const BindingSelectorDropdown: FC<Props> = ({
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                   >
-                    <LabelOption binding={binding} display={display} flag={binding.customFlagData} />
+                    <LabelOption
+                      binding={binding}
+                      display={display}
+                      flag={binding.customFlagData}
+                    />
                   </li>
                 ))}
             </ul>

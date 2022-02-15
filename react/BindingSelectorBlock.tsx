@@ -250,7 +250,6 @@ const BindingSelectorBlock: FC<Props> = ({
     return null
   }
 
-
   if (layout === 'list') {
     return (
       <BindingSelectorList
@@ -265,9 +264,10 @@ const BindingSelectorBlock: FC<Props> = ({
   }
 
   if (layout === 'select') {
-
     if (display === 'combined' || display === 'flag') {
-      console.error('Binding selector: Native HTML <select> tag cannot render flags as options, please choose a different layout')
+      console.error(
+        'Binding selector: Native HTML <select> tag cannot render flags as options, please choose a different layout'
+      )
     }
 
     return (
