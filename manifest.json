@@ -1,7 +1,7 @@
 {
   "name": "binding-selector",
   "vendor": "vtex",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "Binding Selector App",
   "description": "",
   "mustUpdateAt": "2022-08-28",
@@ -48,8 +48,6 @@
       "url": "https://support.vtex.com/hc/requests"
     },
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   }
 }
