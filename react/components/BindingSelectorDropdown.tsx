@@ -3,12 +3,14 @@ import type { FC } from 'react'
 import { useCssHandles } from 'vtex.css-handles'
 
 import Spinner from './Spinner'
+import LabelOption from './LabelsFlags'
 
 interface Props {
   currentBinding: TranslationsAndSettings
   bindingInfo: TranslationsAndSettings[]
   onSelectBinding: (selectedBinding: TranslationsAndSettings) => void
   isLoading: boolean
+  display: FlagDisplay
 }
 
 const CSS_HANDLES = [
@@ -26,6 +28,7 @@ const BindingSelectorDropdown: FC<Props> = ({
   bindingInfo,
   onSelectBinding,
   isLoading,
+  display,
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const handles = useCssHandles(CSS_HANDLES)
@@ -54,9 +57,6 @@ const BindingSelectorDropdown: FC<Props> = ({
     onSelectBinding(binding)
   }
 
-  /**
-   * @todo enable the dropdown to optionally include flag icons
-   */
   return (
     <div
       className={`${handles.container} ${
@@ -77,7 +77,11 @@ const BindingSelectorDropdown: FC<Props> = ({
               className={`${handles.button} link pa3 bg-transparent bn flex items-center pointer c-on-base`}
             >
               <span className={`${handles.buttonText}`}>
-                {currentBinding.label}
+                <LabelOption
+                  binding={currentBinding}
+                  display={display}
+                  flag={currentBinding.customFlagData}
+                />
               </span>
             </button>
             <ul
@@ -101,7 +105,11 @@ const BindingSelectorDropdown: FC<Props> = ({
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                   >
-                    <span>{binding.label}</span>
+                    <LabelOption
+                      binding={binding}
+                      display={display}
+                      flag={binding.customFlagData}
+                    />
                   </li>
                 ))}
             </ul>
