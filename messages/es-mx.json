@@ -1,13 +1,13 @@
 {
   "admin-binding-selector.navigation.label": "Selector de binding",
-  "admin-binding-selector": "Selector de binding",
-  "admin-binding-selector.navigation.search.kws": "Selector de binding",
-  "admin-description": "Las políticas comerciales se actualizarán cuando tus clientes cambien los bindings de su tienda.",
+  "admin-binding-selector": "Selector de vínculo",
+  "admin-binding-selector.navigation.search.kws": "Selector de vínculo",
+  "admin-description": "Las políticas comerciales se actualizarán cuando tus clientes cambien los vínculos de sus tiendas.",
   "admin-label": "Actualizar canal de ventas",
   "admin-store": "Tienda {index}: {address}",
   "admin-locale": "Región: {locale}",
   "admin-action": "Nombres de tienda personalizados",
-  "admin-modal": "Personalizar los nombres de las tiendas en el idioma del binding.",
+  "admin-modal": "Personalizar los nombres de las tiendas en el idioma del vínculo.",
   "admin-cancel": "Cancelar",
   "admin-save": "Guardar",
   "admin-hide-binding": "Visible",
@@ -21,9 +21,9 @@
   "missing-labels": "Falta una etiqueta",
   "hide-label": "Ocultar",
   "store/challenge-bar.action-text": "Elige ver contenido específico o compra online en otro país o región.",
-  "admin/editor.challenge-bar.title": "Barra de acciones del desafío de binding",
+  "admin/editor.challenge-bar.title": "Barra de acciones del desafío de vinculación",
   "admin/editor.challenge-bar.barText.title": "CTA",
-  "admin/custom-flag.toggle": "Ícono de flag de binding personalizado",
+  "admin/custom-flag.toggle": "Ícono de flag de vínculo personalizado",
   "admin/custom-flag.helpText": "Se recomienda utilizar archivos SVG con un tamaño de 24x24 px para mantener uniformidad.",
   "admin/custom-flag.cta": "Editar flag",
   "admin/custom-flag.modal-title": "Cargar flag personalizado",
@@ -31,5 +31,5 @@
   "admin/custom-flag.modal-dropzone-title": "Arrastra el archivo aquí o",
   "admin/custom-flag.modal-dropzone-cta": "selecciona un archivo",
   "admin/custom-flag.modal-dropzone-limit": "El tamaño máximo de archivo es de {max_size} KB.",
-  "admin/redirect-url.tooltip-label": "Este binding tiene una URL de redirección externa."
+  "admin/redirect-url.tooltip-label": "Este vínculo tiene una URL de redirección externa."
 }
