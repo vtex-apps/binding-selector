@@ -60,7 +60,8 @@ The Setup for the app is as follows:
      "binding-selector": {
        "props": {
          "layout": "dropdown",
-         "display": "text"
+         "display": "text",
+         "redirectPage: "home"
        }
      }
    }
@@ -95,6 +96,9 @@ Renders a component that allows the user to select a different binding for your 
 | --------- | -------- | ---------------------------------------------------------------------------------------------- | ------------- |
 | `layout`  | `string` | How the bindings are grouped. Possible values are: `dropdown` - `list` - `select`            | `dropdown`    |
 | `display` | `string` | How the bindings are displayed in the group. Possible values are: `text` - `flag` - `combined`. Please keep in mind that the `select` layout cannot be paired with `flag` or `combined`, as the native HTML tag 'select' can only render text | `text`        |
+| `redirectPage`  | `string` | To which page will redirect after. `home` will redirect to the home page. `current` will redirect to the current page you are. Possible values are: `home` - `current`            | `home`    |
+
+
 
 ### `current-binding` block
 
