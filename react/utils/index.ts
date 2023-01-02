@@ -146,6 +146,7 @@ interface RedirectUrlArgs {
   pageType: string
   keepSalesChannel?: boolean
   salesChannel?: string
+  currentPage?: string
 }
 
 export const isMyAccount = (pageType: string): boolean =>
@@ -160,6 +161,7 @@ export const createRedirectUrl = ({
   pageType,
   keepSalesChannel = false,
   salesChannel,
+  currentPage,
 }: RedirectUrlArgs): string => {
   const isMyVtex = hostname.indexOf('myvtex') !== -1
 
@@ -172,9 +174,7 @@ export const createRedirectUrl = ({
     isMyVtex,
   })
 
-  return `${protocol}//${
-    isMyVtex ? hostname : canonicalBaseAddress.replace(/\/$/, '')
-  }${!myAccount ? path : '/account'}${queryString}${hash}`
+  return `${protocol}//${isMyVtex ? hostname : canonicalBaseAddress.replace(/\/$/, '')}${currentPage ? currentPage : ""}${!myAccount ? path : '/account'}${queryString}${hash}`
 }
 
 interface MatchRoute {

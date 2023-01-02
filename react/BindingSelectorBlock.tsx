@@ -27,11 +27,13 @@ interface Props {
   layout: 'dropwdown' | 'list' | 'select'
   /* How we display each binding */
   display: FlagDisplay
+  redirectPage: 'home' | 'current'
 }
 
 const BindingSelectorBlock: FC<Props> = ({
   layout = 'dropdown',
   display = 'text',
+  redirectPage = 'home',
 }) => {
   const {
     data: { currentBinding, bindingList, bindingsError, loadingBindings },
@@ -99,9 +101,8 @@ const BindingSelectorBlock: FC<Props> = ({
    */
   useEffect(() => {
     const { canonicalBaseAddress } = currentBinding
-    const { hostname, protocol, hash } = window.location
+    const { hostname, protocol, hash, pathname } = window.location
     let path = ''
-
     // eslint-disable-next-line vtex/prefer-early-return
     if (hrefAltData) {
       const { routes = [] } = hrefAltData.internal
@@ -126,8 +127,8 @@ const BindingSelectorBlock: FC<Props> = ({
          * See more details in the useEffect below.
          */
         salesChannel: salesChannel || channel,
+        currentPage: redirectPage === 'current' ? pathname : '',
       })
-
       console.info(`Redirecting to ${urlToRedirect}`)
 
       window.location.href = urlToRedirect
