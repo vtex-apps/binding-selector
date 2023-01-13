@@ -3,7 +3,7 @@
   "admin-binding-selector": "Binding Selector",
   "admin-binding-selector.navigation.search.kws": "Binding Selector",
   "admin-description": "The sales policies will be updated when your customers change their store bindings.",
-  "admin-label": "Update Sales Channel",
+  "admin-label": "Update Trade Policy",
   "admin-store": "Store {index}: {address}",
   "admin-locale": "Locale: {locale}",
   "admin-action": "Custom store names",
