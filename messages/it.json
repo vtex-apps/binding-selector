@@ -1,13 +1,13 @@
 {
-  "admin-binding-selector.navigation.label": "Selettore di binding",
-  "admin-binding-selector": "Selettore di binding",
-  "admin-binding-selector.navigation.search.kws": "Selettore di binding",
-  "admin-description": "Le politiche di vendita verranno aggiornate quando i tuoi clienti cambieranno i binding dei negozi.",
-  "admin-label": "Aggiorna canali di vendita",
+  "admin-binding-selector.navigation.label": "Selettore di associazione",
+  "admin-binding-selector": "Selettore di associazione",
+  "admin-binding-selector.navigation.search.kws": "Selettore di associazione",
+  "admin-description": "Le politiche di vendita verranno aggiornate quando i tuoi clienti cambieranno le associazioni dei negozi.",
+  "admin-label": "Aggiorna politica commerciale",
   "admin-store": "Negozio {index}: {address}",
   "admin-locale": "Regione: {locale}",
   "admin-action": "Personalizza i nomi del negozio",
-  "admin-modal": "Personalizza i nomi del negozio nella lingua del binding.",
+  "admin-modal": "Personalizza i nomi del negozio nella lingua dell'associazione.",
   "admin-cancel": "Annulla",
   "admin-save": "Salva",
   "admin-hide-binding": "Visibile",
@@ -21,9 +21,9 @@
   "missing-labels": "Manca un'etichetta",
   "hide-label": "Nascondi",
   "store/challenge-bar.action-text": "Scegli di visualizzare contenuti specifici o acquista online in un altro paese o regione.",
-  "admin/editor.challenge-bar.title": "Barra delle azioni della sfida di binding",
+  "admin/editor.challenge-bar.title": "Barra delle azioni della sfida di associazione",
   "admin/editor.challenge-bar.barText.title": "CTA (Call to Action)",
-  "admin/custom-flag.toggle": "Personalizza l'icona del flag di binding",
+  "admin/custom-flag.toggle": "Personalizza l'icona del flag di associazione",
   "admin/custom-flag.helpText": "É consigliabile utilizzare file SVG con una dimensione di 24x24 px per mantenere la consistenza.",
   "admin/custom-flag.cta": "Modifica flag",
   "admin/custom-flag.modal-title": "Carica flag personalizzato",
@@ -31,5 +31,5 @@
   "admin/custom-flag.modal-dropzone-title": "Trascina il tuo file qui o",
   "admin/custom-flag.modal-dropzone-cta": "scegli un file",
   "admin/custom-flag.modal-dropzone-limit": "La dimensione massima del file è di {max_size} KB.",
-  "admin/redirect-url.tooltip-label": "Questo binding ha un URL di reindirizzamento esterno"
+  "admin/redirect-url.tooltip-label": "Questa associazione ha un URL di reindirizzamento esterno"
 }
