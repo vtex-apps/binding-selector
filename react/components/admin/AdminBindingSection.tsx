@@ -145,7 +145,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
           <div className="flex flex-column mv5 flex-grow-1 flex-basis-33">
             <span className="b">
               <FormattedMessage
-                id="admin-store"
+                id="admin/store"
                 values={{
                   index: i + 1,
                   address: binding.canonicalBaseAddress,
@@ -154,7 +154,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
             </span>
             <span>
               <FormattedMessage
-                id="admin-locale"
+                id="admin/locale"
                 values={{ locale: binding.defaultLocale }}
               />
             </span>
@@ -186,11 +186,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
               size="small"
               variation="secondary"
             >
-              <FormattedMessage id="admin-action" />
+              <FormattedMessage id="admin/action" />
             </Button>
             {configSettings.show && !hasAllabels ? (
               <p className="absolute c-danger i-s">
-                <FormattedMessage id="missing-labels" />
+                <FormattedMessage id="admin/missing-labels" />
               </p>
             ) : null}
           </div>
@@ -201,9 +201,9 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
               semantic
               label={
                 configSettings.show ? (
-                  <FormattedMessage id="admin-hide-binding" />
+                  <FormattedMessage id="admin/hide-binding" />
                 ) : (
-                  <FormattedMessage id="admin-show-binding" />
+                  <FormattedMessage id="admin/show-binding" />
                 )
               }
               onChange={() => {
@@ -221,7 +221,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
       <Collapsible
         header={
           <span className="c-action-primary hover-c-action-primary fw5">
-            <FormattedMessage id="advanced-settings" />
+            <FormattedMessage id="admin/advanced-settings" />
           </span>
         }
         isOpen={showAdvConfig}
@@ -230,7 +230,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
         <div className="mt7">
           <Toggle
             checked={showRedirectUrl}
-            label={<FormattedMessage id="set-external-url" />}
+            label={<FormattedMessage id="admin/set-external-url" />}
             onChange={handleShowRedirectToggle}
           />
           <form onSubmit={handleSubmitRedirect} className="mt4 flex">
@@ -239,11 +239,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                 value={urlToRedirect}
                 disabled={!showRedirectUrl || edit}
                 placeholder={intl.formatMessage({
-                  id: 'external-url-placeholder',
+                  id: 'admin/external-url-placeholder',
                 })}
                 onChange={handleChangeRedirectUrl}
                 pattern="^https?:\/\/.+"
-                helpText={<FormattedMessage id="external-url-helper-text" />}
+                helpText={<FormattedMessage id="admin/external-url-helper-text" />}
               />
             </div>
             <div className="ml5">
@@ -254,11 +254,11 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
                   disabled={!urlToRedirect}
                   onClick={handleEditMode}
                 >
-                  <FormattedMessage id="edit-url" />
+                  <FormattedMessage id="admin/edit-url" />
                 </Button>
               ) : (
                 <Button type="submit" disabled={!urlToRedirect}>
-                  <FormattedMessage id="save-url" />
+                  <FormattedMessage id="admin/save-url" />
                 </Button>
               )}
             </div>

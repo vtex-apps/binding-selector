@@ -11,7 +11,7 @@ const BindingSelectorAdmin: FC = () => {
   return (
     <Layout
       pageHeader={
-        <PageHeader title={<FormattedMessage id="admin-binding-selector" />} />
+        <PageHeader title={<FormattedMessage id="admin/binding-selector" />} />
       }
     >
       <PageBlock variation="full">

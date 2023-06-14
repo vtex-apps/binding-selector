@@ -110,18 +110,18 @@ const FormDialog: FC<FormDialogProps> = (props: FormDialogProps) => {
   return (
     <Modal
       isOpen={open}
-      title={<FormattedMessage id="admin-modal" />}
+      title={<FormattedMessage id="admin/modal" />}
       onClose={handleOnClose}
       bottomBar={
         <div className="flex">
           <div className="pr4">
             <Button variation="tertiary" onClick={handleOnClose}>
-              <FormattedMessage id="admin-cancel" />
+              <FormattedMessage id="admin/cancel" />
             </Button>
           </div>
           <div>
             <Button onClick={handleOnSave}>
-              <FormattedMessage id="admin-save" />
+              <FormattedMessage id="admin/save" />
             </Button>
           </div>
         </div>

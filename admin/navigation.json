@@ -1,6 +1,6 @@
 {
   "section": "accountSettings",
-  "titleId": "admin-binding-selector.navigation.label",
+  "titleId": "admin/binding-selector.navigation.label",
   "path": "/admin/binding-selector",
-  "searchKeyWordsHelpers": "admin-binding-selector.navigation.search.kws"
+  "searchKeyWordsHelpers": "admin/binding-selector.navigation.search.kws"
 }
