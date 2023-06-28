@@ -54,7 +54,7 @@ const FieldInput: FC<FieldInputProps> = (props: FieldInputProps) => {
             }
           />
           <label htmlFor={`hide-label-${binding.id}`} className="ml3">
-            <FormattedMessage id="hide-label" />
+            <FormattedMessage id="admin/hide-label" />
           </label>
         </div>
       </div>

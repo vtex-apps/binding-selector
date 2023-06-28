@@ -158,9 +158,9 @@ const Selector: FC = () => {
       />
       <Toggle
         checked={updateSalesChannel}
-        label={<FormattedMessage id="admin-label" />}
+        label={<FormattedMessage id="admin/label" />}
         onChange={handleUpdateSalesChannel}
-        helpText={<FormattedMessage id="admin-description" />}
+        helpText={<FormattedMessage id="admin/description" />}
       />
       {loading ? (
         <div className="w100 flex justify-center align-center pa7 ma7">

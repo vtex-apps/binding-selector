@@ -140,7 +140,7 @@ const CustomFlagSetting: FC<Props> = ({
         }}
         bottomBar={
           <Button onClick={() => handleUpload()} disabled={!canUpload}>
-            <FormattedMessage id="admin-save" />
+            <FormattedMessage id="admin/save" />
           </Button>
         }
       >
