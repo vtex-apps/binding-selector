@@ -3,7 +3,7 @@
   "admin/binding-selector": "Selector de binding",
   "admin/binding-selector.navigation.search.kws": "Selector de binding",
   "admin/description": "Las políticas comerciales se actualizarán cuando tus clientes cambien los bindings de su tienda.",
-  "admin/label": "Actualizar canal de ventas",
+  "admin/label": "Actualizar política comercial",
   "admin/store": "Tienda {index}: {address}",
   "admin/locale": "Región: {locale}",
   "admin/action": "Nombres de tienda personalizados",
