@@ -32,7 +32,7 @@ The Setup for the app is as follows:
 
    ```
    "peerDependencies": {
-    "vtex.reviews-and-ratings": "3.x"
+    "vtex.binding-selector": "2.x"
    }
    ```
 
