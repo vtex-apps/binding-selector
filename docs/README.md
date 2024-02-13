@@ -28,11 +28,11 @@ The App consists on **two** main features an **Admin Interface** and a Store Blo
 The Setup for the app is as follows:
 
 1. on the CLI and run: `vtex install vtex.binding-selector@2.x`
-2. declare the block as a dependency inside your store-theme:
+2. declare the block as a peerDependency inside your store-theme manifest.json:
 
    ```
-   "dependencies":{
-     "vtex.binding-selector":"2.x"
+   "peerDependencies": {
+    "vtex.binding-selector": "2.x"
    }
    ```
 
@@ -40,29 +40,28 @@ The Setup for the app is as follows:
 
    ```
    "flex-layout.row#4-desktop": {
-     "props": {
-       "blockClass": "main-header",
-       "horizontalAlign": "center",
-       "verticalAlign": "center",
-       "preventHorizontalStretch": true,
-       "preventVerticalStretch": true,
-       "fullWidth": true
-     },
-     "children": [
-       "flex-layout.col#logo-desktop",
-       "flex-layout.col#category-menu",
-       "flex-layout.col#spacer",
-       "search-bar",
-       "binding-selector",
-       "login",
-       "minicart.v2"
-     ],
-     "binding-selector": {
-       "props": {
-         "layout": "dropdown",
-         "display": "text"
-       }
-     }
+    "props": {
+      "blockClass": "main-header",
+      "horizontalAlign": "center",
+      "verticalAlign": "center",
+      "preventHorizontalStretch": true,
+      "preventVerticalStretch": true,
+      "fullWidth": true
+    },
+    "children": [
+      "flex-layout.col#logo-desktop",
+      "flex-layout.col#category-menu",
+      "flex-layout.col#spacer",
+      "search-bar",
+      "binding-selector",
+      "login",
+      "minicart.v2"
+    ]},
+   "binding-selector": {
+    "props": {
+      "layout": "dropdown",
+      "display": "combined"
+    }
    }
 
    ```
