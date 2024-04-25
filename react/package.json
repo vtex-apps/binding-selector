@@ -1,6 +1,6 @@
 {
   "name": "vtex.binding-selector",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
