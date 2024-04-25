@@ -1,5 +1,10 @@
 # Binding Selector
 
+##  ⚠️ Maintenance ⚠️
+*Starting June 1st 2023, this application will no longer be maintained by VTEX.*
+
+---
+
 The Binding Selector APP, allows multi-language stores, specifically those with a single account-multiple binding architecture, to switch between their configured bindings.
 
 The App takes the **Canonical** context of the current binding as well as the **Alternate href** addresses registered for the other bindings, and creates a drop-down menu component to display the possible options on the Store Front.
