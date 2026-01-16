@@ -31,5 +31,6 @@
   "admin/custom-flag.modal-dropzone-title": "First line of modal's text",
   "admin/custom-flag.modal-dropzone-cta": "Modal's call to action",
   "admin/custom-flag.modal-dropzone-limit": "Modal's file limit",
-  "admin/redirect-url.tooltip-label": "Tooltip text describing the use of a redirect url"
+  "admin/redirect-url.tooltip-label": "Tooltip text describing the use of a redirect url",
+  "store/flag.alt-text": "Alt text for the custom flag image"
 }
