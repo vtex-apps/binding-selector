@@ -1,9 +1,8 @@
 # Binding Selector
 
-##  ⚠️ Maintenance ⚠️
-*Starting June 1st 2023, this application will no longer be maintained by VTEX.*
+[<i class="fa-brands fa-github"></i> Source code](https://github.com/vtex-apps/binding-selector)
 
----
+> ⚠️ This app is no longer maintained by VTEX. This means support and maintenance are no longer provided.
 
 The Binding Selector APP, allows multi-language stores, specifically those with a single account-multiple binding architecture, to switch between their configured bindings.
 
