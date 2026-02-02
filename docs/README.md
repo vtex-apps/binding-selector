@@ -4,43 +4,43 @@
 
 > ⚠️ This app is no longer maintained by VTEX. This means support and maintenance are no longer provided.
 
-The Binding Selector APP, allows multi-language stores, specifically those with a single account-multiple binding architecture, to switch between their configured bindings.
+The Binding Selector app allows multi-language stores, specifically those with a single-account, multiple-binding architecture, to switch between their configured bindings.
 
-The App takes the **Canonical** context of the current binding as well as the **Alternate href** addresses registered for the other bindings, and creates a drop-down menu component to display the possible options on the Store Front.
+The App uses the **Canonical** context of the current binding, along with the **Alternate href** addresses registered for the other bindings, to create a drop-down menu component that displays the possible options on the Store Front.
 
-This allows customers to seamlesly switch between stores without returning to Home or leaving the site.
+This allows customers to seamlessly switch between stores without returning to Home or leaving the site.
 
 Example:
-If a user arrives to the Spanish Site:
-www.testperformancev.com/es/iphone-11-128gb-rojo/p -> Canonical
-www.testperformancev.com/pt/iphone-11-128gb-vermelho/p -> Alternate
+If a user arrives at the Spanish Site:
+- `www.testperformancev.com/es/iphone-11-128gb-rojo/p` -> Canonical
+- `www.testperformancev.com/pt/iphone-11-128gb-vermelho/p` -> Alternate
 
-If a user switches or arrives to the Portuguese Site:
-www.testperformancev.com/pt/iphone-11-128gb-vermelho/p -> Canonical
-www.testperformancev.com/es/iphone-11-128gb-rojo/p -> Alternate
+If a user switches or arrives at the Portuguese Site:
+- `www.testperformancev.com/pt/iphone-11-128gb-vermelho/p` -> Canonical
+- `www.testperformancev.com/es/iphone-11-128gb-rojo/p` -> Alternate
 
-It has the possibility to update the Session and Cart's Sales Channel, this changes the prices and stock available for each store. It is up to the user to toggle this setting ON of OFF inside the App's settings.
+It can update the Session and Cart's Sales Channel, which changes the prices and available stock for each store. It is up to the user to toggle this setting ON or OFF inside the App's settings.
 
-The App is geared towards an improvement on Site Experience for the customer and it will have a direct impact on the store's conversion.
+The App is geared toward improving the customer's Site Experience, and it will have a direct impact on the store's conversion rate.
 
 ![bindingfunctionality](/docs/bindingfunctionality.gif)
 
 ## Configuration
 
-The App consists on **two** main features an **Admin Interface** and a Store Block called **binding-selector** to be declared on the Store-Theme.
+The App consists of **two** main features: an **Admin Interface** and a Store Block called **binding-selector** to be declared on the Store-Theme.
 
 The Setup for the app is as follows:
 
-1. on the CLI and run: `vtex install vtex.binding-selector@2.x`
-2. declare the block as a peerDependency inside your store-theme manifest.json:
+1. Open the terminal and run: `vtex install vtex.binding-selector@2.x`
+2. Declare the block as a `peerDependency` inside your store-theme `manifest.json`:
 
-   ```
+   ```json
    "peerDependencies": {
     "vtex.binding-selector": "2.x"
    }
    ```
 
-3. on the **store-theme** declare the block **binding-selector** where it is intended to be displayed, for example, inside the **header.json** declare the block as follows:
+3. On the store theme, declare the block `binding-selector` where it is intended to be displayed. For example, inside the `header.json`, declare the block as follows:
 
    ```
    "flex-layout.row#4-desktop": {
@@ -72,21 +72,19 @@ The Setup for the app is as follows:
 
 4. Go to your account Admin Panel and under the Account Settings, there will be a new menu item called **Binding Selector**. Here you will have the following options:
 
-   4.1 Possibility to toggle whether or not the app will change Sales Channels when switching bindings. When the store changes the Sales Channel, the prices of the store and the checkout will also change.
+   4.1 Possibility to toggle whether or not the app will change Sales Channels when switching bindings. When the store changes the Sales Channel, the store's prices and the checkout prices will also change.
 
-   4.2. Toggle each store individually to be displayed on the front end component.
+   4.2. Toggle each store individually to be displayed on the front-end component.
 
-   4.3 Modify each displayed option labels clicking on the **Custom Store Names** button. This process has to be done for each active or displayed site.
+   4.3 Modify each displayed option label by clicking on the **Custom Store Names** button. This process must be performed for each active or displayed site. If no labels are configured, the menu won't display any options.
 
-    **if there are no labels configured, the menu won't display any options!!**
-
-   4.4 _Advanced Settings_
+   4.4 _Advanced settings_
 
     4.4.1 External redirect URL
-      - When set, user will redirect to the given URL when clicking the binding in the store
+      - When set, the user will be redirected to the given URL when clicking the binding in the store
 
     4.4.2 Custom Flag
-      - It's possible to customize the flags that represents the bindings. SVG files, with a 24x24px size, is recommended to mantain consistency.
+      - It's possible to customize the flags that represent the bindings. SVG files, with a 24x24px size, are recommended to maintain consistency.
 
 ![adminfunctionality](/docs/admininterface.gif)
 
@@ -101,12 +99,12 @@ Renders a component that allows the user to select a different binding for your 
 
 ### `current-binding` block
 
-Renders a component that ONLY shows the current binding as a SVG flag. Useful to use it as modal-trigger
+Renders a component that ONLY shows the current binding as an SVG flag. Useful to use it as a modal trigger.
 
 ### `binding-challenge` block
 
-Renders an action bar that automatically detects if the user's country is different from the binding locale its browsing.
-The bar has a call to action text and is using the `binding-selector` selector.
+Renders an action bar that automatically detects whether the user's country differs from the binding locale when browsing.
+The bar includes a call-to-action text and uses the `binding-selector` selector.
 
 ## Customization
 
