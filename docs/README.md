@@ -21,15 +21,13 @@ If a user switches or arrives at the Portuguese Site:
 
 It can update the Session and Cart's Sales Channel, which changes the prices and available stock for each store. It is up to the user to toggle this setting ON or OFF inside the App's settings.
 
-The App is geared toward improving the customer's Site Experience, and it will have a direct impact on the store's conversion rate.
+The app is designed to improve the customer's Site Experience and will directly impact the store's conversion rate.
 
 ![bindingfunctionality](/docs/bindingfunctionality.gif)
 
 ## Configuration
 
-The App consists of **two** main features: an **Admin Interface** and a Store Block called **binding-selector** to be declared on the Store-Theme.
-
-The Setup for the app is as follows:
+The app consists of two main features: an Admin interface and a store block called `binding-selector`, which is used on the store theme. The setup for the app is as follows:
 
 1. Open the terminal and run: `vtex install vtex.binding-selector@2.x`
 2. Declare the block as a `peerDependency` inside your store-theme `manifest.json`:
