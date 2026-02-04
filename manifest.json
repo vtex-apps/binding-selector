@@ -1,7 +1,7 @@
 {
   "name": "binding-selector",
   "vendor": "vtex",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "title": "Binding Selector App",
   "description": "",
   "mustUpdateAt": "2022-08-28",
