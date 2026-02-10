@@ -130,7 +130,7 @@ const AdminBindingSection: FC<BindingSectionPropsLocal> = ({
               {flag?.isCustom && flag?.url ? (
                 <img
                   src={flag.url}
-                  alt={intl.formatMessage({ id: 'store/flag.alt-text' })}
+                  alt={intl.formatMessage({ id: 'admin/flag.alt-text' })}
                   width="24"
                   height="24"
                   style={{ maxWidth: 24, maxHeight: 24 }}

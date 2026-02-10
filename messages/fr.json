@@ -32,5 +32,6 @@
   "admin/custom-flag.modal-dropzone-cta": "choisissez un fichier",
   "admin/custom-flag.modal-dropzone-limit": "Taille de fichier maximale de {max_size} Ko.",
   "admin/redirect-url.tooltip-label": "Cette liaison comporte une URL de redirection externe",
+  "admin/flag.alt-text": "Drapeau de la locale de la liaison",
   "store/flag.alt-text": "Drapeau de la locale de la liaison"
 }

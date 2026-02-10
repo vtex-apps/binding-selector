@@ -32,5 +32,6 @@
   "admin/custom-flag.modal-dropzone-cta": "selecciona un archivo",
   "admin/custom-flag.modal-dropzone-limit": "El tamaño máximo de archivo es de {max_size} KB.",
   "admin/redirect-url.tooltip-label": "Este binding tiene una URL de redirección externa.",
+  "admin/flag.alt-text": "Bandera del idioma del binding",
   "store/flag.alt-text": "Bandera del idioma del binding"
 }
