@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - French translations
 
+## [2.1.8] - 2026-02-04
+
+### Fixed
+- Updating README.
+
 ## [2.1.7] - 2024-04-25
 
 ## [2.1.6] - 2024-02-13
