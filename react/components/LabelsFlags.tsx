@@ -1,4 +1,5 @@
 import React from 'react'
+import { useIntl } from 'react-intl'
 import { CountryFlag } from 'vtex.country-flags'
 
 interface Props {
@@ -8,13 +9,16 @@ interface Props {
 }
 
 const LabelOption = ({ binding, display, flag }: Props) => {
+  const intl = useIntl()
   const locale = binding.defaultLocale.substring(3, 5).toUpperCase()
+
+  const flagAltText = intl.formatMessage({ id: 'store/flag.alt-text' })
 
   const flagToDisplay = () =>
     flag?.isCustom && flag.url ? (
       <img
         src={flag.url}
-        alt="A flag of the binding's locale"
+        alt={flagAltText}
         width="24"
         height="24"
         style={{ maxWidth: 24, maxHeight: 24 }}

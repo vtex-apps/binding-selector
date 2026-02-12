@@ -31,5 +31,7 @@
   "admin/custom-flag.modal-dropzone-title": "Trascina il tuo file qui o",
   "admin/custom-flag.modal-dropzone-cta": "scegli un file",
   "admin/custom-flag.modal-dropzone-limit": "La dimensione massima del file è di {max_size} KB.",
-  "admin/redirect-url.tooltip-label": "Questo binding ha un URL di reindirizzamento esterno"
+  "admin/redirect-url.tooltip-label": "Questo binding ha un URL di reindirizzamento esterno",
+  "admin/flag.alt-text": "Bandiera della lingua del binding",
+  "store/flag.alt-text": "Bandiera della lingua del binding"
 }

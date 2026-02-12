@@ -31,5 +31,7 @@
   "admin/custom-flag.modal-dropzone-title": "Drop your file here or",
   "admin/custom-flag.modal-dropzone-cta": "choose a file",
   "admin/custom-flag.modal-dropzone-limit": "Maximum file size of {max_size} KB.",
-  "admin/redirect-url.tooltip-label": "This binding has an external redirect URL"
+  "admin/redirect-url.tooltip-label": "This binding has an external redirect URL",
+  "admin/flag.alt-text": "A flag of the binding's locale",
+  "store/flag.alt-text": "A flag of the binding's locale"
 }

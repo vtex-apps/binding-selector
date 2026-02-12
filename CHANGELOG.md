@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- French translations
+
 ## [2.1.9] - 2026-02-12
 
 ### Fixed
 - Update terms from "Trade Policy" to "Sales Channel"
+
 ## [2.1.8] - 2026-02-04
 
 ### Fixed

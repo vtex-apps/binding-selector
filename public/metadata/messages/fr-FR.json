@@ -1,0 +1,17 @@
+{
+  "name": "Country Store Switcher",
+  "headline": "Solution native pour basculer entre les magasins sur un seul compte - architecture multi-binding.",
+  "overview": "Cette application permet aux magasins avec une architecture de compte unique - bindings multiples de basculer entre leurs différents magasins.",
+  "features": [
+    "Basculer facilement entre les magasins",
+    "Possibilité de changer les canaux de vente lors du changement de magasin",
+    "Activer/désactiver les sites à afficher",
+    "Capacité de redirection externe",
+    "Configurer les libellés par langue"
+  ],
+  "websiteURL": "https://vtex.com/",
+  "support": {
+    "url": "https://support.vtex.com/hc/requests"
+  }
+}
+
