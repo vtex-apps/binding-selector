@@ -1,6 +1,6 @@
 {
   "name": "vtex.binding-selector",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
