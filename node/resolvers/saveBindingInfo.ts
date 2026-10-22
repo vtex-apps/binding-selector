@@ -1,3 +1,5 @@
+import { requireAdminSession } from '../middlewares/requireAdminSession'
+
 export const saveBindingInfo = async (
   _: unknown,
   args: {
@@ -5,6 +7,8 @@ export const saveBindingInfo = async (
   },
   ctx: Context
 ) => {
+  await requireAdminSession(ctx)
+
   const { clients } = ctx
   const { data } = args
   const { vbase } = clients
