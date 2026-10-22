@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+
+- Require an authenticated admin user (License Manager `topbar_visualizar`) on the `saveBindingInfo` and `toggleSalesChannel` mutations. They were callable anonymously through the store GraphQL endpoint.
+
 ### Changed
 
 - Update DK Catalog platform-flow-id

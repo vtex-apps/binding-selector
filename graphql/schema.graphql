@@ -5,8 +5,14 @@ type Query {
 }
 
 type Mutation {
+  """
+  Called by the storefront block on behalf of the shopper. It only touches the
+  shopper's own orderForm through the checkout API, so it stays public.
+  """
   updateSalesChannel(orderFormId: ID, salesChannel: String): PartialOrderForm
 
   saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
+    @auth(productCode: "38", resourceCode: "topbar_visualizar")
   toggleSalesChannel(salesChannel: Boolean): Boolean
+    @auth(productCode: "38", resourceCode: "topbar_visualizar")
 }
