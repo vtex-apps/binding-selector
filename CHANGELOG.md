@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+
+- Require an admin VTEX ID session on saveBindingInfo and toggleSalesChannel.
+
 ### Changed
 
 - Update DK Catalog platform-flow-id
