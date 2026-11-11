@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+
+- Update only the cart in the caller `checkout.vtex.com` cookie in updateSalesChannel, and ignore the orderFormId argument. Callers without the storefront cookie are rejected.
+
 ## [1.5.1] - 2026-10-22
 
 ### Security
