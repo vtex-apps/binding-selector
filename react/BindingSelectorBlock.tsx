@@ -140,24 +140,30 @@ const BindingSelectorBlock: FC<Props> = ({
    */
   useEffect(() => {
     const syncSalesChannel = async () => {
-      const { data } = await updateSalesChannel({
-        variables: {
-          orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
-            .orderFormId,
-          salesChannel: currentBinding.salesChannel,
-        },
-      })
-
-      const { items } = data?.updateSalesChannel ?? { items: [] }
-
-      for (let i = 0; i < items.length; i++) {
-        const { uniqueId, quantity } = items[i]
-
-        // Trigger a re-render for cart component
-        updateQuantity({
-          uniqueId,
-          quantity,
+      try {
+        const { data } = await updateSalesChannel({
+          variables: {
+            orderFormId: (orderFormResponse as GetOrderFormResponse).orderForm
+              .orderFormId,
+            salesChannel: currentBinding.salesChannel,
+          },
         })
+
+        const { items } = data?.updateSalesChannel ?? { items: [] }
+
+        for (let i = 0; i < items.length; i++) {
+          const { uniqueId, quantity } = items[i]
+
+          // Trigger a re-render for cart component
+          updateQuantity({
+            uniqueId,
+            quantity,
+          })
+        }
+      } catch (error) {
+        console.error('Error syncing the cart sales channel', error)
+      } finally {
+        setHasRunSyncEffect(true)
       }
     }
 
@@ -172,9 +178,9 @@ const BindingSelectorBlock: FC<Props> = ({
         !HasRunSyncEffect
       ) {
         syncSalesChannel()
+      } else {
+        setHasRunSyncEffect(true)
       }
-
-      setHasRunSyncEffect(true)
     }
   }, [
     currentBinding,
