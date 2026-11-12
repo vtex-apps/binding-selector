@@ -8,5 +8,7 @@ type Mutation {
   updateSalesChannel(orderFormId: ID, salesChannel: String): PartialOrderForm
 
   saveBindingInfo(data: [BindingsInput]): [TranslatedInfoOutput]
+    @auth(productCode: "147", resourceCode: "storefront.binding-selector.edit")
   toggleSalesChannel(salesChannel: Boolean): Boolean
+    @auth(productCode: "147", resourceCode: "storefront.binding-selector.edit")
 }
