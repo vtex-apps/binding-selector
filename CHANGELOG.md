@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+
+- Require the `storefront.binding-selector.edit` License Manager resource (product Storefront IO, code 147) on the saveBindingInfo and toggleSalesChannel mutations, using the `@auth` directive.
+
+### Removed
+
+- Ad-hoc admin session guard on saveBindingInfo and toggleSalesChannel, with its `sphinx-is-admin` policy, VTEX ID credential validation policy and unused clients.
+
 ## [2.2.1] - 2026-10-22
 
 ### Security

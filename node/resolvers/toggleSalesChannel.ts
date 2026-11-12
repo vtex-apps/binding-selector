@@ -1,5 +1,3 @@
-import { requireAdminSession } from '../middlewares/requireAdminSession'
-
 export const toggleSalesChannel = async (
   _: unknown,
   args: {
@@ -7,8 +5,6 @@ export const toggleSalesChannel = async (
   },
   ctx: Context
 ) => {
-  await requireAdminSession(ctx)
-
   const { clients } = ctx
   const { salesChannel } = args
   const { vbase } = clients
